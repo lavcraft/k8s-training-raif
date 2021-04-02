@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:alpine
+    networks:
+      - deployment
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: dbo-db
+      POSTGRES_USER: dbo
+      POSTGRES_PASSWORD: dbo
+
+  stub:
+    image: docker-training/{{ account }}-stub:1.0.0
+    networks:
+      - deployment
+
+  backend:
+    image: docker-training/{{ account }}-backend:1.0.0
+    networks:
+      - deployment
+    environment:
+      SPRING_PROFILES_ACTIVE: preprod
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db/dbo-db"
+      SPRING_DATASOURCE_USERNAME: dbo
+      SPRING_DATASOURCE_PASSWORD: dbo
+      SPRING_INTEGRATION_LEGACYACCOUNTINGSYSTEM_BASEURL: "http://stub:8888/api"
+
+  proxy:
+    image: docker-training/{{ account }}-proxy:1.0.0
+    ports:
+      - "80:80"
+    networks:
+      - deployment
+
+
+volumes:
+  db:
+
+networks:
+  deployment:
