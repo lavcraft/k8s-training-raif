@@ -1,0 +1,13 @@
+- hosts: all
+  gather_facts: yes
+  become: yes
+
+  tasks:
+    - command: "wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/containerd.io-1.4.4-3.1.el8.x86_64.rpm"
+    - command: "wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/docker-ce-20.10.5-3.el8.x86_64.rpm"
+    - command: "wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/docker-ce-cli-20.10.5-3.el8.x86_64.rpm"
+    - command: "wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/docker-ce-rootless-extras-20.10.5-3.el8.x86_64.rpm"
+    - command: "dnf install -y *.rpm"
+    - command: "systemctl enable docker"
+    - command: "systemctl start docker"
+    - command: "chmod 666 /var/run/docker.sock"
