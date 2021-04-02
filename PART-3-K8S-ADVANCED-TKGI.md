@@ -1,2 +1,0 @@
-Advanced Kubernetes — TKGI
-==========================
