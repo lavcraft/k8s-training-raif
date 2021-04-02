@@ -2,6 +2,11 @@
   gather_facts: yes
   become: yes
 
+  vars:
+    proxy_env:
+      http_proxy: http://proxy-gw.raiffeisen.ru:8080
+      https_proxy: http://proxy-gw.raiffeisen.ru:8080
+
   tasks:
     - command: "wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/containerd.io-1.4.4-3.1.el8.x86_64.rpm"
     - command: "wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/docker-ce-20.10.5-3.el8.x86_64.rpm"
@@ -11,3 +16,6 @@
     - command: "systemctl enable docker"
     - command: "systemctl start docker"
     - command: "chmod 666 /var/run/docker.sock"
+    - copy:
+        src: ../application
+        dest: /docker-application
