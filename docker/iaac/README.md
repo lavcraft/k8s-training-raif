@@ -1,3 +1,9 @@
+SETUP ENV
+=========
+```shell
+export ANSIBLE_HOST_KEY_CHECKING=False
+```
+
 TEST CONNECTION
 ===============
 ```shell
