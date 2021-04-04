@@ -27,7 +27,7 @@ Agenda
 - kubectl
 
 Hands-on practice quest #00: requisites check and compatibility check
----------------------------
+---------------------------------------------------------------------
 
 - [ ] Given сформированы пары участников
 - [ ] When участники используют команды и проанализируют их вывод и поведение
@@ -111,6 +111,7 @@ K8S Concepts Network isolation
 - [ ] Application in cluster resources
 - [ ] Cluster network availability
 - [ ] Docker run in Kubernetes and minimal configuration. Namespaces and pods fast introduction
+- [ ] Демо kubectl apply/get/describe и output моды
 
 Hands-on practice quest #03: Push and run forest
 ------------------------------------------------
@@ -125,12 +126,19 @@ vi pod.yml
 kubectl apply -f pod.yml
 ```
 
+```shell
+kubectl api-resources
+```
+
 - [ ] Then участники делятся результатами и соображениями
 - Как узнать что там с нашим приложением и результатами выполнения команды?
 - Если другой задеплоит под с таким же названием, он перезатрёт мой?
 - А в какой namespace приложение задеплоилось?
 - Как узнать какие проблемы у приложения при запуске?
 - Что значат ограничения по CPU 200mi ? Это сколько?
+- как понять какие ресурсы доступны для меня?
+- как понять какие ресурсы работают в рамках неймспейса??
+- как получить сырой вывод api?
 
 K8S Application discovery
 -------------------------
@@ -138,6 +146,7 @@ K8S Application discovery
 - [ ] Роутинг трафика в кластер и в кластере. Взаимодействие внешнего балансировщика, NSX-T и K8S
 - [ ] Доступность при деплое и политики обновления
 - [ ] K8S Services and namespaces
+- [ ] Демо kubectl exec curl с интерактивным watch для get pods/get svc -o wide
 
 Hands-on practice quest #04: Redeploy application with services
 ---------------------------------------------------------------
@@ -164,7 +173,7 @@ K8S Internal and External access to containers
 - [ ] Containers Shell
 - [ ] K8S Ingress и его описание
 - [ ] kubectl exec
-- [ ] Демо как собрать всё вместе
+- [ ] Про то как собрать всё в кучку и альтернативные решения на примере kustomize и Helm.
 
 Hands-on practice quest #05: Redeploy application with ingress
 ---------------------------------------------------------------
@@ -309,9 +318,49 @@ kubectl apply -f final_deployment.yml
 - Всё ли хорошо с приложениями?
 - Как посмотреть последине свалившиеся приложения?
 
+Hands-on practice quest #11: Redeploy application and start stress testing
+--------------------------------------------------------------------------
+- [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress и завершили задания
+- [ ] When участники запускают команды и применяют новую настройки
+
+
+- [ ] Then участники делятся результатами и соображениями
+- Почему под не стартует? как узнать?
+- Почему сервис может быть не доступен?
+
+K8S Jobs Management and workload distribution
+------------------------------------------------
+- [ ] Jobs Scheduling и специфичные виды запуска
+- [ ] DaemonSets, CronJobs
+- [ ] High Level альтернативы. Argo workflow etc.
+- [ ] Демо запуск нагрузки на наше приложение через jobs
+
+Hands-on practice quest #12: Run dependant jobs
+--------------------------------------------------------------------------
+- [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress и завершили задания
+- [ ] When участники запускают команды и применяют новую настройки
+
+```shell
+vi jobs-test.yaml
+kubectl appy -f jobs-test.yaml
+kubectl describe <>
+```
+
+- [ ] Then участники делятся результатами и соображениями
+- [ ] можно ли запускать job вместе с replica controller?
+- [ ] как что-то сделать при завершение Job ? 
+- [ ] а если что-то пошло не так?
+
 K8S Helm Charts
 ---------------
 - [ ] Предпосылки к появлению
+- [ ] Что было "ДО"
+- [ ] Версии Helm Charts
+- [ ] На что обращать внимание при использовании
+
+K8S Helm Charts
+---------------
+- [ ] Предпосылки к появлению. Отсылки к kustomize.io.
 - [ ] Что было "ДО"
 - [ ] Версии Helm Charts
 - [ ] На что обращать внимание при использовании
