@@ -10,11 +10,11 @@ Prerequisites
 - [ ] Доступен корпоративный Docker {{ registry-host }} `artifactory.raiffeisen.ru`
 - [ ] Доступен корпоративный Docker {{ images-registry }} с производственными образами `{{ registry-host }}/ext-rbru-techimage-docker`
 - [ ] Доступен корпоративный Docker {{ project-registry }} учебного проекта `{{ registry-host }}/training-docker`
-- [ ] Доступен дистрибутив рабочего приложения `{{ project-registry }}/`
+- [ ] Доступен дистрибутив рабочего приложения `{{ project-registry }}/dbo-1.0-SNAPSHOT.jar`
 #TODO ^
-- [ ] Доступен исходный проект рабочего приложения `{{ project-registry }}/`
+- [ ] Доступен исходный проект рабочего приложения `{{ project-registry }}/dbo-1.0-SNAPSHOT-src.jar`
 #TODO ^
-- [ ] Доступен необходимый компонент рабочего приложения `{{ project-registry }}/wiremock-standalone`
+- [ ] Доступен необходимый компонент рабочего приложения `{{ registry-host }}/com/github/tomakehurst/wiremock-standalone/2.9.0/wiremock-standalone-2.9.0.jar`
 #TODO ^
 - [ ] Установлен DockerCE
 ```shell
