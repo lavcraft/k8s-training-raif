@@ -1,8 +1,8 @@
-version: "3.8"
+version: "3.9"
 
 services:
   db:
-    image: artifactory.raiffeisen.ru/ext-rbru-techimage-docker/postgres:11-alpine
+    image: {{ images-registry }}/postgres:11-alpine
     networks:
       - deployment
     volumes:
@@ -13,14 +13,14 @@ services:
       POSTGRES_PASSWORD: dbo
 
   stub:
-    image: docker-training/{{ account }}-stub:1.0.0
+    image: {{ project-registry }}/{{ account }}-stub:1.0.0
     networks:
       - deployment
 
   backend:
-    image: docker-training/{{ account }}-backend:1.0.0
+    image: {{ project-registry }}/{{ account }}-backend:1.0.0
     networks:
-      - deployment
+      deployment:
     environment:
       SPRING_PROFILES_ACTIVE: preprod
       SPRING_DATASOURCE_URL: "jdbc:postgresql://db/dbo-db"
@@ -29,7 +29,7 @@ services:
       SPRING_INTEGRATION_LEGACYACCOUNTINGSYSTEM_BASEURL: "http://stub:8888/api"
 
   proxy:
-    image: docker-training/{{ account }}-proxy:1.0.0
+    image: {{ project-registry }}/{{ account }}-proxy:1.0.0
     ports:
       - "80:80"
     networks:

@@ -1,4 +1,4 @@
-FROM artifactory.raiffeisen.ru/ext-rbru-techimage-docker/openjdk:8-jre-slim
+FROM {{ images-registry }}/openjdk:8-jre-slim
 EXPOSE 8080
 RUN mkdir -p /dbo
 WORKDIR /dbo

@@ -6,9 +6,20 @@ Prerequisites
 =============
 - [ ] RAM ≥ 4Gb
 - [ ] RHEL8
-- [ ] Доступ к corporate Docker repository {{registry-host}}
-- [ ] Права локального админа
-- [ ] Доступ на клонирование к [git-репозиторию с приложением](https://github.com/eugene-krivosheyev/agile-practices-application) 
+- [ ] Права локального админа для аккаунта участника {{ account }}
+- [ ] Доступен корпоративный Docker {{ registry-host }} `artifactory.raiffeisen.ru`
+- [ ] Доступен корпоративный Docker {{ images-registry }} с производственными образами `{{ registry-host }}/ext-rbru-techimage-docker`
+- [ ] Доступен корпоративный Docker {{ project-registry }} учебного проекта `{{ registry-host }}/training-docker`
+- [ ] Доступен дистрибутив рабочего приложения `{{ project-registry }}/`
+#TODO ^
+- [ ] Доступен исходный проект рабочего приложения `{{ project-registry }}/`
+#TODO ^
+- [ ] Доступен необходимый компонент рабочего приложения `{{ project-registry }}/wiremock-standalone`
+#TODO ^
+- [ ] Установлен DockerCE
+```shell
+dnf install -y docker-ce
+```
 
 Agenda
 ======
@@ -34,34 +45,18 @@ Hands-on practice quest #00: prerequisites sound-check
 ---------------------------
 - [ ] Given 
 - сформированы пары участников
-- тренер дал URL corporate Docker {{registry-host}}
-- установлен Docker
-```shell
-cd
-wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/containerd.io-1.4.4-3.1.el8.x86_64.rpm
-wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/docker-ce-20.10.5-3.el8.x86_64.rpm
-wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/docker-ce-cli-20.10.5-3.el8.x86_64.rpm
-wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/docker-ce-rootless-extras-20.10.5-3.el8.x86_64.rpm
-sudo dnf install -y *.rpm
-sudo groupadd docker
-sudo usermod -aG docker $USER
-sudo systemctl enable docker
-sudo systemctl enable containerd
-sudo systemctl start docker
-sudo systemctl start containerd
-sudo chmod 666 /var/run/docker.sock
-```
+- проставлены закладки на основные ресурсы раздела [Prerequisites](#Prerequisites)
 
 - [ ] When участники используют команды и проанализируют их вывод и поведение
 ```shell
 docker --version
 ```
 ```shell
-docker login {{registry-host}}
-docker pull {{registry-host}}/ext-osimage/alpine
+docker login {{ registry-host }}
+docker pull {{ images-registry }}/postgres:11-alpine
 ```
 ```shell
-docker run -it {{registry-host}}/ext-osimage/alpine /bin/sh
+docker run -it {{ images-registry }}/postgres:11-alpine /bin/sh
 $> exit
 ```
 
@@ -91,16 +86,12 @@ docker images
 docker images --all
 ```
 ```shell
-docker rmi hello-world
-docker rmi hello-world --force
-docker images
+docker pull {{ images-registry }}/postgres:11-alpine
+docker images --all
 ```
 ```shell
-docker search alpine
-docker pull adoptopenjdk/openjdk8:alpine-jre
-docker pull postgres:alpine
-docker pull nginx:stable-alpine
-docker images --all
+docker rmi {{ images-registry }}/postgres:11-alpine [--force]
+docker images
 ```
 - [ ] Then участники делятся возникшими и решенными проблемами и отвечают на вопросы
 - Сколько контейнеров было на хосте?
@@ -142,9 +133,9 @@ Hands-on practice quest #02: container lifecycle
 Hands-on practice quest #03: _simple_ application containerization
 ---------------------------
 ```shell
-cd docker/application/backend
-docker build --tag docker-training/{{ account }}-backend:1.0.0 .
-docker run --rm --detach --publish 8080:8080 --name backend --env SPRING_PROFILES_ACTIVE=qa --volume $(pwd)/log:/dbo/log docker-training/{{ account }}-backend:1.0.0
+cd /docker-application/application/backend
+docker build --tag {{ project-registry }}/{{ account }}-backend:1.0.0 .
+docker run --rm --detach --publish 8080:8080 --name backend --env SPRING_PROFILES_ACTIVE=qa --volume $(pwd)/log:/dbo/log {{ project-registry }}/{{ account }}-backend:1.0.0
 ```
 
 Введение в контейнеризацию составного приложения
@@ -157,12 +148,14 @@ docker run --rm --detach --publish 8080:8080 --name backend --env SPRING_PROFILE
 Hands-on practice quest #04: _multi-component_ application containerization
 ---------------------------
 ```shell
-cd docker/application
+cd /docker-application/application
 
-docker build --tag docker-training/{{ account }}-backend:1.0.0 backend
-docker build --tag docker-training/{{ account }}-stub:1.0.0 stub
-docker build --tag docker-training/{{ account }}-proxy:1.0.0 proxy
+nano proxy/nginx.conf #TODOs
+docker build --tag {{ project-registry }}/{{ account }}-proxy:1.0.0 proxy
+docker build --tag {{ project-registry }}/{{ account }}-backend:1.0.0 backend
+docker build --tag {{ project-registry }}/{{ account }}-stub:1.0.0 stub
 
+docker swarm init
 docker stack deploy --compose-file docker-compose.yml my-stack
 
 docker stack ls
@@ -182,7 +175,7 @@ docker stack rm app-stack
 - [ ] Как откатить изменения в образе?
 - [ ] Как можно сохранять изменения на диске вне образа?
 - Shared folders
-- Volumes
+- [Volumes](https://docs.docker.com/storage/volumes/)
 - [ ] Жизненный цикл docker volume
 
 Hands-on practice quest #05: multi-component _stateful_ application containerization
@@ -193,7 +186,7 @@ Hands-on practice quest #05: multi-component _stateful_ application containeriza
 - [ ] Отображение портов
 - [ ] Варианты сетевой топологии между хостом и контейнером
 - [ ] Варианты сетевой топологии между контейнерами
-- [ ] Разрешение адресов и имен в виртуализированных сетях 
+- [ ] Разрешение адресов и имен в виртуализированных сетях (+localhost issue)
 
 Hands-on practice quest #06: _networked_ multi-component stateful application containerization
 ---------------------------
@@ -243,3 +236,4 @@ Docker в среде Kubernetes
 - [ ] k8s больше не поддерживает docker: [все пропало](https://twitter.com/Dixie3Flatline/status/1334188913724850177)?
 - [ ] Как устроен Docker? Вспоминаем элементы.
 - [ ] Как устроены аналоги? [Элементы](https://www.threatstack.com/blog/diving-deeper-into-runtimes-kubernetes-cri-and-shims).
+

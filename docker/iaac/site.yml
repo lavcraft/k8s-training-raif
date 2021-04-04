@@ -1,32 +1,44 @@
-- hosts: all
+- hosts: workstations
   gather_facts: yes
   become: yes
 
-  environment:
-    http_proxy: http://proxy-gw.raiffeisen.ru:8080
-    https_proxy: http://proxy-gw.raiffeisen.ru:8080
+  tasks:
+    - name: Install DockerCE
+      package:
+        name: docker-ce
+        state: present
+
+
+
+- hosts: artifactory
+  gather_facts: yes
+  become: yes
 
   tasks:
-    - command: "wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/containerd.io-1.4.4-3.1.el8.x86_64.rpm"
-    - command: "wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/docker-ce-20.10.5-3.el8.x86_64.rpm"
-    - command: "wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/docker-ce-cli-20.10.5-3.el8.x86_64.rpm"
-    - command: "wget --no-check-certificate https://download.docker.com/linux/centos/8/x86_64/stable/Packages/docker-ce-rootless-extras-20.10.5-3.el8.x86_64.rpm"
+    - name: Upload app distr to artfactory
+      uri:
+        url: "https://{{ project-registry }}/dbo-1.0-SNAPSHOT.jar"
+        src: ../backend/dbo-1.0-SNAPSHOT.jar
+        method: PUT
+        return_content: true
+        user: "{{ ansible_user }}"
+        password: "{{ ansible_password }}"
+        force_basic_auth: true
+        status_code: 201
+        headers:
+          Content-Type: application/octet-stream
+          Accept: application/json
 
-    - command: "dnf install -y *.rpm "
-      become: yes
-      args:
-        chdir: "/home/{{ ansible_user }}"
-
-    - command: "systemctl enable docker"
-      become: yes
-
-    - command: "systemctl start docker"
-      become: yes
-
-    - command: "chmod 666 /var/run/docker.sock"
-      become: yes
-
-    - copy:
-        src: ../application
-        dest: /docker-application
-        mode: u+rwx,g+rw,o+r
+    - name: Upload app source to artfactory
+      uri:
+        url: "https://{{ project-registry }}/dbo-1.0-SNAPSHOT-src.zip"
+        src: ../backend/dbo-1.0-SNAPSHOT-src.zip
+        method: PUT
+        return_content: true
+        user: "{{ ansible_user }}"
+        password: "{{ ansible_password }}"
+        force_basic_auth: true
+        status_code: 201
+        headers:
+          Content-Type: application/octet-stream
+          Accept: application/json
