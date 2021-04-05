@@ -10,15 +10,12 @@ Prerequisites
 - [ ] Доступен корпоративный Docker {{ registry-host }} `artifactory.raiffeisen.ru`
 - [ ] Доступен корпоративный Docker {{ images-registry }} с производственными образами `{{ registry-host }}/ext-rbru-techimage-docker`
 - [ ] Доступен корпоративный Docker {{ project-registry }} учебного проекта `{{ registry-host }}/training-docker`
-- [ ] Доступен дистрибутив рабочего приложения `{{ project-registry }}/dbo-1.0-SNAPSHOT.jar`
-#TODO ^
-- [ ] Доступен исходный проект рабочего приложения `{{ project-registry }}/dbo-1.0-SNAPSHOT-src.jar`
-#TODO ^
-- [ ] Доступен необходимый компонент рабочего приложения `{{ registry-host }}/com/github/tomakehurst/wiremock-standalone/2.9.0/wiremock-standalone-2.9.0.jar`
-#TODO ^
+- [ ] Доступен дистрибутив рабочего приложения `{{ registry-host }}/artifactory/training-docker/dbo-1.0-SNAPSHOT.jar`
+- [ ] Доступен исходный проект рабочего приложения `{{ registry-host }}/artifactory/training-docker/dbo-1.0-SNAPSHOT-sources.jar`
+- [ ] Доступен необходимый компонент рабочего приложения `{{ registry-host }}/artifactory/repo1-cache/com/github/tomakehurst/wiremock-standalone/2.27.2/wiremock-standalone-2.27.2.jar`
 - [ ] Установлен DockerCE
 ```shell
-dnf install -y docker-ce
+sudo dnf install -y docker-ce
 ```
 
 Agenda
@@ -82,7 +79,7 @@ docker system df
 - Сценарий "Как ...?"
 ```shell
 docker container ls [--all]
-docker run --name demo -it {{ images-registry }}/alpine /bin/sh #<-TODO image name
+docker run --name demo -it {{ registry-host }}/ext-rbru-osimage-docker/alpine /bin/sh
 /# cat /etc/os-release
 /# exit 
 ```
@@ -129,19 +126,19 @@ docker image ls # TODO: собственные пометки участнико
 
 - Сценарий "Как ...?"
 ```shell
-docker pull {{ images-registry }}/alpine
+docker pull {{ registry-host }}/ext-rbru-osimage-docker/alpine
 docker image ls
 ```
 
 - Сценарий "Как ...?"
 ```shell
-docker image history {{ images-registry }}/alpine
-docker image inspect {{ images-registry }}/alpine
+docker image history {{ registry-host }}/ext-rbru-osimage-docker/alpine
+docker image inspect {{ registry-host }}/ext-rbru-osimage-docker/alpine
 ```
 
 - Сценарий "Как ...?"
 ```shell
-docker run --name demo -it {{ images-registry }}/alpine
+docker run --name demo -it {{ registry-host }}/ext-rbru-osimage-docker/alpine
 /# touch side-effect
 /# exit
 docker container commit demo training-docker/demo
@@ -156,15 +153,15 @@ docker image ls
 
 - Сценарий "Как ...?"
 ```shell
-docker image push training-docker/demo:1.0.0
+docker image push {{ project-registry }}/demo:1.0.0
 ```
 
 - Сценарий "Как ...?"
 ```shell
 docker image prune
-docker image rm training-docker/demo:1.0.0
+docker image rm {{ project-registry }}/demo:1.0.0
 docker image ls
-docker image rm training-docker/demo:latest
+docker image rm {{ project-registry }}/demo:latest
 docker image ls
 ```
 
@@ -207,14 +204,14 @@ docker container ls --format '{{.ID}} | {{.Names}} | {{.Status}} | {{.Image}}'
 
 - Сценарий "Как запустить 'одноразовый' контейнер в интерактивном режиме?"
 ```shell
-docker run --rm -it {{ images-registry }}/alpine
+docker run --rm -it {{ registry-host }}/ext-rbru-osimage-docker/alpine
 /# exit
 docker container ls
 ```
 
 - Сценарий "Как запустить контейнер с сервисом в фоновом режиме?"
 ```shell
-docker container run --detach --name proxy1 --publish 80:80 nginx:1.19.4
+docker container run --detach --name proxy1 --publish 80:80 {{ images-registry }}/nginx:1.19.4
 docker container ls
 ```
 
@@ -341,8 +338,6 @@ docker push
 - [ ] Какие ресурсы необходимо виртуализировать?
 - узлы
 - [docker network](#Виртуализация сети)
-- [docker configs](https://docs.docker.com/engine/swarm/configs/)
-- [docker secrets](https://docs.docker.com/engine/swarm/secrets/)
 
 Hands-on practice quest #04: _multi-component_ application containerization
 ---------------------------
@@ -405,7 +400,7 @@ Hands-on practice quest #05: multi-component _stateful_ application containeriza
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
 - Сценарий "Как сохранить измененное состояние контейнера в качестве отдельного идентифицируемого образа?"
 ```shell
-docker run -it alpine /bin/sh
+docker run -it {{ registry-host }}/ext-rbru-osimage-docker/alpine /bin/sh
 /# vi side-effect
 /# exit
 
@@ -568,7 +563,9 @@ docker builder prune
 - аккуратно с рекурсивным копированием + .dockerignore
 - COPY вместо ADD
 - фиксированные теги для идентификации образов
-- [ ] Хранение и передача чувствительных данных как [Docker secrets](https://www.docker.com/blog/docker-secrets-management/)
+- [ ] Хранение и передача конфигурации и [чувствительных данных](https://www.docker.com/blog/docker-secrets-management) как 
+- [docker configs](https://docs.docker.com/engine/swarm/configs/)
+- [docker secrets](https://docs.docker.com/engine/swarm/secrets/)
 - [ ] Локальное журналирование и доступ к логам
 - docker [logging drivers](https://docs.docker.com/config/containers/logging/configure/)
 - dedicated logs shared folders/volumes
@@ -597,6 +594,7 @@ curl 127.0.0.1:9323/metrics
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
 - Как проименовали сценарии?
+- Какие интересные Вам метрики можно снимать? 
 
 Docker в среде Kubernetes
 -------------------------
