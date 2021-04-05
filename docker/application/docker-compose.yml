@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   db:
-    image: {{ images-registry }}/postgres:11-alpine
+    image: {{ soft-registry }}/postgres:11-alpine
     networks:
       - deployment
     volumes:

@@ -8,11 +8,12 @@ Prerequisites
 - [ ] RHEL8
 - [ ] Права локального админа для аккаунта участника {{ account }}
 - [ ] Доступен корпоративный Docker {{ registry-host }} `artifactory.raiffeisen.ru`
-- [ ] Доступен корпоративный Docker {{ images-registry }} с производственными образами `{{ registry-host }}/ext-rbru-techimage-docker`
+- [ ] Доступен корпоративный Docker {{ soft-registry }} с образами прикладного ПО `{{ registry-host }}/ext-rbru-techimage-docker`
+- [ ] Доступен корпоративный Docker {{ os-registry }} с образами ОС `{{ registry-host }}/ext-rbru-osimage-docker`
 - [ ] Доступен корпоративный Docker {{ project-registry }} учебного проекта `{{ registry-host }}/training-docker`
-- [ ] Доступен дистрибутив рабочего приложения `{{ registry-host }}/artifactory/training-docker/dbo-1.0-SNAPSHOT.jar`
-- [ ] Доступен исходный проект рабочего приложения `{{ registry-host }}/artifactory/training-docker/dbo-1.0-SNAPSHOT-sources.jar`
-- [ ] Доступен необходимый компонент рабочего приложения `{{ registry-host }}/artifactory/repo1-cache/com/github/tomakehurst/wiremock-standalone/2.27.2/wiremock-standalone-2.27.2.jar`
+- [ ] Доступен дистрибутив рабочего приложения {{ app-distr }} `{{ registry-host }}/artifactory/training-docker/dbo-1.0-SNAPSHOT.jar`
+- [ ] Доступен исходный проект рабочего приложения {{ app-src }} `{{ registry-host }}/artifactory/training-docker/dbo-1.0-SNAPSHOT-sources.jar`
+- [ ] Доступен необходимый компонент рабочего приложения {{ app-stub }} `{{ registry-host }}/artifactory/repo1-cache/com/github/tomakehurst/wiremock-standalone/2.27.2/wiremock-standalone-2.27.2.jar`
 - [ ] Установлен DockerCE
 ```shell
 sudo dnf install -y docker-ce
@@ -72,14 +73,14 @@ docker login {{ registry-host }}
 
 - Сценарий "Как ...?"
 ```shell
-docker pull {{ images-registry }}/postgres:11-alpine
+docker pull {{ soft-registry }}/postgres:11-alpine
 docker system df
 ````
 
 - Сценарий "Как ...?"
 ```shell
 docker container ls [--all]
-docker run --name demo -it {{ registry-host }}/ext-rbru-osimage-docker/alpine /bin/sh
+docker run --name demo -it {{ os-registry }}/alpine /bin/sh
 /# cat /etc/os-release
 /# exit 
 ```
@@ -126,19 +127,19 @@ docker image ls # TODO: собственные пометки участнико
 
 - Сценарий "Как ...?"
 ```shell
-docker pull {{ registry-host }}/ext-rbru-osimage-docker/alpine
+docker pull {{ os-registry }}/alpine
 docker image ls
 ```
 
 - Сценарий "Как ...?"
 ```shell
-docker image history {{ registry-host }}/ext-rbru-osimage-docker/alpine
-docker image inspect {{ registry-host }}/ext-rbru-osimage-docker/alpine
+docker image history {{ os-registry }}/alpine
+docker image inspect {{ os-registry }}/alpine
 ```
 
 - Сценарий "Как ...?"
 ```shell
-docker run --name demo -it {{ registry-host }}/ext-rbru-osimage-docker/alpine
+docker run --name demo -it {{ os-registry }}/alpine
 /# touch side-effect
 /# exit
 docker container commit demo training-docker/demo
@@ -204,14 +205,14 @@ docker container ls --format '{{.ID}} | {{.Names}} | {{.Status}} | {{.Image}}'
 
 - Сценарий "Как запустить 'одноразовый' контейнер в интерактивном режиме?"
 ```shell
-docker run --rm -it {{ registry-host }}/ext-rbru-osimage-docker/alpine
+docker run --rm -it {{ os-registry }}/alpine
 /# exit
 docker container ls
 ```
 
 - Сценарий "Как запустить контейнер с сервисом в фоновом режиме?"
 ```shell
-docker container run --detach --name proxy1 --publish 80:80 {{ images-registry }}/nginx:1.19.4
+docker container run --detach --name proxy1 --publish 80:80 {{ soft-registry }}/nginx:1.19.4
 docker container ls
 ```
 
@@ -295,7 +296,28 @@ docker container diff
 - `ENTRYPOINT` vs `CMD` (+ `shell` vs `exec` formats)
 - `LABEL`
 
-Hands-on practice quest #03: _simple_ application containerization
+Hands-on practice quest #03-1: preparing base image with JRE
+---------------------------
+[ ] Given пары участников
+
+- [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
+- Сценарий "Как создать и опубликовать собственный образ на основе Dockerfile?"
+```shell
+cd application
+mkdir base
+nano Dockerfile # from {{ os-registry }}/centos; yum install -y java-1.8.0-openjdk-headless
+docker image build --tag
+docker push
+```
+
+- Сценарий "Как задать новый образ как базовый для следующих образов?"
+```shell
+cd application
+nano backend/Dockerfile
+nano stub/Dockerfile
+```
+
+Hands-on practice quest #03-2: _simple_ application containerization
 ---------------------------
 - [ ] Given пары участников
 
@@ -303,6 +325,7 @@ Hands-on practice quest #03: _simple_ application containerization
 - Сценарий "Как описать provision образа в Dockerfile?"
 ```shell
 cd application/backend
+wget --user --password {{ app-distr }}
 nano Dockerfile
 ```
 
@@ -346,9 +369,16 @@ Hands-on practice quest #04: _multi-component_ application containerization
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
 - Сценарий "Как ...?"
 ```shell
-cd application
+cd application/backend
+wget {{ app-distr }} 
+
+cd application/stub
+wget {{ app-stub }} 
+
+cd application/proxy
 nano proxy/nginx.conf #TODOs
 
+cd application
 docker build --tag {{ project-registry }}/{{ account }}-proxy:1.0.0 proxy
 docker build --tag {{ project-registry }}/{{ account }}-backend:1.0.0 backend
 docker build --tag {{ project-registry }}/{{ account }}-stub:1.0.0 stub
@@ -400,7 +430,7 @@ Hands-on practice quest #05: multi-component _stateful_ application containeriza
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
 - Сценарий "Как сохранить измененное состояние контейнера в качестве отдельного идентифицируемого образа?"
 ```shell
-docker run -it {{ registry-host }}/ext-rbru-osimage-docker/alpine /bin/sh
+docker run -it {{ os-registry }}/alpine /bin/sh
 /# vi side-effect
 /# exit
 

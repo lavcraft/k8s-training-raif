@@ -1,4 +1,4 @@
-FROM {{ images-registry }}/openjdk:8-jre-slim
+FROM {{ soft-registry }}/openjdk:8-jre-slim
 EXPOSE 8080
 RUN mkdir -p /dbo
 WORKDIR /dbo
