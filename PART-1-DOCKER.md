@@ -305,7 +305,7 @@ Hands-on practice quest #03-1: preparing base image with JRE
 ```shell
 cd application
 mkdir base
-nano Dockerfile # from {{ os-registry }}/centos; yum install -y java-1.8.0-openjdk-headless
+nano Dockerfile # TODO from {{ os-registry }}/centos; yum install -y java-1.8.0-openjdk-headless
 docker image build --tag
 docker push
 ```
@@ -575,6 +575,13 @@ nano application/stub/Dockerfile
 - Сценарий "Как управлять кешем сборки?"
 ```shell
 docker builder prune
+```
+
+- Сценарий "Как осуществить multi-stage сборку образа?"
+```shell
+cd application/backend
+wget {{ app-src }}
+nano Dockerfile # todo BUILD stage with `maven clean verify` and QA stage with `java -jar ... --spring.profiles.active=qa` 
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
