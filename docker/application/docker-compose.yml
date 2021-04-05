@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   db:
-    image: postgres:11-alpine
+    image: {{ images-registry }}/postgres:11-alpine
     networks:
       - deployment
     volumes:
@@ -13,12 +13,12 @@ services:
       POSTGRES_PASSWORD: dbo
 
   stub:
-    image: training-docker/ekr-stub:1.0.0
+    image: {{ project-registry }}/{{ account }}-stub:1.0.0
     networks:
       - deployment
 
   backend:
-    image: training-docker/ekr-backend:1.0.0
+    image: {{ project-registry }}/{{ account }}-backend:1.0.0
     networks:
       deployment:
     environment:
@@ -29,7 +29,7 @@ services:
       SPRING_INTEGRATION_LEGACYACCOUNTINGSYSTEM_BASEURL: "http://stub:8888/api"
 
   proxy:
-    image: training-docker/ekr-proxy:1.0.0
+    image: {{ project-registry }}/{{ account }}-proxy:1.0.0
     ports:
       - "80:80"
     networks:
