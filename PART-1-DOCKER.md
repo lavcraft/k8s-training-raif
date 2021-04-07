@@ -18,10 +18,19 @@ Prerequisites
 ```shell
 sudo dnf install -y docker-ce
 ```
+- [ ] Есть права `sudo`
+- все команды Docker запускаются из-под `sudo`
+- или в сессии `sudo su -`
 
 Agenda
 ======
 7:20
+
+Формат
+------
+- 10:00 – 15:00
+- перерывы
+- вопросы
 
 Введение в Docker (15)
 -----------------
@@ -227,7 +236,9 @@ docker image ls
 - Сценарий "Как ...?"
 ```shell
 docker image history {{ os-registry }}/alpine
+
 docker image inspect {{ os-registry }}/alpine
+docker image inspect --format='{{.Id}} {{.Parent}}' {{ os-registry }}/alpine
 ```
 
 - Сценарий "Как ...?"
@@ -257,6 +268,7 @@ docker image ls
 docker container rm demo
 docker image prune
 docker image ls
+docker image prune --all
 docker image rm {{ project-registry }}/{{account}}-demo:1.0.0
 docker image ls
 docker image rm {{ project-registry }}/{{account}}-demo:latest
@@ -266,9 +278,13 @@ docker image ls
 - [ ] Then участники делятся проблемами и отвечают на вопросы
 - Как проименовали сценарии?
 - Какие способы идентификации образа? 
-- Какой тег у образа по умолчанию?
-- В чем физический смысл удаления образа?
+- Какой тег у образа по умолчанию при создании?
+- Какой тег у образа по умолчанию при операции `pull`?
 - Сколько места занимает образ на диске или в репозитории?
+- В чем физический смысл удаления образа командой `rm`?
+- Всегда ли удаляется образ по команде `rm`?
+- Что делает prune? 
+- Что такое [_dangling_](https://docs.docker.com/config/pruning/#prune-images) image?
 
 Жизненный цикл контейнера (20)
 -------------------------
@@ -314,7 +330,7 @@ docker container ls
 
 - Сценарий "Как запустить контейнер с сервисом в фоновом режиме?"
 ```shell
-docker container run --detach --name proxy1 --publish 80:80 {{ soft-registry }}/nginx:1.19.4
+docker container run --detach --name proxy --publish 80:80 {{ soft-registry }}/nginx:1.19.4
 docker container ls
 ```
 
@@ -351,8 +367,8 @@ docker container prune
 
 - Сценарий "Как 'подключиться' к работающему контейнеру?"
 ```shell
-docker container attach
 docker container logs
+docker container attach
 docker container top
 docker container exec /bin/sh
 ```
@@ -453,17 +469,17 @@ docker push
 - Как проименовали сценарии?
 - В каком порядке выполнялись директивы Dockerfile?
 
-Введение в контейнеризацию составного приложения (20)
+Введение в контейнеризацию составного приложения (15)
 ------------------------------------------------
 - [ ] Что нужно для целостной работы multi-container приложения?
 - Целостная сборка образов (опционально)
 - Целостный запуск, работа и завершение
 - [ ] Оркестраторы:  `compose`, `swarm`, `k8s` и их ограничения
-- [ ] Клиенты для API орекстраторов: Docker Compose (±Dockerfile) и Docker Stack (over Swarm)
+- [ ] Клиенты для API орекстраторов: Docker Compose (±build) и Docker Stack (over Swarm)
 - [ ] Какие ресурсы необходимо виртуализировать?
-- сервисы
-- сеть
-- [ ] Демо `docker-compose.yml`
+- network
+- volumes/folders
+- [ ] Демо `cat docker-compose.yml`
 
 ---
 
@@ -474,7 +490,7 @@ docker push
 - [ ] Что улучшить
 - [ ] Какие вопросы дозакрыть
 
-Hands-on practice quest #04: _multi-component_ application containerization (20+5)
+Hands-on practice quest #04: _multi-component_ application containerization (25+5)
 ---------------------------
 - [ ] Given пары участников
 
@@ -482,40 +498,53 @@ Hands-on practice quest #04: _multi-component_ application containerization (20+
 - Сценарий "Как ...?"
 ```shell
 cd application/backend
-wget {{ app-distr }} 
+wget --user --password {{ app-distr }} # или скачать из artifactory + scp
 
 cd application/stub
-wget {{ app-stub }} 
-
-cd application/proxy
-nano proxy/nginx.conf #TODOs
+wget --user --password  {{ app-stub }} # или скачать из artifactory + scp
 
 cd application
-docker build --tag {{ project-registry }}/{{ account }}-proxy:1.0.0 proxy
-docker build --tag {{ project-registry }}/{{ account }}-backend:1.0.0 backend
-docker build --tag {{ project-registry }}/{{ account }}-stub:1.0.0 stub
+docker build --tag {{ project-registry }}/{{ account }}-stub:1.0.0 ./stub
+docker build --tag {{ project-registry }}/{{ account }}-backend:1.0.0 ./backend
 ```
 
 - Сценарий "Как ...?"
 ```shell
 cd application
-cat docker-compose.yml
 
-docker swarm init
-docker stack deploy --compose-file docker-compose.yml my-stack
+docker run --detach \
+ --name db \
+ --publish "5432:5432" \
+ --volume db:/var/lib/postgresql/data \
+ --env POSTGRES_DB=dbo-db \
+ --env POSTGRES_USER=dbo \
+ --env POSTGRES_PASSWORD=dbo \
+ {{ soft-registry }}/postgres:11-alpine
+ 
+docker run --detach \
+ --name stub \
+ --publish "8888:8888" \
+ {{ project-registry }}/{{ account }}-stub:1.0.0
+ 
+docker run --detach \
+ --name backend \
+ --publish "8080:8080" \
+ --env SPRING_PROFILES_ACTIVE=preprod \
+ --env SPRING_DATASOURCE_URL="jdbc:postgresql://{{ external ip }}/dbo-db" \
+ --env SPRING_DATASOURCE_USERNAME=dbo \
+ --env SPRING_DATASOURCE_PASSWORD=dbo \
+ --env SPRING_INTEGRATION_LEGACYACCOUNTINGSYSTEM_BASEURL="http://{{ external ip }}:8888/api" \
+ {{ project-registry }}/{{ account }}-backend:1.0.0
 ```
 
 - Сценарий "Как ...?"
 ```shell
-docker stack ls
-docker stack ps my-stack
-docker stack services my-stack
-docker ps -a
+docker ps
 ```
 
 - Сценарий "Как ...?"
 ```shell
-docker stack rm app-stack
+docker stop
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
@@ -530,40 +559,36 @@ docker stack rm app-stack
 - [ ] Как зафиксировать изменения в образе?
 - [ ] Как откатить изменения в образе?
 - [ ] Как можно сохранять изменения на диске вне образа?
-- Shared folders [:ro|:rw]
+- Shared folders
+```shell
+cd application
+docker run --volume "$(pwd)"/folder/file:/folder/file:ro 
+```
 - [Volumes](https://docs.docker.com/storage/volumes/)
 - [ ] Жизненный цикл `docker volume`
-- `docker volume create`
+- `docker volume create` | `docker run --volume` | `docker build` + Dockerfile
 - `docker volume ls`
 - `docker volume inspect`
 - `docker volume rm` | `docker volume prune`
+- [ ] Как docker отличает folder от volume по имени? 
+
 
 Hands-on practice quest #05: multi-component _stateful_ application containerization (15+5)
 ---------------------------
 - [ ] Given пары участников
 
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
-- Сценарий "Как сохранить измененное состояние контейнера в качестве отдельного идентифицируемого образа?"
-```shell
-docker run -it {{ os-registry }}/alpine /bin/sh
-/# vi side-effect
-/# exit
-
-docker container commit
-docker image ls
-```
-
 - Сценарий "Как пробросить shared folder с хостовой системы в контейнер?"
 ```shell
-docker run -v
+docker run -v #TODO Сделать proxy/Dockerfile ненужным: пробросить nginx.conf как read-only в контейнер proxy при его запуске (не при сборке)
 ```
 
-- Сценарий "Как подключить volume в контейнер?"
+- Сценарий "Как посмотреть volumes/folders контейнера?"
 ```shell
-docker run -v
+docker container inspect # "Mounts"
 ```
 
-- Сценарий "Как посмотреть текущие volume?"
+- Сценарий "Как посмотреть все текущие volumes?"
 ```shell
 docker volume ls [--all]
 ```
@@ -573,7 +598,7 @@ docker volume ls [--all]
 docker volume 
 ```
 
-- Сценарий "Как удалить все неиспользуемые volume?"
+- Сценарий "Как удалить все неиспользуемые volumes?"
 ```shell
 docker volume 
 ```
@@ -592,21 +617,63 @@ nano docker-compose.yml
 Виртуализация сети (15)
 ------------------
 - [x] Отображение портов
-- [ ] Варианты сетевой топологии между хостом и контейнером
-- [ ] Варианты сетевой топологии между контейнерами
+- [ ] Варианты [сетевой топологии](https://docs.docker.com/network/#network-drivers)
 - [ ] Разрешение адресов и имен в виртуальных сетях (+[localhost issue](https://pythonspeed.com/articles/docker-connection-refused/))
+- `--name` default hostname
+- `--hostname` explicit
 
 Hands-on practice quest #06: _networked_ multi-component stateful application containerization (0)
 ---------------------------
 - [ ] Given пары участников
 
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
-- Сценарий "Как управлять виртуальными сетями?"
+- Сценарий "Как создать виртуальную сеть?"
 ```shell
-docker network create
-docker network rm
-docker network prune
+docker network create my_deployment
 ```
+
+```shell
+docker run --detach \
+ --network my_deployment \
+ --name db \
+ --publish "5432:5432" \
+ --volume db:/var/lib/postgresql/data \
+ --env POSTGRES_DB=dbo-db \
+ --env POSTGRES_USER=dbo \
+ --env POSTGRES_PASSWORD=dbo \
+ {{ soft-registry }}/postgres:11-alpine
+ 
+docker run --detach \
+ --network my_deployment \
+ --name stub \
+ --publish "8888:8888" \
+ {{ project-registry }}/{{ account }}-stub:1.0.0
+ 
+docker run --detach \
+ --network my_deployment \
+ --name backend \
+ --publish "8080:8080" \
+ --env SPRING_PROFILES_ACTIVE=preprod \
+ --env SPRING_DATASOURCE_URL="jdbc:postgresql://db/dbo-db" \ # <- hostanme!
+ --env SPRING_DATASOURCE_USERNAME=dbo \
+ --env SPRING_DATASOURCE_PASSWORD=dbo \
+ --env SPRING_INTEGRATION_LEGACYACCOUNTINGSYSTEM_BASEURL="http://stub:8888/api" \ # <- hostanme!
+ {{ project-registry }}/{{ account }}-backend:1.0.0
+```
+
+```shell
+cd application
+nano proxy/nginx.conf #TODOs
+
+docker build --tag {{ project-registry }}/{{ account }}-proxy:1.0.0 ./proxy
+
+docker run --detach \
+ --network my_deployment \
+ --name proxy \
+ --publish "80:80" \
+ {{ project-registry }}/{{ account }}-proxy:1.0.0
+```
+
 
 - Сценарий "Как подключить контейнер к виртуальным сетям?"
 ```shell
@@ -620,6 +687,12 @@ docker network ls
 docker network inspect
 ```
 
+- Сценарий "Как удалить виртуальную сеть?"
+```shell
+docker network rm
+docker network prune
+```
+
 - Сценарий "Как управлять виртуальными сетями в docker-compose?"
 ```shell
 cd application
@@ -628,7 +701,7 @@ nano docker-compose.yml
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
 - Как проименовали сценарии?
-- Какая сетвая топология определена в `docker-compose`? 
+- Какая сетевая топология определяется по умолчанию? 
 
 Изоляция хостовых ресурсов (20)
 --------------------------
