@@ -636,7 +636,6 @@ docker network create my_deployment
 docker run --detach \
  --network my_deployment \
  --name db \
- --publish "5432:5432" \
  --volume db:/var/lib/postgresql/data \
  --env POSTGRES_DB=dbo-db \
  --env POSTGRES_USER=dbo \
@@ -646,13 +645,11 @@ docker run --detach \
 docker run --detach \
  --network my_deployment \
  --name stub \
- --publish "8888:8888" \
  {{ project-registry }}/{{ account }}-stub:1.0.0
  
 docker run --detach \
  --network my_deployment \
  --name backend \
- --publish "8080:8080" \
  --env SPRING_PROFILES_ACTIVE=preprod \
  --env SPRING_DATASOURCE_URL="jdbc:postgresql://db/dbo-db" \ # <- hostanme!
  --env SPRING_DATASOURCE_USERNAME=dbo \
@@ -702,6 +699,8 @@ nano docker-compose.yml
 - [ ] Then участники делятся проблемами и отвечают на вопросы
 - Как проименовали сценарии?
 - Какая сетевая топология определяется по умолчанию? 
+- Для каких контейнеров мы определили меппинг портов? Почему не для всех?
+- Как мы задаем хосты в конфигурации приложений? Почему не ip?
 
 Изоляция хостовых ресурсов (20)
 --------------------------
