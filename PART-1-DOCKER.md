@@ -321,14 +321,14 @@ docker container ls --all
 docker container ls --format '{{.ID}} | {{.Names}} | {{.Status}} | {{.Image}}' 
 ```
 
-- Сценарий "Как запустить 'одноразовый' контейнер в интерактивном режиме?"
+- Сценарий "Как запустить 'одноразовый' контейнер?"
 ```shell
 docker run --rm -it {{ os-registry }}/alpine
 /# exit
 docker container ls
 ```
 
-- Сценарий "Как запустить контейнер с сервисом в фоновом режиме?"
+- Сценарий "Как запустить контейнер в фоновом режиме?"
 ```shell
 docker container run --detach --name proxy --publish 80:80 {{ soft-registry }}/nginx:1.19.4
 docker container ls
@@ -353,24 +353,29 @@ docker container unpause
 
 - Сценарий "Как остановить и запустить снова работающий контейнер?"
 ```shell
-docker container stop
 docker container start
 docker container restart
+docker container stop # send SIGTERM, and then SIGKILL after grace period
+docker container kill # send SIGKILL, or specified signal
 ```
 
 - Сценарий "Как удалить работающий контейнер?"
 ```shell
-docker container rm -f
-docker container kill
+docker container rm --force
+```
+
+- Сценарий "Как удалить остановленный контейнер?"
+```shell
+docker container rm
 docker container prune
 ```
 
 - Сценарий "Как 'подключиться' к работающему контейнеру?"
 ```shell
 docker container logs
-docker container attach
+docker container attach --sig-proxy=false # otherwise ctrl-c will stop container 
 docker container top
-docker container exec /bin/sh
+docker container exec -it /bin/sh
 ```
 
 - Сценарий "Как обменяться файлами с контейнером?"
@@ -386,8 +391,8 @@ docker container inspect
 
 - Сценарий "Как узнать и сохранить container data (container layer)?"
 ```shell
-docker container commit
 docker container diff
+docker container commit
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
@@ -395,19 +400,19 @@ docker container diff
 - Какие способы идентификации контейнера?
 - Какое имя у контейнера по умолчанию?
 - В чем физический смысл удаления контейнера?
-- Сколько места занимает контейнер на диске?
 
 Контейнеризация простого сервиса: образ "с нуля" (30)
 --------------------------------
 - [ ] Какие действия необходимо совершить для подготовки образа в случае самостоятельной сборки вручную?
 - [ ] Экстернализация конфигурации приложения при сборке образа
-- [ ] [Команда сборки образа](https://docs.docker.com/engine/reference/commandline/build/#tag-an-image--t) `docker image build`
+- [ ] [Команда сборки образа](https://docs.docker.com/engine/reference/commandline/build/#tag-an-image--t) `docker [image] build`
+- [ ] Понятие build context
 - [ ] Структура Dockerfile и его декларативность
 - [ ] Ключевые [директивы Dockerfile](https://docs.docker.com/engine/reference/builder)
 - [`FROM`](https://docs.docker.com/engine/reference/builder/#from)
 - [`WORKDIR`](https://docs.docker.com/engine/reference/builder/#workdir)
 - [`COPY`](https://docs.docker.com/engine/reference/builder/#copy) [and](https://stackoverflow.com/questions/24958140/what-is-the-difference-between-the-copy-and-add-commands-in-a-dockerfile/24958548#24958548) [`ADD`](https://docs.docker.com/engine/reference/builder/#add) from build context (+ [`.dockerignore`](https://docs.docker.com/engine/reference/builder/#dockerignore-file))
-- [`RUN`](https://docs.docker.com/engine/reference/builder/#run) (+ `shell` and preferred `exec` forms) and [`SHELL`](https://docs.docker.com/engine/reference/builder/#shell) for non-default shell execution
+- [`RUN`](https://docs.docker.com/engine/reference/builder/#run) (+ `shell` and preferred `exec` forms) and [`SHELL`](https://docs.docker.com/engine/reference/builder/#shell) for non-default shell
 - [`ENV`](https://docs.docker.com/engine/reference/builder/#environment-replacement)
 - [`ARG`](https://docs.docker.com/engine/reference/builder/#arg)
 - [`EXPOSE`](https://docs.docker.com/engine/reference/builder/#expose) documentation
@@ -422,47 +427,58 @@ Hands-on practice quest #03-1: preparing base image with JRE (15)
 - Сценарий "Как создать и опубликовать собственный образ на основе Dockerfile?"
 ```shell
 cd application
-mkdir base
-nano Dockerfile # TODO from {{ os-registry }}/centos; yum install -y java-1.8.0-openjdk-headless
-docker image build --tag
-docker push
-```
+cat backend/Dockerfile # as reference for new base/Dockerfile
 
-- Сценарий "Как задать новый образ как базовый для следующих образов?"
-```shell
-cd application
-nano backend/Dockerfile
-nano stub/Dockerfile
+mkdir base
+nano base/Dockerfile # TODO from {{ os-registry }}/centos; yum install -y java-1.8.0-openjdk-headless
+
+docker image build --tag {{ project-registry }}/{{ account }}-base:1.0 ./base # where Dockerfile is
+docker push {{ project-registry }}/{{ account }}-base:1.0
 ```
 
 Hands-on practice quest #03-2: _simple_ application containerization (15+5)
 ---------------------------
 - [ ] Given 
 - пары участников
+- опубликованные базовые образы других команд
 - Dockerfiles для основных сервисов приложения
 
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
+- Сценарий "Как задать "чужой" образ как базовый для своих следующих образов?"
+```shell
+cd application
+nano backend/Dockerfile # TODO fix FROM
+nano stub/Dockerfile # TODO fix FROM
+```  
+
 - Сценарий "Как описать provision образа в Dockerfile?"
 ```shell
-cd application/backend
-wget --user --password {{ app-distr }}
-nano Dockerfile
+cd application
+wget --user {{ account }} --ask-password {{ app-distr }} # или скачать из artifactory + scp
+nano backend/Dockerfile
 ```
 
 - Сценарий "Как собрать свой образ с приложением на базе Dockerfile?"
 ```shell
-docker image build --tag {{ project-registry }}/{{ account }}-backend:1.0.0 .
-```
-
-- Сценарий "Как запустить контейнер на базе своего образа с приложением?"
-```shell
-docker run --rm --detach --publish 8080:8080 --name backend --env SPRING_PROFILES_ACTIVE=qa --volume $(pwd)/log:/dbo/log {{ project-registry }}/{{ account }}-backend:1.0.0
+docker image build --tag {{ project-registry }}/{{ account }}-backend:1.0.0 ./backend
 ```
 
 - Сценарий "Как сохранить образ в репозитории?"
 ```shell
 docker login
 docker push
+```
+
+- Сценарий "Как запустить "одноразовый" контейнер на базе своего образа с приложением?"
+```shell
+docker run \
+ --name backend \
+ --rm \ # "одноразовый" контейнер
+ --detach \ # в фоновом режиме
+ --publish 8080:8081 \ # контейнерный 8080 порт опубликован как хостовой 8081 
+ --env SPRING_PROFILES_ACTIVE=qa \ # в контейнере действует переменная окружения
+ --volume $(pwd)/log:/dbo/log \ # папка в конейнере /dbo/log отображена на папку на хосте /current-path/log
+ {{ project-registry }}/{{ account }}-backend:1.0.0
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
@@ -474,11 +490,11 @@ docker push
 - [ ] Что нужно для целостной работы multi-container приложения?
 - Целостная сборка образов (опционально)
 - Целостный запуск, работа и завершение
-- [ ] Оркестраторы:  `compose`, `swarm`, `k8s` и их ограничения
-- [ ] Клиенты для API орекстраторов: Docker Compose (±build) и Docker Stack (over Swarm)
 - [ ] Какие ресурсы необходимо виртуализировать?
 - network
 - volumes/folders
+- [ ] Оркестраторы:  `compose`, `swarm`, `k8s` и их ограничения
+- [ ] Клиенты для API орекстраторов: Docker Compose (±build) и Docker Stack (over Swarm)
 - [ ] Демо `cat docker-compose.yml`
 
 ---
@@ -498,10 +514,10 @@ Hands-on practice quest #04: _multi-component_ application containerization (25+
 - Сценарий "Как ...?"
 ```shell
 cd application/backend
-wget --user --password {{ app-distr }} # или скачать из artifactory + scp
+wget --user --ask-password {{ app-distr }} # или скачать из artifactory + scp
 
 cd application/stub
-wget --user --password  {{ app-stub }} # или скачать из artifactory + scp
+wget --user ---ask-password  {{ app-stub }} # или скачать из artifactory + scp
 
 cd application
 docker build --tag {{ project-registry }}/{{ account }}-stub:1.0.0 ./stub
@@ -514,7 +530,7 @@ cd application
 
 docker run --detach \
  --name db \
- --publish "5432:5432" \
+ --publish 5432:5432 \
  --volume db:/var/lib/postgresql/data \
  --env POSTGRES_DB=dbo-db \
  --env POSTGRES_USER=dbo \
@@ -523,55 +539,66 @@ docker run --detach \
  
 docker run --detach \
  --name stub \
- --publish "8888:8888" \
+ --publish 8888:8888 \
  {{ project-registry }}/{{ account }}-stub:1.0.0
- 
+curl localhost:8888/api/account
+
 docker run --detach \
  --name backend \
- --publish "8080:8080" \
+ --publish 8080:8080 \
  --env SPRING_PROFILES_ACTIVE=preprod \
- --env SPRING_DATASOURCE_URL="jdbc:postgresql://{{ external ip }}/dbo-db" \
+ --env SPRING_DATASOURCE_URL="jdbc:postgresql://$(hostname -i)/dbo-db" \
  --env SPRING_DATASOURCE_USERNAME=dbo \
  --env SPRING_DATASOURCE_PASSWORD=dbo \
- --env SPRING_INTEGRATION_LEGACYACCOUNTINGSYSTEM_BASEURL="http://{{ external ip }}:8888/api" \
+ --env SPRING_INTEGRATION_LEGACYACCOUNTINGSYSTEM_BASEURL="http://$(hostname -i):8888/api" \
  {{ project-registry }}/{{ account }}-backend:1.0.0
+curl -H "X-API-VERSION:1" localhost:8080/dbo/actuator/health
+curl -H "X-API-VERSION:1" localhost:8080/dbo/api/account
 ```
+browser@student-host> http://{{ external host ip }}:8080/dbo/swagger-ui.html
 
 - Сценарий "Как ...?"
 ```shell
-docker ps
+docker ps [--all]
 ```
 
 - Сценарий "Как ...?"
 ```shell
 docker stop
+docker rm [--force]
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
 - Как проименовали сценарии?
-- Какой оркестратор использовался?
+- По какому URL получили доступ к веб-интерфейсу приложения для тестирования работоспособности?
+- Система работоспособна?
+- Исходя из экстернализированных настроек, как связаны компоненты системы?  
 - Какие ресурсы были виртуализированы?
+- Какой оркестратор использовался?
 
 Изоляция данных (15)
 ---------------
-- [ ] Что происходит с изменениями в образе при остановке контейнера?
-- [ ] Stateful VS Stateless containers
-- [ ] Как зафиксировать изменения в образе?
-- [ ] Как откатить изменения в образе?
+- [x] Что происходит с изменениями в образе при остановке контейнера?
+- [x] Как зафиксировать изменения в образе?
+- [x] Как откатить изменения в образе?
 - [ ] Как можно сохранять изменения на диске вне образа?
-- Shared folders
+- [ ] Stateful VS Stateless containers
+- [ ] [Управление данными на хостовой машине](https://docs.docker.com/storage/)
+- [Shared folders](https://docs.docker.com/storage/bind-mounts/#start-a-container-with-a-bind-mount) как подмонтированные FS  
 ```shell
 cd application
-docker run --volume "$(pwd)"/folder/file:/folder/file:ro 
+docker run --volume "$(pwd)"/folder/file:/folder/file:ro # пути у folder абсолютные, начинаются со "/"
 ```
-- [Volumes](https://docs.docker.com/storage/volumes/)
+- [Volumes](https://docs.docker.com/storage/volumes/) как блочные устройства
+```shell
+cd application
+docker run --volume my_volume:/folder/file:ro # имя volume не начинается со "/"
+```
 - [ ] Жизненный цикл `docker volume`
 - `docker volume create` | `docker run --volume` | `docker build` + Dockerfile
 - `docker volume ls`
 - `docker volume inspect`
 - `docker volume rm` | `docker volume prune`
-- [ ] Как docker отличает folder от volume по имени? 
-
 
 Hands-on practice quest #05: multi-component _stateful_ application containerization (15+5)
 ---------------------------
@@ -580,7 +607,7 @@ Hands-on practice quest #05: multi-component _stateful_ application containeriza
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
 - Сценарий "Как пробросить shared folder с хостовой системы в контейнер?"
 ```shell
-docker run -v #TODO Сделать proxy/Dockerfile ненужным: пробросить nginx.conf как read-only в контейнер proxy при его запуске (не при сборке)
+docker run -v #TODO Сделать proxy/Dockerfile ненужным: пробросить nginx.conf как read-only файл в контейнер proxy при его запуске (не при сборке)
 ```
 
 - Сценарий "Как посмотреть volumes/folders контейнера?"
@@ -590,17 +617,12 @@ docker container inspect # "Mounts"
 
 - Сценарий "Как посмотреть все текущие volumes?"
 ```shell
-docker volume ls [--all]
+docker volume ...
 ```
 
 - Сценарий "Как удалить неиспользуемую volume?"
 ```shell
-docker volume 
-```
-
-- Сценарий "Как удалить все неиспользуемые volumes?"
-```shell
-docker volume 
+docker volume ...
 ```
 
 - Сценарий "Как управлять volume и shared folder в docker-compose?"
@@ -618,9 +640,11 @@ nano docker-compose.yml
 ------------------
 - [x] Отображение портов
 - [ ] Варианты [сетевой топологии](https://docs.docker.com/network/#network-drivers)
-- [ ] Разрешение адресов и имен в виртуальных сетях (+[localhost issue](https://pythonspeed.com/articles/docker-connection-refused/))
+- [ ] Разрешение адресов и имен в виртуальных сетях
 - `--name` default hostname
-- `--hostname` explicit
+- `--hostname` explicit hostname
+- [ ] [`localhost` issue](https://pythonspeed.com/articles/docker-connection-refused/)
+- слушайте 0.0.0.0
 
 Hands-on practice quest #06: _networked_ multi-component stateful application containerization (0)
 ---------------------------
@@ -629,7 +653,7 @@ Hands-on practice quest #06: _networked_ multi-component stateful application co
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
 - Сценарий "Как создать виртуальную сеть?"
 ```shell
-docker network create my_deployment
+docker network ...
 ```
 
 ```shell
@@ -671,7 +695,6 @@ docker run --detach \
  {{ project-registry }}/{{ account }}-proxy:1.0.0
 ```
 
-
 - Сценарий "Как подключить контейнер к виртуальным сетям?"
 ```shell
 docker network connect 
@@ -700,7 +723,7 @@ nano docker-compose.yml
 - Как проименовали сценарии?
 - Какая сетевая топология определяется по умолчанию? 
 - Для каких контейнеров мы определили меппинг портов? Почему не для всех?
-- Как мы задаем хосты в конфигурации приложений? Почему не ip?
+- Как мы задаем хосты в экстернализированной конфигурации приложений? Почему не ip?
 
 Изоляция хостовых ресурсов (20)
 --------------------------
@@ -708,6 +731,7 @@ nano docker-compose.yml
 - [x] Установка переменных окружения ОС для контейнера
 - [ ] [Просмотр статистики потребления ресурсов](https://docs.docker.com/engine/reference/commandline/stats/)
 - [ ] [Лимитирование памяти и CPU](https://docs.docker.com/config/containers/resource_constraints/) 
+- [ ] [Лимитирование дискового объема контейнера](https://docs.docker.com/engine/reference/commandline/run/#set-storage-driver-options-per-container)
 - [ ] Лимитирование ресурсов при [запуске контейнера](https://docs.docker.com/engine/reference/run/#runtime-constraints-on-resources)
 - [ ] Лимитирование ресурсов в [docker-compose](https://docs.docker.com/compose/compose-file/compose-file-v3/#deploy)
 - [ ] [Как ведет себя одиночный контейнер](https://docs.docker.com/engine/reference/run/#restart-policies---restart) при ошибках контейнеризуемого приложения
@@ -731,24 +755,71 @@ docker run # ограничить по CPU и памяти, чтобы полу�
 - Сценарий "Как лимитировать ресурсы в docker-compose?"
 ```shell
 cd application
-nano docker-compose.yml # ограничить по CPU и памяти, чтобы получить OOME
+nano docker-compose.yml # ограничить по CPU, чтоб не баловал и по памяти, чтобы получить OOME
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
 - Как проименовали сценарии?
 - Какие лимиты на ресурсы устанавливаются Docker по умолчанию?
 - Какое поведение отдельного контейнера при OOME по умолчанию?
-- Какое поведение контейнера в Swarm при OOME по умолчанию?
 
 Оптимизация сборки образов (20)
 --------------------------
 - [ ] Как уменьшить размер образа? Как ускорить сборку образа?
 - [ ] Директивы Dockerfile как слои образа
+- каждая директива выполняется своим контейнером
+- RUN, COPY, ADD create layers
+- Other instructions create temporary intermediate images, and do not increase the size of the build
+```shell
+docker build --tag stub ./stub
+[+] Building 2.2s (10/10) FINISHED                                                                                                                                                                                                                      
+ => [internal] load build definition from Dockerfile                                                                                                                                                                                               0.0s
+ => => transferring dockerfile: 328B                                                                                                                                                                                                               0.0s
+ => [internal] load .dockerignore                                                                                                                                                                                                                  0.0s
+ => => transferring context: 34B                                                                                                                                                                                                                   0.0s
+ => [internal] load metadata for docker.io/library/openjdk:8-jre-slim                                                                                                                                                                              1.3s
+ => [1/5] FROM docker.io/library/openjdk:8-jre-slim@sha256:0330883ffeb5e14c4c15271004cdf6a2df21e827420b71dca01c34e41a23690d                                                                                                                        0.1s
+ => => resolve docker.io/library/openjdk:8-jre-slim@sha256:0330883ffeb5e14c4c15271004cdf6a2df21e827420b71dca01c34e41a23690d                                                                                                                        0.0s
+ => => sha256:5563c7e505fa828bd868ae99f24c5a56bb0bd5488a10184f7175d10f167b0898 1.16kB / 1.16kB                                                                                                                                                     0.0s
+ => => sha256:a6c8e47b54ca34cb71f873f586aaac09f73ace9bffe1b5b62eb2b05f8c974deb 7.14kB / 7.14kB                                                                                                                                                     0.0s
+ => => sha256:0330883ffeb5e14c4c15271004cdf6a2df21e827420b71dca01c34e41a23690d 320B / 320B                                                                                                                                                         0.0s
+ => [internal] load build context                                                                                                                                                                                                                  0.4s
+ => => transferring context: 20.00MB                                                                                                                                                                                                               0.4s
+ => [2/5] RUN mkdir -p /stub/mappings                                                                                                                                                                                                              0.5s
+ => [3/5] WORKDIR /stub                                                                                                                                                                                                                            0.0s
+ => [4/5] COPY mappings/* mappings/                                                                                                                                                                                                                0.0s
+ => [5/5] COPY wiremock-standalone-2.27.2.jar /stub                                                                                                                                                                                                0.1s
+ => exporting to image                                                                                                                                                                                                                             0.1s
+ => => exporting layers                                                                                                                                                                                                                            0.1s
+ => => writing image sha256:0a8dfafa48b9c717b862532fe441e8f2db7146a6deb8380768e6a713c75a6da4                                                                                                                                                       0.0s
+ => => naming to docker.io/library/stub
+```
 - [ ] Кеширование включаемых файлов и результатов директив
-- [ ] Составные команды
-- [ ] Порядок директив 
-- [ ] Выбор образа-предка: легковесные ОС, busybox и `scratch`-образ
-- [ ] Паттерн "multi-stage build" для сборки и запуска
+```shell
+docker build --tag stub ./stub
+[+] Building 1.9s (11/11) FINISHED                                                                                                                                                                                                                      
+ => [internal] load build definition from Dockerfile                                                                                                                                                                                               0.0s
+ => => transferring dockerfile: 328B                                                                                                                                                                                                               0.0s
+ => [internal] load .dockerignore                                                                                                                                                                                                                  0.0s
+ => => transferring context: 32B                                                                                                                                                                                                                   0.0s
+ => [internal] load metadata for docker.io/library/openjdk:8-jre-slim                                                                                                                                                                              1.8s
+ => [auth] library/openjdk:pull token for registry-1.docker.io                                                                                                                                                                                     0.0s
+ => [1/5] FROM docker.io/library/openjdk:8-jre-slim@sha256:0330883ffeb5e14c4c15271004cdf6a2df21e827420b71dca01c34e41a23690d                                                                                                                        0.0s
+ => [internal] load build context                                                                                                                                                                                                                  0.0s
+ => => transferring context: 689B                                                                                                                                                                                                                  0.0s
+ => CACHED [2/5] RUN mkdir -p /stub/mappings                                                                                                                                                                                                       0.0s
+ => CACHED [3/5] WORKDIR /stub                                                                                                                                                                                                                     0.0s
+ => CACHED [4/5] COPY mappings/* mappings/                                                                                                                                                                                                         0.0s
+ => CACHED [5/5] COPY wiremock-standalone-2.27.2.jar /stub                                                                                                                                                                                         0.0s
+ => exporting to image                                                                                                                                                                                                                             0.0s
+ => => exporting layers                                                                                                                                                                                                                            0.0s
+ => => writing image sha256:1b7c6f374f61947cd1e96233307f4fa56dfc3c0e5fd6bf228b0e7e27803ca011                                                                                                                                                       0.0s
+ => => naming to docker.io/library/stub
+```
+- [ ] Оптимизации
+- [Используйте build cache](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#leverage-build-cache): порядок директив в Dockerfile
+- [Составные команды](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#sort-multi-line-arguments)
+- Выбор образа-предка: легковесные ОС, busybox и `scratch`-образ
 
 Hands-on practice quest #08: _build-optimized_ networked multi-component stateful application resource-limited containerization (15+5)
 ---------------------------
@@ -764,43 +835,43 @@ nano application/stub/Dockerfile
 
 - Сценарий "Как управлять кешем сборки?"
 ```shell
-docker builder prune
-```
-
-- Сценарий "Как осуществить multi-stage сборку образа?"
-```shell
-cd application/backend
-wget {{ app-src }}
-nano Dockerfile # todo BUILD stage with `maven clean verify` and QA stage with `java -jar ... --spring.profiles.active=qa` 
+docker builder prune [--all]
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
 - Как проименовали сценарии?
-- Насколько получилось оптимизировать сборки?
+- Насколько получилось оптимизировать сборки в измеряемых метриках?
 
 Рекомендуемые практики (30)
 ----------------------
 - [ ] Минимизировать [security риски](https://snyk.io/blog/10-docker-image-security-best-practices)
-1. Используйте минимальные образы: быстрее и меньше зависимостей – меньше рисков 
-1. Запуск от выделенного пользователя с минимальными привилегиями с возможностью при запуске [добавить прав](https://docs.docker.com/engine/reference/run/#additional-groups)
-1. Подписывать образы и проверять подписи
-1. Сканеры уязвимостей для образов
-1. Линтеры для Dockerfile
-1. multi-stage builds, чтобы в образ не утекли чувствительные данные
+1. Используйте минимальные образы: быстрее и меньше зависимостей + меньше рисков 
+1. Запуск в [rootless mode](https://docs.docker.com/engine/security/rootless/) или от [пользователя с минимальными привилегиями](https://docs.docker.com/engine/reference/run/#user) с возможностью при запуске [добавить прав](https://docs.docker.com/engine/reference/run/#additional-groups)
+1. [Подписывать образы и проверять подписи](https://docs.docker.com/engine/security/trust/)
+1. [Сканеры уязвимостей](https://techbeacon.com/security/10-top-open-source-tools-docker-security) для образов `docker scan --dependency-tree <image>`
+1. [Линтеры](https://medium.com/@renatomefi/writing-dockerfile-like-a-software-developer-linting-9fd8c620174) для Dockerfile
+1. [COPY вместо ADD](https://nickjanetakis.com/blog/docker-tip-2-the-difference-between-copy-and-add-in-a-dockerile)
 1. Аккуратно с рекурсивным копированием + .dockerignore
-1. COPY вместо ADD
-1. Фиксированные теги для идентификации образов
-1. Semantic versioning vs Unique tags
-- [ ] Хранение и передача конфигурации и [чувствительных данных](https://www.docker.com/blog/docker-secrets-management) как 
-- [docker configs](https://docs.docker.com/engine/swarm/configs/)
-- [docker secrets](https://docs.docker.com/engine/swarm/secrets/)
+1. Фиксированные теги для идентификации образов (Semantic versioning vs Unique tags)
+
+- [ ] Хранение и передача конфигурации и чувствительных данных
+- [docker experimental buildkit secrets](https://blog.alexellis.io/mutli-stage-docker-builds/)
+- [docker compose secrets](https://docs.docker.com/compose/compose-file/compose-file-v3/#secrets)
+- [docker swarm secrets](https://docs.docker.com/engine/swarm/secrets/)
+- [docker swarm configs](https://docs.docker.com/engine/swarm/configs/)
+
 - [ ] Локальное журналирование и доступ к логам
-- docker [logging drivers](https://docs.docker.com/config/containers/logging/configure/)
-- dedicated logs shared folders/volumes
-- remote log collectors
+1. docker [logging drivers](https://docs.docker.com/config/containers/logging/configure/)
+1. dedicated logs shared folders/volumes
+1. remote log collectors
+
 - [ ] Мониторинг
 - [Docker как Prometheus target](https://docs.docker.com/config/daemon/prometheus/)
-- [ ] "Docker-из-docker"?
+
+- [ ] ["Docker-из-docker"](https://stackoverflow.com/a/33003273)?
+- [ ] [Автотесты для Dockerfile](https://medium.com/@renatomefi/unit-testing-writing-dockerfiles-like-a-software-developer-1759f416ce84)
+- [ ] Паттерн [Builder](https://blog.alexellis.io/mutli-stage-docker-builds/) vs ["multi-stage build"](https://docs.docker.com/develop/develop-images/multistage-build/) для конвейера разработки и поставки ПО: CI/CD pipeline
+- в том числе, чтобы в итоговый образ не утекли чувствительные данные
 
 Hands-on practice quest #09: build-optimized networked multi-component stateful application resource-limited _best practice based_ containerization (10+5)
 ---------------------------
@@ -820,6 +891,13 @@ nano /etc/docker/daemon.json
 curl 127.0.0.1:9323/metrics
 ```
 
+- Сценарий "Как осуществить multi-stage сборку образа?"
+```shell
+cd application/backend
+wget --user --ask-password {{ app-src }}
+nano Dockerfile # todo BUILD stage with `maven clean verify` and QA stage with `java -jar ... --spring.profiles.active=qa` 
+```
+
 - [ ] Then участники делятся проблемами и отвечают на вопросы
 - Как проименовали сценарии?
 - Какие интересные Вам метрики можно снимать? 
@@ -836,3 +914,9 @@ Docker в среде Kubernetes (5)
 - [ ] Что на производство
 - [ ] Что улучшить
 - [ ] Какие вопросы дозакрыть
+
+Домашка
+-------
+Для желающих:
+- [ ] Пройти практику до конца на stand-alone containers
+- [ ] Пройти практику до конца с использованием оркестратора (docker-compose compliant: `docker compose`, `docker stack` in default swarm mode, `podman-compose`) 
