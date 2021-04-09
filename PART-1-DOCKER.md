@@ -338,7 +338,7 @@ docker container ls
 - Сценарий "Как создать контейнер с сервисом без запуска?"
 ```shell
 docker container create
-docker container rename
+docker container rename # podman issue
 ```
 
 - Сценарий "Как запустить созданный контейнер?"
@@ -424,6 +424,9 @@ docker container commit
 - [`EXPOSE`](https://docs.docker.com/engine/reference/builder/#expose) documentation
 - [`VOLUME`](https://docs.docker.com/engine/reference/builder/#volume)
 - [`ENTRYPOINT`](https://docs.docker.com/engine/reference/builder/#entrypoint) [and](https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact) [`CMD`](https://docs.docker.com/engine/reference/builder/#cmd) (+ `shell`, preferred `exec` and `default parameters to ENTRYPOINT` forms)
+```shell
+docker run [--entrypoint Dockerfile's ENTRYPOINT override] IMAGE [Dockerfile's CMD override] 
+```
 
 Hands-on practice quest #03-1: preparing base image with JRE (15)
 ---------------------------
@@ -436,7 +439,7 @@ cd application
 cat backend/Dockerfile # as reference for new base/Dockerfile
 
 mkdir base
-nano base/Dockerfile # TODO from {{ os-registry }}/centos; yum install -y java-1.8.0-openjdk-headless
+nano base/Dockerfile #TODO describe image based on centos and install java-1.8.0-openjdk-headless
 
 docker image build --tag {{ project-registry }}/{{ account }}-base:1.0 ./base # where Dockerfile is
 docker push {{ project-registry }}/{{ account }}-base:1.0
@@ -453,8 +456,8 @@ Hands-on practice quest #03-2: _simple_ application containerization (15+5)
 - Сценарий "Как задать "чужой" образ как базовый для своих следующих образов?"
 ```shell
 cd application
-nano backend/Dockerfile # TODO fix FROM
-nano stub/Dockerfile # TODO fix FROM
+nano backend/Dockerfile #TODO fix FROM
+nano stub/Dockerfile #TODO fix FROM
 ```  
 
 - Сценарий "Как описать provision образа в Dockerfile?"
@@ -481,7 +484,7 @@ docker run \
  --name backend \
  --rm \ # "одноразовый" контейнер
  --detach \ # в фоновом режиме
- --publish 8080:8081 \ # контейнерный 8080 порт опубликован как хостовой 8081 
+ --publish 8080:80 \ # контейнерный 80 порт опубликован как хостовой 8080
  --env SPRING_PROFILES_ACTIVE=qa \ # в контейнере действует переменная окружения
  --volume $(pwd)/log:/dbo/log \ # папка в конейнере /dbo/log отображена на папку на хосте /current-path/log
  {{ project-registry }}/{{ account }}-backend:1.0.0
@@ -681,10 +684,10 @@ docker run --detach \
  --network my_deployment \
  --name backend \
  --env SPRING_PROFILES_ACTIVE=preprod \
- --env SPRING_DATASOURCE_URL="jdbc:postgresql://db/dbo-db" \ # <- hostanme!
+ --env SPRING_DATASOURCE_URL="jdbc:postgresql://db/dbo-db" \ # hostname instead of external ip is the result of virtualizing network
  --env SPRING_DATASOURCE_USERNAME=dbo \
  --env SPRING_DATASOURCE_PASSWORD=dbo \
- --env SPRING_INTEGRATION_LEGACYACCOUNTINGSYSTEM_BASEURL="http://stub:8888/api" \ # <- hostanme!
+ --env SPRING_INTEGRATION_LEGACYACCOUNTINGSYSTEM_BASEURL="http://stub:8888/api" \ # hostname instead of external ip is the result of virtualizing network
  {{ project-registry }}/{{ account }}-backend:1.0.0
 ```
 
@@ -697,7 +700,7 @@ docker build --tag {{ project-registry }}/{{ account }}-proxy:1.0.0 ./proxy
 docker run --detach \
  --network my_deployment \
  --name proxy \
- --publish "80:80" \
+ --publish 80:80 \
  {{ project-registry }}/{{ account }}-proxy:1.0.0
 ```
 
@@ -834,7 +837,7 @@ Hands-on practice quest #08: _build-optimized_ networked multi-component statefu
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
 - Сценарий "Как оптимизировать сборку?"
 ```shell
-nano application/backend/Dockerfile # TODO оптимизировать сборку и убедиться в ускорении
+nano application/backend/Dockerfile #TODO оптимизировать сборку и убедиться в ускорении
 nano application/proxy/Dockerfile
 nano application/stub/Dockerfile
 ```
@@ -901,7 +904,7 @@ curl 127.0.0.1:9323/metrics
 ```shell
 cd application/backend
 wget --user --ask-password {{ app-src }}
-nano Dockerfile # todo BUILD stage with `maven clean verify` and QA stage with `java -jar ... --spring.profiles.active=qa` 
+nano Dockerfile #TODO: BUILD stage with `maven clean verify` and QA stage with `java -jar ... --spring.profiles.active=qa` 
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
@@ -925,4 +928,4 @@ Docker в среде Kubernetes (5)
 -------
 Для желающих:
 - [ ] Пройти практику до конца на stand-alone containers
-- [ ] Пройти практику до конца с использованием оркестратора (docker-compose compliant: `docker compose`, `docker stack` in default swarm mode, `podman-compose`) 
+- [ ] Пройти практику до конца с использованием оркестратора (docker-compose.yml compliant: `docker compose`, `docker stack` in default swarm mode, `podman-compose`) 

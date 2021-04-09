@@ -1,3 +1,3 @@
-FROM {{ soft-registry }}/nginx:1.19.4
+FROM # TODO search {{ soft-registry }} for most lightweight latest stable nginx
 EXPOSE 80
 COPY nginx.conf /etc/nginx/
