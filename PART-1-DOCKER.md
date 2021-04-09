@@ -289,6 +289,7 @@ docker image ls
 Жизненный цикл контейнера (20)
 -------------------------
 - [ ] container = process + container data (container layer)
+- [ ] Что значит "запуск" контейнера? Что именно там запускается?
 - [ ] Что нужно определить для запуска контейнера?
 - [Форвардинг портов](https://docs.docker.com/engine/reference/commandline/run/#options)
 - [Экстернализация](https://docs.docker.com/engine/reference/run/#env-environment-variables) конфигурации приложения при запуске контейнера
