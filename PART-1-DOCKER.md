@@ -14,13 +14,10 @@ Prerequisites
 - [ ] Доступен дистрибутив рабочего приложения {{ app-distr }} `{{ registry-host }}/artifactory/training-docker/dbo-1.0-SNAPSHOT.jar`
 - [ ] Доступен исходный проект рабочего приложения {{ app-src }} `{{ registry-host }}/artifactory/training-docker/dbo-1.0-SNAPSHOT-sources.jar`
 - [ ] Доступен необходимый компонент рабочего приложения {{ app-stub }} `{{ registry-host }}/artifactory/repo1-cache/com/github/tomakehurst/wiremock-standalone/2.27.2/wiremock-standalone-2.27.2.jar`
-- [ ] Установлен DockerCE
+- [ ] Установлен DockerCE или совместимый менеджер контейнеров (e.g. Podman)
 ```shell
-sudo dnf install -y docker-ce
+sudo dnf install -y docker
 ```
-- [ ] Есть права `sudo`
-- все команды Docker запускаются из-под `sudo`
-- или в сессии `sudo su -`
 
 Agenda
 ======
@@ -85,13 +82,13 @@ Hands-on practice quest #00: prerequisites sound-check (15+5)
 ---------------------------
 - [ ] Given 
 - сделан форк данного руководства для собственных пометок
-- форк открыт в браузере для внесения пометок
-- проставлены закладки или выписаны в notepad основные ресурсы раздела [Prerequisites](#Prerequisites)
+- форк открыт в браузере для внесения пометок 
+- для последующей удобной работы с copy+paste для ресурсов раздела [Prerequisites](#Prerequisites) плейсхолдеры заменены актуальными значениями
+- все команды Docker запускаются из-под `sudo ...` или в сессии `sudo su -`
 - Hint: синонимы команд docker cli
 - Hint: `... --help`
 - Hint: [docker cli reference](https://docs.docker.com/engine/reference/commandline/docker/)
 - сформированы пары участников с чередованием ролей в паре 
-
 
 - [ ] When участники именуют сценарии, выполняют команды и анализируют их вывод и поведение
 - Сценарий "Как ...?"
@@ -100,13 +97,11 @@ docker version # TODO: собственные пометки участнико�
 docker system info
 docker system df
 
-cat $HOME/.docker/config.json
-cat $HOME/.docker/daemon.json
-
 docker events
 ```
 
-- Сценарий "Как ...?" (в новом shell, чтобы параллельно видеть вывод `docker events`)
+- Сценарий "Как ...?"
+(в новом shell, чтобы параллельно видеть вывод `docker events`)
 ```shell
 docker logout
 docker login {{ registry-host }}
@@ -121,7 +116,7 @@ docker system df
 - Сценарий "Как ...?"
 ```shell
 docker container ls [--all]
-docker run --name demo -it {{ os-registry }}/alpine /bin/sh
+docker run --name demo -it {{ os-registry }}/alpine
 /# cat /etc/os-release
 /# exit 
 ```
@@ -139,6 +134,8 @@ docker rm [-f] demo
 - Откуда взялся образ диска?
 - Сколько места занимает образ?
 - Сколько места занимает контейнер?
+- Какая версия образа скачивается по умолчанию?
+- Какая гостевая команда запускается при запуске контейнера? 
 
 Жизненный цикл готового образа (40)
 ------------------------------
@@ -154,38 +151,38 @@ docker rm [-f] demo
 - Config files
 - Data files
 ```shell
-$ docker run --rm -it alpine 
-/ # ls
+$ docker run --rm -it {{ os-registry }}/alpine ls
 bin    dev    etc    home   lib    media  mnt    opt    proc   root   run    sbin   srv    sys    tmp    usr    var
 ```
 
 ### ЖЗЛ
 - [ ] Идентификация образов: 
-- id
-- `хост/репозиторий/имя:теги`
+- `id` как хеш [слоя] образа 
+- `хост/репозиторий/имя:тег`
+- `хост/репозиторий/группа/имя:тег`
 - [ ] Жизненный цикл образа в репозитории и аналогии с git
-- `docker image create` > `docker image push` > `docker image pull` | `docker container run` # штатный ЖЦ
-- `docker container run` + side effects > `docker container commit` > `docker image push` # редко используем такой ЖЦ
+- `docker container run` + side effects > `docker container commit` > `docker image push` # редко используемый "ручной" ЖЦ
+- `docker image build` > `docker image push` > `docker image pull` | `docker container run` # штатный автоматизированный ЖЦ
 
 ### Структура и хранение образа
 - [ ] [Хранение образа на хостовой системе](https://docs.docker.com/storage/storagedriver/select-storage-driver/): OverlayFS
 - [ ] [Прием copy-on-write в OverlayFS](https://docs.docker.com/storage/storagedriver/)
 ```shell
-$ docker image history training-docker/ekr-backend:1.0.0
-IMAGE          CREATED      CREATED BY                                      SIZE      COMMENT
-e96641ea7cdf   2 days ago   COPY dbo-1.0-SNAPSHOT.jar /dbo # buildkit       65.9MB    buildkit.dockerfile.v0
-<missing>      2 days ago   ENTRYPOINT ["java" "-jar" "dbo-1.0-SNAPSHOT.…   0B        buildkit.dockerfile.v0
-<missing>      2 days ago   WORKDIR /dbo                                    0B        buildkit.dockerfile.v0
-<missing>      2 days ago   RUN /bin/sh -c mkdir -p /dbo # buildkit         0B        buildkit.dockerfile.v0
-<missing>      2 days ago   EXPOSE map[8080/tcp:{}]                         0B        buildkit.dockerfile.v0
-<missing>      5 days ago   /bin/sh -c #(nop)  ENV JAVA_HOME=/opt/java/o…   0B        
-<missing>      5 days ago   /bin/sh -c set -eux;     apk add --no-cache …   96.9MB    
-<missing>      5 days ago   /bin/sh -c #(nop) COPY multi:b8938281d618ac3…   16.7kB    
-<missing>      5 days ago   /bin/sh -c #(nop)  ENV JAVA_VERSION=jdk8u282…   0B        
-<missing>      5 days ago   /bin/sh -c apk add --no-cache tzdata --virtu…   14.2MB    
-<missing>      5 days ago   /bin/sh -c #(nop)  ENV LANG=en_US.UTF-8 LANG…   0B        
-<missing>      6 days ago   /bin/sh -c #(nop)  CMD ["/bin/sh"]              0B        
-<missing>      6 days ago   /bin/sh -c #(nop) ADD file:f77db8e5b937d8ebb…   5.58MB
+$ docker image ls [--all]
+REPOSITORY                                                    TAG        IMAGE ID       CREATED       SIZE
+artifactory.raiffeisen.ru/training-docker/ekr/proxy           1.0.0      11b2f064b006   2 hours ago   137 MB
+artifactory.raiffeisen.ru/training-docker/ekr/stub            1.0.0      32cd0ee546f0   2 hours ago   936 MB
+<none>                                                        <none>     0543fdd9c316   2 hours ago   137 MB
+<none>                                                        <none>     b91407f8c8d5   2 hours ago   922 MB
+artifactory.raiffeisen.ru/training-docker/ekr/backend         1.0.0      ad1950426837   2 hours ago   988 MB
+artifactory.raiffeisen.ru/training-docker/ekr/base            1.0.0      1c4adc3f2016   2 hours ago   922 MB
+artifactory.raiffeisen.ru/training-docker/ekr/demo            1.0.0      e00f6dcb2a6d   3 hours ago   6.96 MB
+artifactory.raiffeisen.ru/training-docker/ekr/demo            latest     e00f6dcb2a6d   3 hours ago   6.96 MB
+artifactory.raiffeisen.ru/ext-rbru-techimage-docker/postgres  11-alpine  905f19b2a1c2   2 weeks ago   159 MB
+artifactory.raiffeisen.ru/ext-rbru-osimage-docker/centos      latest     f9b030b89c29   4 months ago  212 MB
+artifactory.raiffeisen.ru/ext-rbru-techimage-docker/nginx     1.19.4     c39a868aad02   5 months ago  137 MB
+artifactory.raiffeisen.ru/ext-rbru-techimage-docker/openjdk   8-jre-s1im 21a3c44ee1bb   5 months ago  191 MB
+
 
 $ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock nate/dockviz images -t
 <scratch>
@@ -208,6 +205,23 @@ $ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock nate/dockviz imag
 │                   └─<missing> Virtual Size: 116.7 MB
 │                     └─<missing> Virtual Size: 116.7 MB
 │                       └─e96641ea7cdf Virtual Size: 182.6 MB Tags: training-docker/ekr-backend:1.0.0
+
+
+$ docker image history {{ project-registry }}/ekr/backend:1.0.0
+IMAGE          CREATED      CREATED BY                                      SIZE      COMMENT
+e96641ea7cdf   2 days ago   COPY dbo-1.0-SNAPSHOT.jar /dbo # buildkit       65.9MB    buildkit.dockerfile.v0
+<missing>      2 days ago   ENTRYPOINT ["java" "-jar" "dbo-1.0-SNAPSHOT.…   0B        buildkit.dockerfile.v0
+<missing>      2 days ago   WORKDIR /dbo                                    0B        buildkit.dockerfile.v0
+<missing>      2 days ago   RUN /bin/sh -c mkdir -p /dbo # buildkit         0B        buildkit.dockerfile.v0
+<missing>      2 days ago   EXPOSE map[8080/tcp:{}]                         0B        buildkit.dockerfile.v0
+<missing>      5 days ago   /bin/sh -c #(nop)  ENV JAVA_HOME=/opt/java/o…   0B        
+<missing>      5 days ago   /bin/sh -c set -eux;     apk add --no-cache …   96.9MB    
+<missing>      5 days ago   /bin/sh -c #(nop) COPY multi:b8938281d618ac3…   16.7kB    
+<missing>      5 days ago   /bin/sh -c #(nop)  ENV JAVA_VERSION=jdk8u282…   0B        
+<missing>      5 days ago   /bin/sh -c apk add --no-cache tzdata --virtu…   14.2MB    
+<missing>      5 days ago   /bin/sh -c #(nop)  ENV LANG=en_US.UTF-8 LANG…   0B        
+<missing>      6 days ago   /bin/sh -c #(nop)  CMD ["/bin/sh"]              0B        
+<missing>      6 days ago   /bin/sh -c #(nop) ADD file:f77db8e5b937d8ebb…   5.58MB
 ```
   
 ### Как посмотреть слои
@@ -246,20 +260,20 @@ docker image inspect --format='{{.Id}} {{.Parent}}' {{ os-registry }}/alpine
 docker run --name demo -it {{ os-registry }}/alpine
 /# touch side-effect.txt
 /# exit
-docker container diff
-docker container commit demo {{ project-registry }}/{{account}}-demo
+docker container diff demo
+docker container commit demo {{ project-registry }}/{{account}}/demo
 docker image ls
 ```
 
 - Сценарий "Как ...?"
 ```shell
-docker image tag {{ project-registry }}/{{account}}-demo:latest {{ project-registry }}/{{account}}-demo:1.0.0
+docker image tag {{ project-registry }}/{{account}}/demo:latest {{ project-registry }}/{{account}}/demo:1.0.0
 docker image ls
 ```
 
 - Сценарий "Как ...?"
 ```shell
-docker image push {{ project-registry }}/{{account}}-demo:1.0.0
+docker image push {{ project-registry }}/{{account}}/demo:1.0.0
 ```
 
 - Сценарий "Как ...?"
@@ -278,9 +292,8 @@ docker image ls
 - [ ] Then участники делятся проблемами и отвечают на вопросы
 - Как проименовали сценарии?
 - Какие способы идентификации образа? 
-- Какой тег у образа по умолчанию при создании?
+- Какой тег у образа по умолчанию при создании коммитом?
 - Какой тег у образа по умолчанию при операции `pull`?
-- Сколько места занимает образ на диске или в репозитории?
 - В чем физический смысл удаления образа командой `rm`?
 - Всегда ли удаляется образ по команде `rm`?
 - Что делает prune? 
@@ -290,6 +303,7 @@ docker image ls
 -------------------------
 - [ ] container = process + container data (container layer)
 - [ ] Что значит "запуск" контейнера? Что именно там запускается?
+- [ ] Как можно доопределить команду, запускаемую в контейнере?
 - [ ] Что нужно определить для запуска контейнера?
 - [Форвардинг портов](https://docs.docker.com/engine/reference/commandline/run/#options)
 - [Экстернализация](https://docs.docker.com/engine/reference/run/#env-environment-variables) конфигурации приложения при запуске контейнера
@@ -324,21 +338,20 @@ docker container ls --format '{{.ID}} | {{.Names}} | {{.Status}} | {{.Image}}'
 
 - Сценарий "Как запустить 'одноразовый' контейнер?"
 ```shell
-docker run --rm -it {{ os-registry }}/alpine
+docker run --rm -it {{ os-registry }}/alpine # note `--rm`
 /# exit
 docker container ls
 ```
 
 - Сценарий "Как запустить контейнер в фоновом режиме?"
 ```shell
-docker container run --detach --name proxy --publish 80:80 {{ soft-registry }}/nginx:1.19.4
+docker container run --detach --name proxy --publish 80:80 {{ soft-registry }}/nginx:1.19.4 # note `--detach`
 docker container ls
 ```
 
 - Сценарий "Как создать контейнер с сервисом без запуска?"
 ```shell
 docker container create
-docker container rename # podman issue
 ```
 
 - Сценарий "Как запустить созданный контейнер?"
@@ -379,11 +392,6 @@ docker container top
 docker container exec -it /bin/sh
 ```
 
-- Сценарий "Как обменяться файлами с контейнером?"
-```shell
-docker container cp
-```
-
 - Сценарий "Как посмотреть свойства контейнера?"
 ```shell
 docker container port
@@ -396,11 +404,17 @@ docker container diff
 docker container commit
 ```
 
+- Сценарий "Как обменяться файлами с контейнером?"
+```shell
+docker container cp
+```
+
 - [ ] Then участники делятся проблемами и отвечают на вопросы
 - Как проименовали сценарии?
 - Какие способы идентификации контейнера?
 - Какое имя у контейнера по умолчанию?
 - В чем физический смысл удаления контейнера?
+- Что делает `prune`?
 
 Контейнеризация простого сервиса: автоматическая сборка образа "с нуля" (30)
 --------------------------------
@@ -436,13 +450,13 @@ Hands-on practice quest #03-1: preparing base image with JRE (15)
 - Сценарий "Как создать и опубликовать собственный образ на основе Dockerfile?"
 ```shell
 cd application
-cat backend/Dockerfile # as reference for new base/Dockerfile
+cat backend/Dockerfile # check it for reference of new base/Dockerfile
 
 mkdir base
-nano base/Dockerfile #TODO describe image based on centos and install java-1.8.0-openjdk-headless
+nano base/Dockerfile #TODO describe image that based on centos and install java-1.8.0-openjdk-headless with `yum -y`
 
-docker image build --tag {{ project-registry }}/{{ account }}-base:1.0 ./base # where Dockerfile is
-docker push {{ project-registry }}/{{ account }}-base:1.0
+docker image build --tag {{ project-registry }}/{{ account }}/base:1.0.0 ./base # where Dockerfile located
+docker push {{ project-registry }}/{{ account }}/base:1.0.0
 ```
 
 Hands-on practice quest #03-2: _simple_ application containerization (15+5)
@@ -456,26 +470,27 @@ Hands-on practice quest #03-2: _simple_ application containerization (15+5)
 - Сценарий "Как задать "чужой" образ как базовый для своих следующих образов?"
 ```shell
 cd application
-nano backend/Dockerfile #TODO fix FROM
-nano stub/Dockerfile #TODO fix FROM
+nano backend/Dockerfile #TODO fix FROM for new base image
+nano stub/Dockerfile #TODO fix FROM for new base image
 ```  
 
 - Сценарий "Как описать provision образа в Dockerfile?"
 ```shell
-cd application
-wget --user {{ account }} --ask-password {{ app-distr }} # или скачать из artifactory + scp
-nano backend/Dockerfile
+cd application/backend
+wget --user {{ account }} --ask-password {{ app-distr }} # или скачать из artifactory + scp to remote
+cat Dockerfile # check out if everything is Ok
 ```
 
 - Сценарий "Как собрать свой образ с приложением на базе Dockerfile?"
 ```shell
-docker image build --tag {{ project-registry }}/{{ account }}-backend:1.0.0 ./backend
+cd application
+docker image build --tag {{ project-registry }}/{{ account }}/backend:1.0.0 ./backend
 ```
 
 - Сценарий "Как сохранить образ в репозитории?"
 ```shell
-docker login
-docker push
+docker login ...
+docker push ...
 ```
 
 - Сценарий "Как запустить "одноразовый" контейнер на базе своего образа с приложением?"
@@ -484,10 +499,15 @@ docker run \
  --name backend \
  --rm \ # "одноразовый" контейнер
  --detach \ # в фоновом режиме
- --publish 8080:80 \ # контейнерный 80 порт опубликован как хостовой 8080
+ --publish 8080:8080 \ # [host address:]8080:8080
  --env SPRING_PROFILES_ACTIVE=qa \ # в контейнере действует переменная окружения
  --volume $(pwd)/log:/dbo/log \ # папка в конейнере /dbo/log отображена на папку на хосте /current-path/log
- {{ project-registry }}/{{ account }}-backend:1.0.0
+ {{ project-registry }}/{{ account }}/backend:1.0.0
+
+curl localhost:8080/dbo/actuator/health
+curl -X POST localhost:8080/dbo/actuator/shutdown
+
+docker container ls --all 
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
@@ -529,8 +549,8 @@ cd application/stub
 wget --user ---ask-password  {{ app-stub }} # или скачать из artifactory + scp
 
 cd application
-docker build --tag {{ project-registry }}/{{ account }}-stub:1.0.0 ./stub
-docker build --tag {{ project-registry }}/{{ account }}-backend:1.0.0 ./backend
+docker build --tag {{ project-registry }}/{{ account }}/backend:1.0.0 ./backend
+docker build --tag {{ project-registry }}/{{ account }}/stub:1.0.0 ./stub
 ```
 
 - Сценарий "Как ...?"
@@ -549,8 +569,8 @@ docker run --detach \
 docker run --detach \
  --name stub \
  --publish 8888:8888 \
- {{ project-registry }}/{{ account }}-stub:1.0.0
-curl localhost:8888/api/account
+ {{ project-registry }}/{{ account }}/stub:1.0.0
+curl localhost:8888/api/account [| jq]
 
 docker run --detach \
  --name backend \
@@ -560,9 +580,9 @@ docker run --detach \
  --env SPRING_DATASOURCE_USERNAME=dbo \
  --env SPRING_DATASOURCE_PASSWORD=dbo \
  --env SPRING_INTEGRATION_LEGACYACCOUNTINGSYSTEM_BASEURL="http://$(hostname -i):8888/api" \
- {{ project-registry }}/{{ account }}-backend:1.0.0
-curl -H "X-API-VERSION:1" localhost:8080/dbo/actuator/health
-curl -H "X-API-VERSION:1" localhost:8080/dbo/api/account
+ {{ project-registry }}/{{ account }}/backend:1.0.0
+curl -H "X-API-VERSION:1" localhost:8080/dbo/actuator/health [| jq]
+curl -H "X-API-VERSION:1" localhost:8080/dbo/api/account [| jq]
 ```
 browser@student-host> http://{{ external host ip }}:8080/dbo/swagger-ui.html
 
@@ -596,12 +616,12 @@ docker rm [--force]
 - [Shared folders](https://docs.docker.com/storage/bind-mounts/#start-a-container-with-a-bind-mount) как подмонтированные FS  
 ```shell
 cd application
-docker run --volume "$(pwd)"/folder/file:/folder/file:ro # пути у folder абсолютные, начинаются со "/"
+docker run --volume "$(pwd)"/folder/file:/folder/file:ro # пути у folder абсолютные, начинаются с "/"
 ```
 - [Volumes](https://docs.docker.com/storage/volumes/) как блочные устройства
 ```shell
 cd application
-docker run --volume my_volume:/folder/file:ro # имя volume не начинается со "/"
+docker run --volume my_volume:/folder/file:ro # имя volume не начинается с "/"
 ```
 - [ ] Жизненный цикл `docker volume`
 - `docker volume create` | `docker run --volume` | `docker build` + Dockerfile
@@ -658,6 +678,7 @@ nano docker-compose.yml
 Hands-on practice quest #06: _networked_ multi-component stateful application containerization (0)
 ---------------------------
 - [ ] Given пары участников
+- В случае podman для работы символьных имен хостов в виртуальных сетях необходимо [собрать и сконфигурировать плагин `dnsname`](https://github.com/containers/dnsname/blob/master/README_PODMAN.md)
 
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
 - Сценарий "Как создать виртуальную сеть?"
@@ -678,7 +699,7 @@ docker run --detach \
 docker run --detach \
  --network my_deployment \
  --name stub \
- {{ project-registry }}/{{ account }}-stub:1.0.0
+ {{ project-registry }}/{{ account }}/stub:1.0.0
  
 docker run --detach \
  --network my_deployment \
@@ -688,20 +709,20 @@ docker run --detach \
  --env SPRING_DATASOURCE_USERNAME=dbo \
  --env SPRING_DATASOURCE_PASSWORD=dbo \
  --env SPRING_INTEGRATION_LEGACYACCOUNTINGSYSTEM_BASEURL="http://stub:8888/api" \ # hostname instead of external ip is the result of virtualizing network
- {{ project-registry }}/{{ account }}-backend:1.0.0
+ {{ project-registry }}/{{ account }}/backend:1.0.0
 ```
 
 ```shell
 cd application
 nano proxy/nginx.conf #TODOs
 
-docker build --tag {{ project-registry }}/{{ account }}-proxy:1.0.0 ./proxy
+docker build --tag {{ project-registry }}/{{ account }}/proxy:1.0.0 ./proxy
 
 docker run --detach \
  --network my_deployment \
  --name proxy \
  --publish 80:80 \
- {{ project-registry }}/{{ account }}-proxy:1.0.0
+ {{ project-registry }}/{{ account }}/proxy:1.0.0
 ```
 
 - Сценарий "Как подключить контейнер к виртуальным сетям?"
@@ -893,11 +914,6 @@ docker info --format '{{.LoggingDriver}}'
 docker docker run -it --log-driver local --log-opt mode=non-blocking --log-opt max-buffer-size=4m 
 docker inspect -f '{{.HostConfig.LogConfig.Type}}'
 docker logs 
-```
-- Сценарий "Как ...?"
-```shell
-nano /etc/docker/daemon.json
-curl 127.0.0.1:9323/metrics
 ```
 
 - Сценарий "Как осуществить multi-stage сборку образа?"
