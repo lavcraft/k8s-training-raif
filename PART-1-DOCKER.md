@@ -282,11 +282,11 @@ docker image ls
 docker container rm demo
 docker image prune
 docker image ls
-docker image prune --all
 docker image rm {{ project-registry }}/{{account}}-demo:1.0.0
 docker image ls
 docker image rm {{ project-registry }}/{{account}}-demo:latest
 docker image ls
+docker image prune --all
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
@@ -427,6 +427,17 @@ docker container cp
 - [ ] Экстернализация конфигурации приложения при сборке образа
 - [ ] [Команда сборки образа](https://docs.docker.com/engine/reference/commandline/build/#tag-an-image--t) `docker [image] build`
 - [ ] Понятие build context
+- [ ] Кеширование при сборке (включая [`--pull`, `--no-cache`](https://docs.docker.com/engine/reference/commandline/build/#options))
+```shell
+$ docker build .
+Uploading context  6.76 MB
+Step 1/2 : FROM busybox
+ ---> 769b9341d937
+Step 2/2 : CMD echo Hello world
+ ---> Using cache
+ ---> 99cc1ad10469
+Successfully built 99cc1ad10469
+```
 - [ ] Структура Dockerfile и его декларативность
 - [ ] Ключевые [директивы Dockerfile](https://docs.docker.com/engine/reference/builder)
 - [`FROM`](https://docs.docker.com/engine/reference/builder/#from)
@@ -455,7 +466,7 @@ cat backend/Dockerfile # check it for reference of new base/Dockerfile
 mkdir base
 nano base/Dockerfile #TODO describe image that based on centos and install java-1.8.0-openjdk-headless with `yum -y`
 
-docker image build --tag {{ project-registry }}/{{ account }}/base:1.0.0 ./base # where Dockerfile located
+docker image build --tag {{ project-registry }}/{{ account }}/base:1.0.0 [--pull] ./base # where Dockerfile located
 docker push {{ project-registry }}/{{ account }}/base:1.0.0
 ```
 
@@ -513,6 +524,7 @@ docker container ls --all
 - [ ] Then участники делятся проблемами и отвечают на вопросы
 - Как проименовали сценарии?
 - В каком порядке выполнялись директивы Dockerfile?
+- Что дает ключ `docker build --pull`?
 
 Введение в контейнеризацию составного приложения (15)
 ------------------------------------------------
