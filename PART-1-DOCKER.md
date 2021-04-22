@@ -90,6 +90,14 @@ Hands-on practice quest #00: prerequisites sound-check (15+5)
 - Hint: [docker cli reference](https://docs.docker.com/engine/reference/commandline/docker/)
 - сформированы пары участников с чередованием ролей в паре 
 
+- [ ] "Как описать рабочий сценарий использования команды?"
+```shell
+В общем случае:
+- предварительные команды подготовки системы к действию
+- команды действия
+- команды проверки успешности и корректности действия 
+``` 
+
 - [ ] When участники именуют сценарии, выполняют команды и анализируют их вывод и поведение
 - Сценарий "Как ...?"
 ```shell
@@ -416,6 +424,15 @@ docker container cp
 - В чем физический смысл удаления контейнера?
 - Что делает `prune`?
 
+---
+
+Ретроспектива (10)
+-----------------------
+- [ ] Ценность
+- [ ] Что на производство
+- [ ] Что улучшить
+- [ ] Какие вопросы дозакрыть
+
 Контейнеризация простого сервиса: автоматическая сборка образа "с нуля" (30)
 --------------------------------
 - [ ] Автоматическая сборка – "это другое!" 
@@ -438,7 +455,7 @@ Step 2/2 : CMD echo Hello world
  ---> 99cc1ad10469
 Successfully built 99cc1ad10469
 ```
-- [ ] Структура Dockerfile и его декларативность
+- [ ] Структура Dockerfile и декларативность ряда директив
 - [ ] Ключевые [директивы Dockerfile](https://docs.docker.com/engine/reference/builder)
 - [`FROM`](https://docs.docker.com/engine/reference/builder/#from)
 - [`WORKDIR`](https://docs.docker.com/engine/reference/builder/#workdir)
@@ -452,6 +469,10 @@ Successfully built 99cc1ad10469
 ```shell
 docker run [--entrypoint Dockerfile's ENTRYPOINT override] IMAGE [Dockerfile's CMD override] 
 ```
+- [ ] Версионирование создаваемого образа через теги
+- опасность `latest`
+- semantic versioning
+- unique tags
 
 Hands-on practice quest #03-1: preparing base image with JRE (15)
 ---------------------------
@@ -537,15 +558,6 @@ docker container ls --all
 - [ ] Оркестраторы:  `compose`, `swarm`, `k8s` и их ограничения
 - [ ] Клиенты для API орекстраторов: Docker Compose (±build) и Docker Stack (over Swarm)
 - [ ] Демо `cat docker-compose.yml`
-
----
-
-Ретроспектива (10)
------------------------
-- [ ] Ценность
-- [ ] Что на производство
-- [ ] Что улучшить
-- [ ] Какие вопросы дозакрыть
 
 Hands-on practice quest #04: _multi-component_ application containerization (25+5)
 ---------------------------
