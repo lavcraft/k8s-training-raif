@@ -581,8 +581,8 @@ docker container ls --all
 - [ ] Какие ресурсы необходимо виртуализировать?
 - network
 - volumes/folders
-- [ ] Оркестраторы:  `compose`, `swarm`, `k8s` и их ограничения
-- [ ] Клиенты для API орекстраторов: Docker Compose (±build) и Docker Stack (over Swarm)
+- [ ] Оркестраторы:  `compose`, `swarm`, `k8s (+minikube)` и их ограничения
+- [ ] Клиенты оркестраторов: Docker Compose (+build) и Docker Stack over Swarm/k8s/minikube (-build)
 - [ ] Демо `cat docker-compose.yml`
 
 Hands-on practice quest #04: _multi-component_ application containerization (25+5)
