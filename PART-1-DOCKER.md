@@ -90,7 +90,7 @@ Hands-on practice quest #00: prerequisites sound-check (15+5)
 - Hint: [docker cli reference](https://docs.docker.com/engine/reference/commandline/docker/)
 - сформированы пары участников с чередованием ролей в паре 
 
-- [ ] "Как описать рабочий сценарий использования команды?"
+- [ ] "Как описать сценарий использования команд?"
 ```shell
 В общем случае:
 - предварительные команды подготовки системы к действию
@@ -98,7 +98,7 @@ Hands-on practice quest #00: prerequisites sound-check (15+5)
 - команды проверки успешности и корректности действия 
 ``` 
 
-- [ ] When участники именуют сценарии, выполняют команды и анализируют их вывод и поведение
+- [ ] When участники *именуют сценарии*, выполняют команды и анализируют их вывод и поведение
 - Сценарий "Как ...?"
 ```shell
 docker version # TODO: собственные пометки участников для будущего использования в проектах
@@ -290,9 +290,9 @@ docker image ls
 docker container rm demo
 docker image prune
 docker image ls
-docker image rm {{ project-registry }}/{{account}}-demo:1.0.0
+docker image rm {{ project-registry }}/{{account}}/demo:1.0.0
 docker image ls
-docker image rm {{ project-registry }}/{{account}}-demo:latest
+docker image rm {{ project-registry }}/{{account}}/demo:latest
 docker image ls
 docker image prune --all
 ```
@@ -336,6 +336,7 @@ docker image prune --all
 Hands-on practice quest #02: container lifecycle (15+5)
 ---------------------------
 - [ ] Given пары участников
+- [optional] `sudo yum install -y jq` # json cli viewer
 
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
 - Сценарий "Как посмотреть список работающих и остановленных контейнеров?"
@@ -355,6 +356,27 @@ docker container ls
 ```shell
 docker container run --detach --name proxy --publish 80:80 {{ soft-registry }}/nginx:1.19.4 # note `--detach`
 docker container ls
+curl localhost:80
+```
+
+- Сценарий "Как 'подключиться' к работающему контейнеру?"
+```shell
+docker container logs
+docker container attach --sig-proxy=false # otherwise detach key `ctrl-c` will stop container 
+docker container top
+docker container exec -it /bin/sh
+```
+
+- Сценарий "Как посмотреть свойства контейнера?"
+```shell
+docker container port
+docker container inspect [| jq]
+```
+
+- Сценарий "Как поставить на паузу контейнер?"
+```shell
+docker container pause
+docker container unpause
 ```
 
 - Сценарий "Как создать контейнер с сервисом без запуска?"
@@ -365,12 +387,6 @@ docker container create
 - Сценарий "Как запустить созданный контейнер?"
 ```shell
 docker container start
-```
-
-- Сценарий "Как поставить на паузу контейнер?"
-```shell
-docker container pause
-docker container unpause
 ```
 
 - Сценарий "Как остановить и запустить снова работающий контейнер?"
@@ -392,20 +408,6 @@ docker container rm
 docker container prune
 ```
 
-- Сценарий "Как 'подключиться' к работающему контейнеру?"
-```shell
-docker container logs
-docker container attach --sig-proxy=false # otherwise ctrl-c will stop container 
-docker container top
-docker container exec -it /bin/sh
-```
-
-- Сценарий "Как посмотреть свойства контейнера?"
-```shell
-docker container port
-docker container inspect
-```
-
 - Сценарий "Как узнать и сохранить container data (container layer)?"
 ```shell
 docker container diff
@@ -423,6 +425,7 @@ docker container cp
 - Какое имя у контейнера по умолчанию?
 - В чем физический смысл удаления контейнера?
 - Что делает `prune`?
+- Сколько новых layers добавила команда `commit` к базовому образу?
 
 ---
 
@@ -470,13 +473,36 @@ Successfully built 99cc1ad10469
 docker run [--entrypoint Dockerfile's ENTRYPOINT override] IMAGE [Dockerfile's CMD override] 
 ```
 - [ ] Версионирование создаваемого образа через теги
-- опасность `latest`
+- опасность `:latest`
 - semantic versioning
 - unique tags
 
 Hands-on practice quest #03-1: preparing base image with JRE (15)
 ---------------------------
 - [ ] Given пары участников
+- Будущая структура папок, которую участники создадут в процессе этой и следующих практик
+```shell
+application
+├── backend
+│   ├── Dockerfile
+│   ├── dbo-1.0-SNAPSHOT-sources.zip
+│   └── dbo-1.0-SNAPSHOT.jar
+├── db
+│   └── Dockerfile
+├── proxy
+│   ├── Dockerfile
+│   └── nginx.conf
+├── stub
+│   ├── mappings
+│   │   └── legacyAccountingSystemResponse.json
+│   ├── Dockerfile
+│   └── wiremock-standalone-2.27.2.jar
+└── docker-compose.yml
+```
+- Создана рабочая папка проекта 
+```shell
+mkdir application
+```
 
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
 - Сценарий "Как создать и опубликовать собственный образ на основе Dockerfile?"
@@ -487,7 +513,7 @@ cat backend/Dockerfile # check it for reference of new base/Dockerfile
 mkdir base
 nano base/Dockerfile #TODO describe image that based on centos and install java-1.8.0-openjdk-headless with `yum -y`
 
-docker image build --tag {{ project-registry }}/{{ account }}/base:1.0.0 [--pull] ./base # where Dockerfile located
+docker image build --tag {{ project-registry }}/{{ account }}/base:1.0.0 ./base # where Dockerfile located
 docker push {{ project-registry }}/{{ account }}/base:1.0.0
 ```
 
@@ -503,7 +529,6 @@ Hands-on practice quest #03-2: _simple_ application containerization (15+5)
 ```shell
 cd application
 nano backend/Dockerfile #TODO fix FROM for new base image
-nano stub/Dockerfile #TODO fix FROM for new base image
 ```  
 
 - Сценарий "Как описать provision образа в Dockerfile?"
@@ -521,8 +546,8 @@ docker image build --tag {{ project-registry }}/{{ account }}/backend:1.0.0 ./ba
 
 - Сценарий "Как сохранить образ в репозитории?"
 ```shell
-docker login ...
-docker push ...
+docker login
+docker push
 ```
 
 - Сценарий "Как запустить "одноразовый" контейнер на базе своего образа с приложением?"
@@ -545,7 +570,8 @@ docker container ls --all
 - [ ] Then участники делятся проблемами и отвечают на вопросы
 - Как проименовали сценарии?
 - В каком порядке выполнялись директивы Dockerfile?
-- Что дает ключ `docker build --pull`?
+- Сколько новых layers добавила сборка к базовому образу?
+- Когда и по какой причине остановился контейнер?
 
 Введение в контейнеризацию составного приложения (15)
 ------------------------------------------------
@@ -571,6 +597,7 @@ wget --user --ask-password {{ app-distr }} # или скачать из artifact
 
 cd application/stub
 wget --user ---ask-password  {{ app-stub }} # или скачать из artifactory + scp
+nano Dockerfile #TODO fix FROM for new base image
 
 cd application
 docker build --tag {{ project-registry }}/{{ account }}/backend:1.0.0 ./backend
