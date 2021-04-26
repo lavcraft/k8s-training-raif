@@ -640,13 +640,12 @@ Hands-on practice quest #04: _multi-component_ application containerization (25+
 ```shell
 cd application/backend
 wget --user --ask-password {{ app-distr }} # или скачать из artifactory + scp
+nano Dockerfile #TODO fix active Spring profile to `preprod` instead of `qa`
+docker image build --tag {{ project-registry }}/{{ account }}/backend:1.0.0 ./backend
 
 cd application/stub
 wget --user ---ask-password  {{ app-stub }} # или скачать из artifactory + scp
-nano Dockerfile #TODO fix FROM for new base image
-
-cd application
-docker image build --tag {{ project-registry }}/{{ account }}/backend:1.0.0 ./backend
+nano Dockerfile #TODO fix FROM for new custom base image
 docker image build --tag {{ project-registry }}/{{ account }}/stub:1.0.0 ./stub
 ```
 
@@ -675,7 +674,7 @@ docker container run \
  --detach \
  --name backend \
  --publish 8080:8080 \
- --env SPRING_PROFILES_ACTIVE=preprod \
+ --env SPRING_PROFILES_ACTIVE=preprod \ # необязательно, установили как параметр командной строки в Dockerfile
  --env SPRING_DATASOURCE_URL="jdbc:postgresql://$(hostname -i)/dbo-db" \
  --env SPRING_DATASOURCE_USERNAME=dbo \
  --env SPRING_DATASOURCE_PASSWORD=dbo \
@@ -807,7 +806,7 @@ docker container run \
  --detach \
  --network my_deployment \
  --name backend \
- --env SPRING_PROFILES_ACTIVE=preprod \
+ --env SPRING_PROFILES_ACTIVE=preprod \ # необязательно, установили как параметр командной строки в Dockerfile
  --env SPRING_DATASOURCE_URL="jdbc:postgresql://db/dbo-db" \ # hostname instead of external ip is the result of virtualizing network
  --env SPRING_DATASOURCE_USERNAME=dbo \
  --env SPRING_DATASOURCE_PASSWORD=dbo \
