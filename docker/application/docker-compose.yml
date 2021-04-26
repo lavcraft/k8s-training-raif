@@ -19,6 +19,7 @@ services:
 
   backend:
     image: {{ project-registry }}/{{ account }}/backend:1.0.0
+    command: --spring.profiles.active=preprod
     networks:
       deployment:
     environment:
