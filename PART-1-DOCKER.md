@@ -514,10 +514,12 @@ $ docker run --rm test Alpine
 Hello Alpine
 ```
 
-- [ ] Наследование дочерних образов от базовых
-- `ENTRYPOINT` нельзя переопределить в дочерних образах
-- поэтому в базовых системных образах в качестве точки входа используется `CMD`
-- а в дочерних прикладных образах в качестве точки входа используется `ENTRYPOINT`
+- [ ] Системные образы для базы VS прикладные образы с приложениями
+- Dockerfile should specify at least one of `CMD` or `ENTRYPOINT` commands
+- `ENTRYPOINT` should be defined when using the container as an executable.
+- `CMD` should be used as a way of defining default arguments for an `ENTRYPOINT` command _or_ for executing an ad-hoc command in a container
+- `CMD` will be overridden when running the container with alternative arguments
+- If `CMD` is defined from the base image, setting `ENTRYPOINT` will reset `CMD` to an empty value
 
 - [ ] Версионирование создаваемого образа через теги
 - опасность `:latest`
