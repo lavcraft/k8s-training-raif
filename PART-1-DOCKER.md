@@ -7,6 +7,7 @@ Prerequisites
 - [ ] RAM ≥ 4Gb
 - [ ] RHEL8
 - [ ] Права локального админа для аккаунта участника {{ account }}
+- [ ] Доступен git repo с данным руководством {{ git-repo }} `gitlabci.raiffeisen.ru/container-trainings/training-docker`
 - [ ] Доступен корпоративный Docker {{ registry-host }} `artifactory.raiffeisen.ru`
 - [ ] Доступен корпоративный Docker {{ soft-registry }} с образами прикладного ПО `{{ registry-host }}/ext-rbru-techimage-docker`
 - [ ] Доступен корпоративный Docker {{ os-registry }} с образами ОС `{{ registry-host }}/ext-rbru-osimage-docker`
@@ -78,6 +79,7 @@ container #--# host : "port\nmapping"
 @enduml
 ```
 </details>
+
 - [ ] Клиентский UI
 - docker cli
 - podman cli
