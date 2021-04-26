@@ -33,12 +33,12 @@ Agenda
 
 Введение в Docker (15)
 -----------------
-- [ ] Зачем нужен Docker? Каковы функции инструментов контейнеризации?
-- development environment
-- testing environment
-- production environment
-- [ ] Метафора морского контейнера
-- [ ] Виртуализация или контейнеризация?
+- [ ] Зачем нужен Docker? Метафора морского контейнера 
+- [ ] Каковы функции инструментов контейнеризации?
+- development environment?
+- testing environment?
+- production environment?
+- [ ] Виртуализация (инфраструктуры) VS контейнеризация (приложения)?
 - место на диске для гостевой ОС
 - время запуска гостевой ОС
 - overhead операций гостевой ОС
@@ -49,7 +49,8 @@ Agenda
 - disk image provisioning tool (dockercli) and Dockerfile
 - disk image
 - disk image registries: [docker hub](http://hub.docker.com) and corporate registries
-- container = process + container data (container layer)
+- container = running process + container data (container layer)
+
 <details>
 <summary>puml</summary>
 
@@ -86,10 +87,10 @@ container #--# host : "port\nmapping"
 - GUI в дистрибутиве для MacOS
 - GUI в IDEA
 - ...
+
 - [ ] Итого
 ```
-Контейнер – это новый экзешник.
-Переносимый и управляемый.
+Контейнер – это новый экзешник. Переносимый и управляемый.
 ```
 
 Hands-on practice quest #00: prerequisites sound-check (15+5)
@@ -99,10 +100,12 @@ Hands-on practice quest #00: prerequisites sound-check (15+5)
 - форк открыт в браузере для внесения пометок 
 - для последующей удобной работы с copy+paste для ресурсов раздела [Prerequisites](#Prerequisites) плейсхолдеры заменены актуальными значениями
 - все команды Docker запускаются из-под `sudo ...` или в сессии `sudo su -`
+
+- [ ] Сформированы пары участников с чередованием ролей в паре 
 - Hint: синонимы команд docker cli
 - Hint: `... --help`
 - Hint: [docker cli reference](https://docs.docker.com/engine/reference/commandline/docker/)
-- сформированы пары участников с чередованием ролей в паре 
+- Hint: при работе в терминале используйте `Tab` и `↑` для автоподстановки значений
 
 - [ ] "Как описать сценарий использования команд?"
 ```shell
@@ -123,7 +126,7 @@ docker events
 ```
 
 - Сценарий "Как ...?"
-(в новом shell, чтобы параллельно видеть вывод `docker events`)
+(в новом ssh shell, чтобы параллельно видеть вывод `docker events`)
 ```shell
 docker logout
 docker login {{ registry-host }}
@@ -131,14 +134,14 @@ docker login {{ registry-host }}
 
 - Сценарий "Как ...?"
 ```shell
-docker pull {{ soft-registry }}/postgres:11-alpine
+docker image pull {{ os-registry }}/alpine
 docker system df
 ````
 
 - Сценарий "Как ...?"
 ```shell
 docker container ls [--all]
-docker run --name demo -it {{ os-registry }}/alpine
+docker container run --name demo -it {{ os-registry }}/alpine
 /# cat /etc/os-release
 /# exit 
 ```
@@ -146,7 +149,7 @@ docker run --name demo -it {{ os-registry }}/alpine
 - Сценарий "Как ...?"
 ```shell
 docker container ls [--all]
-docker rm [-f] demo
+docker container rm [--force] demo
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
@@ -265,7 +268,7 @@ docker image ls # TODO: собственные пометки участнико
 
 - Сценарий "Как ...?"
 ```shell
-docker pull {{ os-registry }}/alpine
+docker image pull {{ os-registry }}/alpine
 docker image ls
 ```
 
@@ -274,12 +277,12 @@ docker image ls
 docker image history {{ os-registry }}/alpine
 
 docker image inspect {{ os-registry }}/alpine
-docker image inspect --format='{{.Id}} {{.Parent}}' {{ os-registry }}/alpine
+docker image inspect --format='{{.Id}} -> {{.Parent}}' {{ os-registry }}/alpine
 ```
 
 - Сценарий "Как ...?"
 ```shell
-docker run --name demo -it {{ os-registry }}/alpine
+docker container run --name demo -it {{ os-registry }}/alpine
 /# touch side-effect.txt
 /# exit
 docker container diff demo
@@ -323,19 +326,21 @@ docker image prune --all
 
 Жизненный цикл контейнера (20)
 -------------------------
-- [ ] container = process + container data (container layer)
+- [ ] container = running process + container data (container layer)
 - [ ] Что значит "запуск" контейнера? Что именно там запускается?
 - [ ] Как можно доопределить команду, запускаемую в контейнере?
+
 - [ ] Что нужно определить для запуска контейнера?
 - [Форвардинг портов](https://docs.docker.com/engine/reference/commandline/run/#options)
-- [Экстернализация](https://docs.docker.com/engine/reference/run/#env-environment-variables) конфигурации приложения при запуске контейнера
 - имя контейнера (+defaults)
-- container layer
 - disk image
 - virtual network
 - folder | volume mapping
 - entry point (image `entrypoint` override)
+- guest environment variables 
 - command line arguments (image `cmd` override)
+- [Экстернализация](https://docs.docker.com/engine/reference/run/#env-environment-variables) конфигурации приложения при запуске контейнера
+
 - [ ] [Жизненный цикл контейнера](docker/img/container-lifecycle.png)
 - `docker container create` + `docker container start` = `docker container run` `[args]`
 - `docker container pause`, `docker container unpause`
@@ -345,7 +350,16 @@ docker image prune --all
 - просмотр лога контейнера
 - `docker container stop`
 - `docker container rm`
-- [ ] [Запуск контейнера в интерактивном и фоновом режимах](https://docs.docker.com/engine/reference/run/#detached--d): `-d` vs `-it`
+
+- [ ] [Запуск контейнера в интерактивном и фоновом режимах](https://docs.docker.com/engine/reference/run/#detached--d): `-d` [vs](https://stackoverflow.com/a/46898038) `-it`
+- [ ] Сколько по времени будет работать контейнер?
+  
+- [ ] Можно ли запускать несколько сервисов в одном контейнере?
+- [отслеживается только один процесс](https://stackoverflow.com/questions/25775266/how-to-keep-docker-container-running-after-starting-services) c PID 1 (из директив ENTRYPOINT + CMD) и по его завершению контейнер завершается тоже, жестко останавливая остальные процессы
+- поэтому технически можно, но если [очень аккуратно](https://docs.docker.com/config/containers/multi-service_container/) запустить свой менеджер процессов и управлять дочерними процессами
+- в целом вся философия, инструментарий и паттерны Docker [рекомендуют подход "service per container"](https://devops.stackexchange.com/questions/447/why-it-is-recommended-to-run-only-one-process-in-a-container)
+- иначе сложно контейнеры отлаживать, мониторить, анализировать логи, разделять ресурсы и данные, обрабатывать падения сервисов
+- для управления группой контейнеров существуют оркестраторы
 
 Hands-on practice quest #02: container lifecycle (15+5)
 ---------------------------
@@ -361,7 +375,7 @@ docker container ls --format '{{.ID}} | {{.Names}} | {{.Status}} | {{.Image}}'
 
 - Сценарий "Как запустить 'одноразовый' контейнер?"
 ```shell
-docker run --rm -it {{ os-registry }}/alpine # note `--rm`
+docker container run --rm -it {{ os-registry }}/alpine # note `--rm`
 /# exit
 docker container ls
 ```
@@ -428,7 +442,7 @@ docker container diff
 docker container commit
 ```
 
-- Сценарий "Как обменяться файлами с контейнером?"
+- Опциональный сценарий "Как обменяться файлами с контейнером?"
 ```shell
 docker container cp
 ```
@@ -463,7 +477,7 @@ docker container cp
 - [ ] Понятие build context
 - [ ] Кеширование при сборке (включая [`--pull`, `--no-cache`](https://docs.docker.com/engine/reference/commandline/build/#options))
 ```shell
-$ docker build .
+$ docker image build .
 Uploading context  6.76 MB
 Step 1/2 : FROM busybox
  ---> 769b9341d937
@@ -482,10 +496,24 @@ Successfully built 99cc1ad10469
 - [`ARG`](https://docs.docker.com/engine/reference/builder/#arg)
 - [`EXPOSE`](https://docs.docker.com/engine/reference/builder/#expose) documentation
 - [`VOLUME`](https://docs.docker.com/engine/reference/builder/#volume)
-- [`ENTRYPOINT`](https://docs.docker.com/engine/reference/builder/#entrypoint) [and](https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact) [`CMD`](https://docs.docker.com/engine/reference/builder/#cmd) (+ `shell`, preferred `exec` and `default parameters to ENTRYPOINT` forms)
+- [`ENTRYPOINT`](https://docs.docker.com/engine/reference/builder/#entrypoint) [and](https://docs.docker.com/engine/reference/builder/#understand-how-cmd-and-entrypoint-interact) [`CMD`](https://docs.docker.com/engine/reference/builder/#cmd) (+ preferred `exec` and similar `default parameters to ENTRYPOINT`, `shell` forms)
 ```shell
-docker run [--entrypoint Dockerfile's ENTRYPOINT override] IMAGE [Dockerfile's CMD override] 
+docker container run [--entrypoint Dockerfile's ENTRYPOINT override] IMAGE [Dockerfile's CMD defaults override] 
 ```
+```shell
+FROM alpine
+ENTRYPOINT ["echo", "Hello"]
+CMD ["World"] # 'default parameters to ENTRYPOINT' form
+...
+$ docker build --tag test .
+...
+$ docker run --rm test
+Hello World
+...
+$ docker run --rm test Alpine
+Hello Alpine
+```
+
 - [ ] Версионирование создаваемого образа через теги
 - опасность `:latest`
 - semantic versioning
@@ -525,10 +553,10 @@ cd application
 cat backend/Dockerfile # check it for reference of new base/Dockerfile
 
 mkdir base
-nano base/Dockerfile #TODO describe image that based on centos and install java-1.8.0-openjdk-headless with `yum -y`
+nano base/Dockerfile #TODO describe image that based on CentOS fixed fresh available version and install java-1.8.0-openjdk-headless with `yum install -y`
 
 docker image build --tag {{ project-registry }}/{{ account }}/base:1.0.0 ./base # where Dockerfile located
-docker push {{ project-registry }}/{{ account }}/base:1.0.0
+docker image push {{ project-registry }}/{{ account }}/base:1.0.0
 ```
 
 Hands-on practice quest #03-2: _simple_ application containerization (15+5)
@@ -549,7 +577,7 @@ nano backend/Dockerfile #TODO fix FROM for new base image
 ```shell
 cd application/backend
 wget --user {{ account }} --ask-password {{ app-distr }} # или скачать из artifactory + scp to remote
-cat Dockerfile # check out if everything is Ok
+cat Dockerfile # check out application's default configuration
 ```
 
 - Сценарий "Как собрать свой образ с приложением на базе Dockerfile?"
@@ -561,19 +589,20 @@ docker image build --tag {{ project-registry }}/{{ account }}/backend:1.0.0 ./ba
 - Сценарий "Как сохранить образ в репозитории?"
 ```shell
 docker login
-docker push
+docker image push
 ```
 
 - Сценарий "Как запустить "одноразовый" контейнер на базе своего образа с приложением?"
 ```shell
-docker run \
+docker container run \
  --name backend \
- --rm \ # "одноразовый" контейнер
- --detach \ # в фоновом режиме
+ --rm \ # одноразовый: удалится после остановки
+ --detach \ # -d
  --publish 8080:8080 \ # [host address:]8080:8080
  --env SPRING_PROFILES_ACTIVE=qa \ # в контейнере действует переменная окружения
  --volume $(pwd)/log:/dbo/log \ # папка в конейнере /dbo/log отображена на папку на хосте /current-path/log
- {{ project-registry }}/{{ account }}/backend:1.0.0
+ {{ project-registry }}/{{ account }}/backend:1.0.0 \ #  репозиторий и тег
+ --spring.profiles.active=qa # параметры командной строки
 
 curl localhost:8080/dbo/actuator/health
 curl -X POST localhost:8080/dbo/actuator/shutdown
@@ -586,6 +615,9 @@ docker container ls --all
 - В каком порядке выполнялись директивы Dockerfile?
 - Сколько новых layers добавила сборка к базовому образу?
 - Когда и по какой причине остановился контейнер?
+- Сколько раз вы столкнулись с настройкой экстернализированной конфигурации приложения?
+- Какие приориеты у этих точек конфигурации?
+- Что случится при запуске контейнера с параметром командной строки `docker run ... --spring.profiles.active=preprod` ? 
 
 Введение в контейнеризацию составного приложения (15)
 ------------------------------------------------
@@ -614,15 +646,16 @@ wget --user ---ask-password  {{ app-stub }} # или скачать из artifac
 nano Dockerfile #TODO fix FROM for new base image
 
 cd application
-docker build --tag {{ project-registry }}/{{ account }}/backend:1.0.0 ./backend
-docker build --tag {{ project-registry }}/{{ account }}/stub:1.0.0 ./stub
+docker image build --tag {{ project-registry }}/{{ account }}/backend:1.0.0 ./backend
+docker image build --tag {{ project-registry }}/{{ account }}/stub:1.0.0 ./stub
 ```
 
 - Сценарий "Как ...?"
 ```shell
 cd application
 
-docker run --detach \
+docker container run \
+ --detach \
  --name db \
  --publish 5432:5432 \
  --volume db:/var/lib/postgresql/data \
@@ -631,13 +664,15 @@ docker run --detach \
  --env POSTGRES_PASSWORD=dbo \
  {{ soft-registry }}/postgres:11-alpine
  
-docker run --detach \
+docker container run \
+ --detach \
  --name stub \
  --publish 8888:8888 \
  {{ project-registry }}/{{ account }}/stub:1.0.0
 curl localhost:8888/api/account [| jq]
 
-docker run --detach \
+docker container run \
+ --detach \
  --name backend \
  --publish 8080:8080 \
  --env SPRING_PROFILES_ACTIVE=preprod \
@@ -653,13 +688,13 @@ browser@student-host> http://{{ external host ip }}:8080/dbo/swagger-ui.html
 
 - Сценарий "Как ...?"
 ```shell
-docker ps [--all]
+docker container ls [--all]
 ```
 
 - Сценарий "Как ...?"
 ```shell
-docker stop
-docker rm [--force]
+docker container stop
+docker container rm [--force]
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
@@ -681,12 +716,12 @@ docker rm [--force]
 - [Shared folders](https://docs.docker.com/storage/bind-mounts/#start-a-container-with-a-bind-mount) как подмонтированные FS  
 ```shell
 cd application
-docker run --volume "$(pwd)"/folder/file:/folder/file:ro # пути у folder абсолютные, начинаются с "/"
+docker container run --volume "$(pwd)"/folder/file:/folder/file:ro # пути у folder абсолютные, начинаются с "/"
 ```
 - [Volumes](https://docs.docker.com/storage/volumes/) как блочные устройства
 ```shell
 cd application
-docker run --volume my_volume:/folder/file:ro # имя volume не начинается с "/"
+docker container run --volume my_volume:/folder/file:ro # имя volume не начинается с "/"
 ```
 - [ ] Жизненный цикл `docker volume`
 - `docker volume create` | `docker run --volume` | `docker build` + Dockerfile
@@ -701,7 +736,7 @@ Hands-on practice quest #05: multi-component _stateful_ application containeriza
 - [ ] When участники именуют сценарии, формируют свои команды и проверяют их вывод и поведение
 - Сценарий "Как пробросить shared folder с хостовой системы в контейнер?"
 ```shell
-docker run -v #TODO Сделать proxy/Dockerfile ненужным: пробросить nginx.conf как read-only файл в контейнер proxy при его запуске (не при сборке)
+docker container run -v #TODO Сделать proxy/Dockerfile ненужным: пробросить nginx.conf как read-only файл в контейнер proxy при его запуске (не при сборке)
 ```
 
 - Сценарий "Как посмотреть volumes/folders контейнера?"
@@ -752,7 +787,8 @@ docker network ...
 ```
 
 ```shell
-docker run --detach \
+docker container run \
+ --detach \
  --network my_deployment \
  --name db \
  --volume db:/var/lib/postgresql/data \
@@ -761,12 +797,14 @@ docker run --detach \
  --env POSTGRES_PASSWORD=dbo \
  {{ soft-registry }}/postgres:11-alpine
  
-docker run --detach \
+docker container run \
+ --detach \
  --network my_deployment \
  --name stub \
  {{ project-registry }}/{{ account }}/stub:1.0.0
  
-docker run --detach \
+docker container run \
+ --detach \
  --network my_deployment \
  --name backend \
  --env SPRING_PROFILES_ACTIVE=preprod \
@@ -781,9 +819,10 @@ docker run --detach \
 cd application
 nano proxy/nginx.conf #TODOs
 
-docker build --tag {{ project-registry }}/{{ account }}/proxy:1.0.0 ./proxy
+docker image build --tag {{ project-registry }}/{{ account }}/proxy:1.0.0 ./proxy
 
-docker run --detach \
+docker container run \
+ --detach \
  --network my_deployment \
  --name proxy \
  --publish 80:80 \
@@ -844,7 +883,7 @@ docker stats
 
 - Сценарий "Как лимитировать ресурсы при запуске контейнера?"
 ```shell
-docker run # ограничить по CPU и памяти, чтобы получить OOME
+docker container run # ограничить по CPU и памяти, чтобы получить OOME
 ```
 
 - Сценарий "Как лимитировать ресурсы в docker-compose?"
@@ -866,7 +905,7 @@ nano docker-compose.yml # ограничить по CPU, чтоб не бало�
 - RUN, COPY, ADD create layers
 - Other instructions create temporary intermediate images, and do not increase the size of the build
 ```shell
-docker build --tag stub ./stub
+docker image build --tag stub ./stub
 [+] Building 2.2s (10/10) FINISHED                                                                                                                                                                                                                      
  => [internal] load build definition from Dockerfile                                                                                                                                                                                               0.0s
  => => transferring dockerfile: 328B                                                                                                                                                                                                               0.0s
@@ -891,7 +930,7 @@ docker build --tag stub ./stub
 ```
 - [ ] Кеширование включаемых файлов и результатов директив
 ```shell
-docker build --tag stub ./stub
+docker image build --tag stub ./stub
 [+] Building 1.9s (11/11) FINISHED                                                                                                                                                                                                                      
  => [internal] load build definition from Dockerfile                                                                                                                                                                                               0.0s
  => => transferring dockerfile: 328B                                                                                                                                                                                                               0.0s
@@ -937,7 +976,7 @@ docker builder prune [--all]
 - Как проименовали сценарии?
 - Насколько получилось оптимизировать сборки в измеряемых метриках?
 
-Рекомендуемые практики (30)
+[Рекомендуемые практики](https://cloud.google.com/architecture/best-practices-for-building-containers) (30)
 ----------------------
 - [ ] Минимизировать [security риски](https://snyk.io/blog/10-docker-image-security-best-practices)
 1. Используйте минимальные образы: быстрее и меньше зависимостей + меньше рисков 
@@ -976,7 +1015,7 @@ Hands-on practice quest #09: build-optimized networked multi-component stateful 
 - Сценарий "Как ...?"
 ```shell
 docker info --format '{{.LoggingDriver}}'
-docker docker run -it --log-driver local --log-opt mode=non-blocking --log-opt max-buffer-size=4m 
+docker container run -it --log-driver local --log-opt mode=non-blocking --log-opt max-buffer-size=4m 
 docker inspect -f '{{.HostConfig.LogConfig.Type}}'
 docker logs 
 ```
@@ -985,7 +1024,7 @@ docker logs
 ```shell
 cd application/backend
 wget --user --ask-password {{ app-src }}
-nano Dockerfile #TODO: BUILD stage with `maven clean verify` and QA stage with `java -jar ... --spring.profiles.active=qa` 
+nano Dockerfile #TODO: BUILD stage with `mvn clean verify` and QA stage with `java -jar ... --spring.profiles.active=qa` 
 ```
 
 - [ ] Then участники делятся проблемами и отвечают на вопросы
@@ -1019,4 +1058,4 @@ Docker в среде Kubernetes (5)
 -------
 Для желающих:
 - [ ] Пройти практику до конца на stand-alone containers
-- [ ] Пройти практику до конца с использованием оркестратора (docker-compose.yml compliant: `docker compose`, `docker stack` in default swarm mode, `podman-compose`) 
+- [ ] Пройти практику до конца с использованием оркестратора (docker-compose.yml compliant: `docker compose`, `docker stack` in default swarm mode, `podman compose`) 
