@@ -36,10 +36,6 @@ Hands-on practice quest #00: requisites check and compatibility check
 kubectl
 ```
 
-```shell
-docker version
-```
-
 - [ ] Then участники делятся возникшими и решенными проблемами и отвечают на вопросы
 - Какая версия kubectl нужна для установленного кластера?
 - Какие версии kubectl совместимы с какими версиями кластера?
@@ -62,7 +58,7 @@ cat ~/.kube/config
 ```
 
 ```shell
-kubectl config
+kubectl config view
 ```
 
 ```shell
@@ -71,29 +67,27 @@ kubectl config get-contexts
 
 ```shell
 kubectl config use-contexts
-```
-
-```shell
-tkgi login -a API -u USER -k
-tkgi clusters
-tkgi get-credentials CLUSTER_NAME
-kubectl config get-contexts
+kubectl auth can-i --list
 ```
 
 - [ ] Then участники делятся возникшими и решенными проблемами и отвечают на вопросы
 - Что делать если команда не найдена?
 - Как переключать кластеры без use-context?
 - Как избежать ошибок выполнения команд не на "тех" кластерах?
+- \* попробуйте использовать несколько конфигураций с помощью переменной окружения `KUBECONFIG`. Что будет с разными кластерами при выводе `kubectl config view`?
 
-K8S Concepts
-------------
+## K8S Concepts
+
 - [ ] Declarative vs Imperative
 - [ ] Control loop (Observe, Orient, Decide, Act) Jonh Boyd
 - [ ] Reconciliation
 - Real control loop examples by kubectl - Desired state vs Current stats (Observe, diff ,act Control model)
+- Материалы
+  - [Настрокйка реквизитов docker-registry k8s](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
-Hands-on practice quest #02: I have an application, I wish deploy it to production!
------------------------------------------------------------------------------------
+
+### Hands-on practice quest #02: I have an application, I wish deploy it to production!
+
 - [ ] Given пары участников прошедших Docker тренинг
 - [ ] When участники собирают приложение и деплоят в кластер
 ```shell
@@ -101,11 +95,33 @@ docker build
 docker push
 ```
 
-- [ ] Then участники делятся мыслями и соображениями
-- куда нужно запушить образ чтобы kubernetes кластер его увидил?
+```shell
+kubectl create job test --image=busybox -- echo "Hello World" 
+```
 
-K8S Concepts Network isolation
-------------------------------
+```shell
+kubectl create job test --image=artifactory.raiffeisen.ru/ext-techimage-docker/busybox -- echo "Hello World" 
+kubet get logs jobs/test
+```
+
+```shell
+cat ~/.docker/config.json
+kubectl get events
+kubectl describe jobs/test
+kubectl create secret generic regcred \
+    --from-file=.dockerconfigjson=$USER/.docker/config.json> \
+    --type=kubernetes.io/dockerconfigjson
+kubectl get pods
+kubectl get jobs
+```
+
+- [ ] Then участники делятся мыслями и соображениями
+- куда нужно запушить образ чтобы kubernetes кластер его успешно спулил?
+- какой правильный процесс деплоя образов?
+- чем отличается Job от Pods?
+
+## K8S Concepts Network isolation
+
 - [ ] Clusters and nodes
 - [ ] Clusters network isolation
 - [ ] Application in cluster resources
@@ -113,14 +129,10 @@ K8S Concepts Network isolation
 - [ ] Docker run in Kubernetes and minimal configuration. Namespaces and pods fast introduction
 - [ ] Демо kubectl apply/get/describe и output моды
 
-Hands-on practice quest #03: Push and run forest
-------------------------------------------------
+### Hands-on practice quest #03: Run sth in cluster and observe
 - [ ] Given пары участников имеют собранные образы приложений
 - [ ] When участники описывают поды с двумя сервисами и меняют состояние kubernetes
-```shell
-docker push <>
-vi pod.yml
-```
+
 
 ```shell
 kubectl apply -f pod.yml
