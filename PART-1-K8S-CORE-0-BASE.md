@@ -25,6 +25,7 @@ Agenda
 - [ ] K8S и приложения - Capabilities (Self-Service, API-Driven, Elastic)
 - [ ] Основные компоненты и с чем мы будем работать на этом тренинге
 - kubectl
+- [] **Демо**. CLI и настройки доступа к кластеру
 
 Hands-on practice quest #00: requisites check and compatibility check
 ---------------------------------------------------------------------
@@ -34,18 +35,30 @@ Hands-on practice quest #00: requisites check and compatibility check
 
 ```shell
 kubectl
+docker version
+```
+
+```shell
+ls -la ~/.kube
+kubectl cluster-info
+```
+
+```shell
+kubectl completion bash
 ```
 
 - [ ] Then участники делятся возникшими и решенными проблемами и отвечают на вопросы
+- Какая версия kubernetes кластера у вас?
 - Какая версия kubectl нужна для установленного кластера?
 - Какие версии kubectl совместимы с какими версиями кластера?
+- [Enable kubectl completion howto](https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/#enable-kubectl-autocompletion)
 
 K8S Authentication
 ------------------
 - [ ] K8S _Реализации_ - PKS/TKGI/Cloud
 - [ ] Как управлять кластерами? CLI or GUI ?
 - [ ] kubectl CLI и много кластеров. Как понять где себя обслужить
-- [ ] kubectl contexts
+- [ ] kubectl config get-contexts
 - [ ] tkgi cli
 
 Hands-on practice quest #01: connect to existed cluster
@@ -142,10 +155,15 @@ kubectl apply -f pod.yml
 kubectl api-resources
 ```
 
+```shell
+kubectl config set-context --current --namespace=<>
+```
+
 - [ ] Then участники делятся результатами и соображениями
 - Как узнать что там с нашим приложением и результатами выполнения команды?
 - Если другой задеплоит под с таким же названием, он перезатрёт мой?
 - А в какой namespace приложение задеплоилось?
+- А на каком узле запустилось?
 - Как узнать какие проблемы у приложения при запуске?
 - Что значат ограничения по CPU 200mi ? Это сколько?
 - как понять какие ресурсы доступны для меня?
@@ -176,9 +194,14 @@ kubectl apply -f service.yml
 kubectl apply -f pod.yml
 ```
 
+```shell
+kubectl get pods --show-labels
+```
+
 - [ ] Then участники делятся результатами и соображениями
 - Как узнать что сервис настроен правильно и работает корректно?
 - Рестартовало ли приложение после `kubectl apply -f pod.yml`?
+- Что будет если изменить metadata.labels.app ?
 
 K8S Internal and External access to containers
 ----------------------------------------------
@@ -225,7 +248,7 @@ Hands-on practice quest #06: Redeploy application with replicas
 
 ```shell
 vi pod.yml
-kubectl apply -f pod.yml
+kubectl apply -f pod.yml #see metadata and replicas
 curl <>
 ```
 
@@ -261,6 +284,52 @@ tty0$ kubectl apply -f deployment.yml
 - Как распределены инстансы приложений?
 - В какой момент приложение становится доступно для запроса curl?
 - Пробовали открыть UI?
+
+Hands-on practice quest #07.1: Edit deployment
+-------------------------------------------------------------
+- [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress
+- [ ] When участники запускают команды и применяют новую настройки
+
+Изменим metadata.labels.app
+```shell
+kubectl edit pod/<>
+```
+
+Вернём обратно metadata.labels.app
+```shell
+kubectl edit pod/<>
+```
+
+- [ ] Then участники делятся результатами и соображениями
+- Что случилось со старым приложением при изменении labels?
+- Объясните поведение
+- Будет ли работать replica set?
+
+K8S Deployment rollout
+-------------------------------------------
+- [ ] kubectl rollout undo demo
+
+Hands-on practice quest #07.2: Edit deployment
+-------------------------------------------------------------
+- [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress
+- [ ] When участники запускают команды и применяют новую настройки
+
+Изменим metadata.labels.app
+```shell
+tty0$ kubectl edit deployment/<>
+tty0$ kubectl get rs
+tty0$ kubectl rollut undo deployment/<>
+```
+
+Вернём обратно metadata.labels.app
+```shell
+kubectl edit pod/<>
+```
+
+- [ ] Then участники делятся результатами и соображениями
+- Что случилось со старым приложением при изменении labels?
+- Объясните поведение
+- Будет ли работать replica set?
 
 K8S Multi path applications
 ---------------------------

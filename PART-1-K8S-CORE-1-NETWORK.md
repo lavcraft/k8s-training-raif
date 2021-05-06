@@ -23,6 +23,7 @@ Kubernetes Network Base
 - [ ] kube-proxy и iptables/conntrack механизмы
 - [ ] CNI Networks. Что это и причём тут Linux? Какие есть точки расширения?
 - [ ] CNI реализации. NSX-T, calicao, flannel, etc и зачем так много?
+- [ ] Как NSX-T + NCP. OSI и разные уровни маршрутизации на основе Ingress Resource + Ingress Controller
 - [ ] Виртуальные устройства Linux veth* и бриджы cbr* и где же всё таки наш CNI?
 
 Hands-on practice quest #00: работа с портами приложений - containerPort/targetPort/nodePort
