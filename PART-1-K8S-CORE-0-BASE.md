@@ -36,6 +36,7 @@ Hands-on practice quest #00: requisites check and compatibility check
 ```shell
 kubectl
 docker version
+docker login artifactory.raiffeisen.ru
 ```
 
 ```shell

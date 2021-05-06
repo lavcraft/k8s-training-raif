@@ -21,7 +21,7 @@ Install required and optional software. Optional for more comfortable work
     1. open https://artifactory.raiffeisen.ru and login
     1. Search `kubectl` and copy `url to file`
     1. Download `wget --user <YOUR_USER> --password <url>`
-    1. install `sudo rpm - i *.rpm`
+    1. install `sudo rpm -i *.rpm`
 1. `sudo yum install helm jq`
 
 **Sudo**
