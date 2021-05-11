@@ -33,18 +33,18 @@ Hands-on practice quest #00: requisites check and compatibility check
 - [ ] Given сформированы пары участников
 - [ ] When участники используют команды и проанализируют их вывод и поведение
 
-```shell
+```shell script
 kubectl
 docker version
 docker login artifactory.raiffeisen.ru
 ```
 
-```shell
+```shell script
 ls -la ~/.kube
 kubectl cluster-info
 ```
 
-```shell
+```shell script
 kubectl completion bash
 ```
 
@@ -67,19 +67,19 @@ Hands-on practice quest #01: connect to existed cluster
 - [ ] Given пары участников
 - [ ] When участники используют команды для извлечения информации из кластера
 
-```shell
+```shell script
 cat ~/.kube/config
 ```
 
-```shell
+```shell script
 kubectl config view
 ```
 
-```shell
+```shell script
 kubectl config get-contexts
 ```
 
-```shell
+```shell script
 kubectl config use-contexts
 kubectl auth can-i --list
 ```
@@ -88,6 +88,7 @@ kubectl auth can-i --list
 - Что делать если команда не найдена?
 - Как переключать кластеры без use-context?
 - Как избежать ошибок выполнения команд не на "тех" кластерах?
+- Как разделены ресурсы других участников во дном кластере?
 - \* попробуйте использовать несколько конфигураций с помощью переменной окружения `KUBECONFIG`. Что будет с разными кластерами при выводе `kubectl config view`?
 
 ## K8S Concepts
@@ -104,35 +105,43 @@ kubectl auth can-i --list
 
 - [ ] Given пары участников прошедших Docker тренинг
 - [ ] When участники собирают приложение и деплоят в кластер
-```shell
-docker build
-docker push
+```shell script
+kubectl create job test --image=busybox -- echo "Hello World"
 ```
 
-```shell
-kubectl create job test --image=busybox -- echo "Hello World" 
-```
-
-```shell
+```shell script
 kubectl create job test --image=artifactory.raiffeisen.ru/ext-techimage-docker/busybox -- echo "Hello World" 
-kubet get logs jobs/test
+
+kubectl get pods
+kubectl get jobs
+
+kubectl get logs jobs/test
 ```
 
-```shell
+```shell script
+# Попробуем запустить образ из репозиторя, требущего авторизацию
+kubectl run -it debug --image=artifactory.raiffeisen.ru/ext-rbru-container-community-docker/cli-tools -- /bin/sh
+
 cat ~/.docker/config.json
+
 kubectl get events
-kubectl describe jobs/test
 kubectl create secret generic regcred \
     --from-file=.dockerconfigjson=$USER/.docker/config.json> \
     --type=kubernetes.io/dockerconfigjson
+kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regcred"}]}'
+
+kubectl run -it debug --image=artifactory.raiffeisen.ru/ext-rbru-container-community-docker/cli-tools -- /bin/sh
+
 kubectl get pods
-kubectl get jobs
 ```
 
 - [ ] Then участники делятся мыслями и соображениями
 - куда нужно запушить образ чтобы kubernetes кластер его успешно спулил?
 - какой правильный процесс деплоя образов?
 - чем отличается Job от Pods?
+- когда удаляется Pod созданный при создании Job?
+- кто ответственнен за это удаление?
+- \* запустить под с лимитами по памяти в 16mb
 
 ## K8S Concepts Network isolation
 
@@ -142,23 +151,46 @@ kubectl get jobs
 - [ ] Cluster network availability
 - [ ] Docker run in Kubernetes and minimal configuration. Namespaces and pods fast introduction
 - [ ] Демо kubectl apply/get/describe и output моды
+- [Подробно о ресурсах и CGroups](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html-single/resource_management_guide/index)
 
-### Hands-on practice quest #03: Run sth in cluster and observe
+### Hands-on practice quest #03: Run apps in cluster
 - [ ] Given пары участников имеют собранные образы приложений
 - [ ] When участники описывают поды с двумя сервисами и меняют состояние kubernetes
 
 
-```shell
-kubectl apply -f pod.yml
+```shell script
+cat handson/handson-03/apps-01.yml
+kubectl apply -f handson/handson-03/apps-01.yml
 ```
 
-```shell
-kubectl api-resources
+- [ ] Then участники делятся результатами и соображениями
+- [ ] Какой статус пода?
+- [ ] Найдите ошибку
+- Как исправить?
+
+```shell script
+ kubectl
 ```
 
-```shell
+```shell script
+# INFO: Не забываем что можно указать дефолтный контекст
 kubectl config set-context --current --namespace=<>
 ```
+
+```shell script
+kubectl edit app-butter
+# add limits 4mb
+vi handson/handson-03/apps-01.yml
+kubectl apply -f handson/handson-03/apps-01.yml
+kubectl get pods
+```
+
+- [ ] Then приложение не запуcтилось
+- [ ] Найти информацию для извлечения признака проблемы
+- [ ] Найти оптимальное значение лимитов и исправить
+- [ ] * Вывести статусы всех ошибочных статусов приложений в форме `image - status`. Смотри документацию jsonpath/go-template [kubectl jsonpath doc](https://kubernetes.io/docs/reference/kubectl/jsonpath/)
+- [ ] * Задайте дефолтные квоты для приложений в вашем namespace
+
 
 - [ ] Then участники делятся результатами и соображениями
 - Как узнать что там с нашим приложением и результатами выполнения команды?
@@ -170,6 +202,7 @@ kubectl config set-context --current --namespace=<>
 - как понять какие ресурсы доступны для меня?
 - как понять какие ресурсы работают в рамках неймспейса??
 - как получить сырой вывод api?
+- получилось ли у вас отредактировать лимиты приложения? Какие были трудности?
 
 K8S Application discovery
 -------------------------
@@ -178,69 +211,94 @@ K8S Application discovery
 - [ ] Доступность при деплое и политики обновления
 - [ ] K8S Services and namespaces
 - [ ] Демо kubectl exec curl с интерактивным watch для get pods/get svc -o wide
+- [kubectl port-forward docs](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
 
 Hands-on practice quest #04: Redeploy application with services
 ---------------------------------------------------------------
 - [ ] Given пары участников имеют задеплоенную версию приложений
 - [ ] When участники запускают команды и применяют новую настройки
 
-Описываем сервисы
 ```shell
-vi service.yml
+cat  handson/handson-04/apps.yml
+kubectl apply -f  handson/handson-04/apps.yml
+kubectl get pod debug
+```
+
+```shell
+cat handson/handson-04/service.yml
 # применяем их
-kubectl apply -f service.yml
+kubectl apply -f  handson/handson-04/service.yml
 ```
+
+- [ ] Допишете сервис для недостающего приложения
+- [ ] Запустить cli-tools если под не запущен
+- [ ] Как проверить их работособность?
+- [ ] Задание: Запустить cli-tools если под не запущен
+- [ ] Задание: Вычислите IP сервиса
 
 ```shell
-kubectl apply -f pod.yml
+kubectl get pods
+[debug] $ nslookup <pod-ip>
+[debug] $ nslookup <service-ip>
 ```
 
-```shell
-kubectl get pods --show-labels
+- [ ] Then nslookup выдал обратные зоны по запрашиваемым IP
+- [ ] Кто ответственнен за это преобразование?
+- [ ] Как найти кто ответственен?
+- [ ] Можно ли его переконфигурировать?
+- [ ] Demo 
+- [ ] Задание: Найти кто влияет на название DNS имени
+
+```shell script
+[debug] $ cat /etc/resolv.conf
+kubectl get services --all-namespaces | grep <nameserver-ip>
+kubectl get pods --namespace=kube-system -l k8s-app=kube-dns
 ```
 
+  
 - [ ] Then участники делятся результатами и соображениями
 - Как узнать что сервис настроен правильно и работает корректно?
 - Рестартовало ли приложение после `kubectl apply -f pod.yml`?
 - Что будет если изменить metadata.labels.app ?
+- Что если остановить приложение и обратиться к сервису?
+- Кто настраивает kube-dns ?
+- Как диагнастировать kube-dns ?
 
 K8S Internal and External access to containers
 ----------------------------------------------
 - [ ] Containers Shell
 - [ ] K8S Ingress и его описание
 - [ ] kubectl exec
-- [ ] Про то как собрать всё в кучку и альтернативные решения на примере kustomize и Helm.
+- [ ] [Подробнее об ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 
 Hands-on practice quest #05: Redeploy application with ingress
 ---------------------------------------------------------------
 - [ ] Given пары участников имеют задеплоенную версию приложений и сервисов
 - [ ] When участники запускают команды и применяют новую настройки
 
-Описываем ingress
-```shell
-vi ingress.yml
-# применяем их
-kubectl apply -f ingress.yml
-```
+- [ ] Задание: Настроить доступ из сети банка к приложению
 
-```shell
-docker build <>
-vi pod.yml
-kubectl apply -f pod.yml
+```shell script
+# тест должен заработать
+watch -n0.1 http://app-knife-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+# Завершите ingress конфигурацию
+vi handson/handson-05/ingress.yml
+kubectl apply -f handson/handson-05/ingress.yml
 ```
 
 - [ ] Then участники делятся результатами и соображениями
 - Как теперь достучаться до сервиса?
+- Что будет если остановить сервис?
 - Как попробовать посмотреть что внутри?
 - Сколько инстансов каждого приложения?
+- Как ingress связан с ingress-controller?
+- Где находится ingress-controller?
+- Кто отвечает за "анонсирование" внутренних имён сервисов и имён для ingress?
 
 K8S Namespace, Pods, Containers again and Scaling
 -------------------------------------------------
-- [ ] Containers Shell
-- [ ] K8S Ingress и его описание
-- [ ] ReplicaSet, Selector и TopologyKey
-- [ ] kubectl exec
-- [ ] Демо как собрать всё вместе
+- [ ] ReplicaSet, Deployment и TopologyKey
+- [ ] Как собрать всё вместе
 
 Hands-on practice quest #06: Redeploy application with replicas
 ---------------------------------------------------------------
@@ -248,20 +306,28 @@ Hands-on practice quest #06: Redeploy application with replicas
 - [ ] When участники запускают команды и применяют новую настройки
 
 ```shell
-vi pod.yml
-kubectl apply -f pod.yml #see metadata and replicas
-curl <>
+# запускаем тестовую команду. Видим что падает
+[tty0] $ watch -n0.1 app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+# применяем деплоймент
+[tty1] $ kubectl apply -f handson/handson-06/deployment.yml
+# после запуска снова запускаем
+[tty0] $ watch -n0.1 app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 ```
 
-- [ ] Then участники делятся результатами и соображениями
+- [ ] Задание: Изменить количество реплик для деплоймента app-butter-deployment на 2 с помощью команды `kubectl scale`
+
+- [ ] Then тест упал при увеличении количества реплик когда сервис вернул HTTP 500
+- [ ] Почему упал тест? Разберитесь в источнике проблемы
+- [ ] Участники делятся результатами и соображениями
 - Как узнать в какое приложение попал запрос?
 - Как посмотреть логи сразу со всех инстансов?
 - Как распределены инстансы приложений?
 - В какой момент приложение становится доступно для запроса curl?
+- Как вы думаете, какой вид балансировки используется при вызове app-butter из app-knife?
 
 K8S Application Probes and full deployments
 -------------------------------------------
-- [ ] liveness and rediness probess
+- [ ] liveness and readiness probess
 - [ ] Application access model
 - [ ] LB probes and application availability for user corner cases
 - [ ] K8S Deploments
@@ -273,10 +339,10 @@ Hands-on practice quest #07: Redeploy application with probes
 
 Конфигурируем для одного приложение rediness/liveness для другого нет
 ```shell
-tty0$ vi deployment.yml
-tty1$ while true; do curl <app1>; sleep 1;done
-tty2$ while true; do curl <app2>; sleep 1;done
-tty0$ kubectl apply -f deployment.yml
+[tty0] $ watch -n0.1 app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+
+[tty1] $ kubectl edit deployment.apps app-butter-deployment
+[tty1] $ kubectl apply -f deployment.yml
 ```
 
 - [ ] Then участники делятся результатами и соображениями
@@ -284,21 +350,25 @@ tty0$ kubectl apply -f deployment.yml
 - Как посмотреть логи сразу со всех инстансов?
 - Как распределены инстансы приложений?
 - В какой момент приложение становится доступно для запроса curl?
-- Пробовали открыть UI?
+- Будут ли доходить запросы до приложения если livenessProbe отрицательна а readinessProbe положительна?
+- * HAL API: как быть с обратными ссылками? Как узнать с каого адреса пришёл запрос?
 
-Hands-on practice quest #07.1: Edit deployment
+Hands-on practice quest #08: Edit deployment
 -------------------------------------------------------------
 - [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress
 - [ ] When участники запускают команды и применяют новую настройки
 
 Изменим metadata.labels.app
 ```shell
-kubectl edit pod/<>
+[tty0] $ kubectl get pods -w
+[tty1] $ kubectl edit pod app-butter-<>
+[tty1] $ kubectl get pods
 ```
 
 Вернём обратно metadata.labels.app
 ```shell
-kubectl edit pod/<>
+kubectl edit pod app-butter-<>
+kubectl get pods
 ```
 
 - [ ] Then участники делятся результатами и соображениями
@@ -310,27 +380,22 @@ K8S Deployment rollout
 -------------------------------------------
 - [ ] kubectl rollout undo demo
 
-Hands-on practice quest #07.2: Edit deployment
+Hands-on practice quest #07.2: deployment rollout
 -------------------------------------------------------------
 - [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress
 - [ ] When участники запускают команды и применяют новую настройки
 
 Изменим metadata.labels.app
 ```shell
-tty0$ kubectl edit deployment/<>
-tty0$ kubectl get rs
-tty0$ kubectl rollut undo deployment/<>
-```
-
-Вернём обратно metadata.labels.app
-```shell
-kubectl edit pod/<>
+[tty0] $ kubectl get rs -w
+[tty1] $ kubectl rollout history deployment app-butter-deployment
+[tty1] $ kubectl rollout undo deployment app-butter-deployment --to-revision=<revision-number>
+[tty1] $ kubectl get deployment app-butter-deployment -o yaml
 ```
 
 - [ ] Then участники делятся результатами и соображениями
-- Что случилось со старым приложением при изменении labels?
-- Объясните поведение
-- Будет ли работать replica set?
+- Можно ли откатиться на уже откаченную версию (последнюю)?
+- Как посмотреть все deployments на кластере?
 
 K8S Multi path applications
 ---------------------------
@@ -341,23 +406,34 @@ Hands-on practice quest #08: Redeploy application with custom location
 ----------------------------------------------------------------------
 - [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress
 - [ ] When участники запускают команды и применяют новую настройки
+- [ ] Задание: сделать новый ingress, чтобы приложения работали на одном хосте
 
-Выносим приложения на разные пути одного домена
+INFO: [Nginx ingress docs](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+INFO: [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/user-guide/ingress-path-matching/)
+
+
 ```shell
-tty0$ vi ingress.yml
-tty0$ kubectl apply -f ingress.yml
+# Тест должен заработать
+[tty0] $ watch -n0.5 curl training-app.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+
+# Выносим приложения на разные пути одного домена
+tty1$ vi ingress.yml
+tty1$ kubectl apply -f ingress.yml
 ```
+
+- [ ] Задание: просмотрите логи всех приложений app-butter. Какие заголовки приходят в приложение?
 
 - [ ] Then участники делятся результатами и соображениями
 - Пробовали открыть UI? Всё работает как нужно?
 - Как можно исправить проблему с путями? (3 варианта)
+- Достаточно ли заголовков которые приходят для восстановления контекста запроса?
 
-K8S DNS mappings
+K8S ConfigMaps
 ----------------
+- [ ] K8S ConfigMaps
 - [ ] Подробно Forwarded RFC + расширения
 - [ ] DNS TTL и как это влияет на maintenance приложений
 - [ ] Локальность данных при использовании DNS Discovery
-- [ ] Какой Discovery будет использовать наше приложение?
 - [ ] K8S Config maps - Что это и где стоит использовать а где нет
 
 Hands-on practice quest #09: Redeploy application with custom configuration

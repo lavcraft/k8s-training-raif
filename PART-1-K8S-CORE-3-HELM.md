@@ -74,3 +74,9 @@ vi values.yaml
 - как сделать дефолтные значения для переменных шаблона?
 - как откатить helm?
 - что будет с stateful приложениями при откате?
+
+```shell script
+kubectl repo add container-community "https://artifactory.raiffeisen.ru/artifactory/ext-rbru-container-community-virtual-helm/" --username=<> --paswword=<> --namespace=<>
+helm repo update
+  helm install rbru-kubernetes-ingress container-community/rbru-kubernetes-ingress --set imagePullSecrets[0].name='regcred' --namespace=<>
+```
