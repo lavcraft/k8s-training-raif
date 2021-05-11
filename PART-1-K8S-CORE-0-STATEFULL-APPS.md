@@ -477,40 +477,12 @@ kubectl apply -f deployment.yml
 - почему нельзя комбинировать несколько TCP/UDP соединений на одном endpoint?
 - как посмотреть какие сейчас есть балансировщики?
 
-K8S Secrets
-----------------
-- [ ] K8S Secrets object. Secret types and security considerations
-- [ ] Secrets best practice for Cloud Native apps
-- [ ] Required support for security from infrastructure side and app side
-
-Hands-on practice quest #10: K8S Secrets simple practice
----------------------------------------------------------------------------
-- [ ] Given пары участников имеют app-knife-deployment и app-butter-deployment в своём namespace
-- [ ] When участники запускают команды и применяют новую настройки
-
-- [ ] Задание: создать секрет и добавить его в приложения. Проверить его наличие и формат
-
-```shell
-kubectl explain secrets
-kubectl explain secrets.data
-vi secret.yml
-vi deployment.yml
-kubectl apply -f configmap.yml
-kubectl apply -f deployment.yml
-```
-
-- [ ] Then участники делятся результатами и соображениями
-- можно ли зашифровать секрет?
-- чем секрет отличается от ConfigMap
-
-K8S Apps Distribution
+K8S Test Distributed Application and pods states
 ------------------------------------------------
-- [ ] Manage application topology
-- [ ] Taints and Tolerations
-- [ ] Topology keys
-- [ ] Disruption Budget
-- [ ] Node maintenance
-Hands-on practice quest #10: Reconfigure apps distribution
+- [ ] Типичные трудности в распределённых приложениях при масштабировании
+- [ ] OpenTelemetry и трейсинг
+
+Hands-on practice quest #10: Redeploy application and start stress testing
 --------------------------------------------------------------------------
 - [ ] Given пары участников имеют app-knife-deployment и app-butter-deployment в своём namespace
 - [ ] When участники запускают команды и применяют новую настройки
@@ -548,13 +520,6 @@ kubectl describe <>
 - [ ] можно ли запускать job вместе с replica controller?
 - [ ] как что-то сделать при завершение Job ? 
 - [ ] а если что-то пошло не так?
-
-# TODO
-
-K8S Test Distributed Application and pods states
-------------------------------------------------
-- [ ] Типичные трудности в распределённых приложениях при масштабировании
-- [ ] OpenTelemetry и трейсинг
 
 K8S Helm Charts
 ---------------
