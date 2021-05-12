@@ -45,6 +45,9 @@ kubectl cluster-info
 ```
 
 ```shell script
+# выведем "спецификацию" для авто комплита
+kubectl completion bash
+# применим её
 source <(kubectl completion bash)
 ```
 
@@ -142,9 +145,9 @@ cat ~/.docker/config.json
 
 kubectl get events
 kubectl create secret generic regcred \
-    --from-file=.dockerconfigjson=/home/$USER/.docker/config.json> \
+    --from-file=.dockerconfigjson=/home/$USER/.docker/config.json \
     --type=kubernetes.io/dockerconfigjson
-kubectl explain job.template.spec.imagePullSecrets
+kubectl explain serviceaccount.imagePullSecrets
 kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regcred"}]}'
 
 kubectl run -it debug --image=artifactory.raiffeisen.ru/ext-rbru-container-community-docker/cli-tools -- /bin/sh
