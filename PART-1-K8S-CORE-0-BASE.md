@@ -66,6 +66,7 @@ Hands-on practice quest #01: connect to existed cluster
 -------------------------------------------------------
 - [ ] Given пары участников
 - [ ] When участники используют команды для извлечения информации из кластера
+- [ ] Задача: узнать список ваших привилегий в кластере
 
 ```shell script
 cat ~/.kube/config
@@ -89,6 +90,7 @@ kubectl auth can-i --list
 - Как переключать кластеры без use-context?
 - Как избежать ошибок выполнения команд не на "тех" кластерах?
 - Как разделены ресурсы других участников во дном кластере?
+- Как выбрать свой namespace пол умолчанию?
 - \* попробуйте использовать несколько конфигураций с помощью переменной окружения `KUBECONFIG`. Что будет с разными кластерами при выводе `kubectl config view`?
 
 ## K8S Concepts
@@ -109,14 +111,27 @@ kubectl auth can-i --list
 kubectl create job test --image=busybox -- echo "Hello World"
 ```
 
+- [ ] Задание: Понять сработала ли наша задача
+- [ ] Почему не вывелись логи?
+- [ ] Почему у пода такое странное имя?
+
 ```shell script
+kubectl describe pod test-<id>
+
 kubectl create job test --image=artifactory.raiffeisen.ru/ext-techimage-docker/busybox -- echo "Hello World" 
 
 kubectl get pods
 kubectl get jobs
 
-kubectl get logs jobs/test
+kubectl logs jobs/test
+kubectl delete job test
+kubectl get pods
 ```
+
+- [ ] в чём различие в семантике написания команд - `kubectl get job test` и `kubectl get jobs/test`? Попробуйте объяснить
+- [ ] что будет если команду вывода логов разными способами?
+- [ ] удаляется ли созданный pod после удаления job test? 
+- [ ] Задание: запустить образ с curl, dig прочими инструментами для дебага
 
 ```shell script
 # Попробуем запустить образ из репозиторя, требущего авторизацию
@@ -127,8 +142,9 @@ cat ~/.docker/config.json
 
 kubectl get events
 kubectl create secret generic regcred \
-    --from-file=.dockerconfigjson=$USER/.docker/config.json> \
+    --from-file=.dockerconfigjson=/home/$USER/.docker/config.json> \
     --type=kubernetes.io/dockerconfigjson
+kubectl explain job.template.spec.imagePullSecrets
 kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regcred"}]}'
 
 kubectl run -it debug --image=artifactory.raiffeisen.ru/ext-rbru-container-community-docker/cli-tools -- /bin/sh
@@ -161,28 +177,30 @@ kubectl get pods
 
 ```shell script
 cat handson/handson-03/apps-01.yml
-kubectl explain pod.spec.imagePullSecrets
 kubectl apply -f handson/handson-03/apps-01.yml
 ```
 
 - [ ] Then участники делятся результатами и соображениями
 - [ ] Какой статус пода?
 - [ ] Найдите ошибку
-- Как исправить?
-
-```shell script
- kubectl
-```
+- [ ] Задание: Исправьте ошибку пользуясь информацией `kubectl explain`
 
 ```shell script
 # INFO: Не забываем что можно указать дефолтный контекст
 kubectl config set-context --current --namespace=<>
+kubectl explain pod.spec
+kubectl edit butter-fabric
 ```
 
+- [ ] Какие возникли трудности при редактировании? Объясните почему так?
+- [ ] Задание: передеплоить приложения отдельно
+
 ```shell script
+kubectl delete -f handson/handson-03/apps-01.yml
+kubectl apply -f handson/handson-03/apps-02.yml
 kubectl explain pod.spec.containers.resources
+# add limits 4mb и cpu 200mi
 kubectl edit app-butter
-# add limits 4mb
 vi handson/handson-03/apps-01.yml
 kubectl apply -f handson/handson-03/apps-01.yml
 kubectl get pods
@@ -191,7 +209,7 @@ kubectl get pods
 - [ ] Then приложение не запуcтилось
 - [ ] Найти информацию для извлечения признака проблемы
 - [ ] Найти оптимальное значение лимитов и исправить
-- [ ] \* Вывести статусы всех ошибочных статусов приложений в форме `image - status`. Смотри документацию jsonpath/go-template [kubectl jsonpath doc](https://kubernetes.io/docs/reference/kubectl/jsonpath/)
+- [ ] \* Вывести статусы всех ошибочных статусов приложений в форме `name/image - status`. Смотри документацию jsonpath/go-template [kubectl jsonpath doc](https://kubernetes.io/docs/reference/kubectl/jsonpath/)
 - [ ] \* Задайте дефолтные квоты для приложений в вашем namespace
 
 
@@ -220,27 +238,30 @@ Hands-on practice quest #04: Access to application via services
 ---------------------------------------------------------------
 - [ ] Given пары участников имеют задеплоенную версию приложений
 - [ ] When участники запускают команды и применяют новую настройки
-- [ ] Задание: Запусть cli-tools если отсутствует
+- [ ] Задание: Запустить cli-tools если отсутствует
 
 ```shell
+kubectl delete -f handson/handson-03/apps-01.yml
+kubectl delete -f handson/handson-03/apps-02.yml
 cat  handson/handson-04/apps.yml
 kubectl apply -f  handson/handson-04/apps.yml
 kubectl get pod debug 
 ```
 
 ```shell
-cat handson/handson-04/service.yml
-kubectl explan service.spec
+cat handson/handson-04/services.yml
+kubectl explain service.spec
 kubectl expose --help
 # применяем их
-kubectl apply -f  handson/handson-04/service.yml
+kubectl apply -f  handson/handson-04/services.yml
 kubectl get services
 kubectl get endpoints
 ```
 
-- [ ] Допишете сервис для недостающего приложения
-- [ ] Запустить cli-tools если под не запущен
-- [ ] Как проверить их работособность?
+- [ ] Как проверить работоспособность сервисов?
+- [ ] Как выполнить команду в запущенном контейнере?
+- [ ] Можно ли включить интерактивный шел в запущенном контейнере?
+- [ ] Задание: Допишете сервис для недостающего приложения
 - [ ] Задание: Запустить cli-tools если под не запущен
 - [ ] Задание: Вычислите IP сервиса
 
@@ -290,7 +311,7 @@ Hands-on practice quest #05: Redeploy application with ingress
 
 ```shell script
 # тест должен заработать
-watch -n0.1 http://app-knife-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+watch -n0.1 curl http://app-knife-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 kubect explain ingress.spec
 # Завершите ingress конфигурацию
 vi handson/handson-05/ingress.yml
@@ -308,26 +329,31 @@ kubectl apply -f handson/handson-05/ingress.yml
 
 K8S Namespace, Pods, Containers again and Scaling
 -------------------------------------------------
-- [ ] ReplicaSet, Deployment и TopologyKey
-- [ ] Как собрать всё вместе
+- [ ] ReplicaSet
+- [ ] Deployment
+- [ ] TopologyKey
 
 Hands-on practice quest #06: Redeploy application with replicas
 ---------------------------------------------------------------
 - [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress
 - [ ] When участники запускают команды и применяют новую настройки
-- [ ] Исследуем надёжность нашего деплоймента
+- [ ] Задание: изменить запуск приложений в поде на запуск c помощью deployment
 
 ```shell
 # запускаем тестовую команду. Видим что падает
-[tty0] $ watch -n0.1 app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
-kubect explain deployment
+[tty0] $ watch -e -n0.1 curl --fail app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+[tty1] kubectl explain deployment
 # применяем деплоймент
+[tty1] $ cat handson/handson-06/deployment.yml
+[tty1] $ vi handson/handson-06/deployment.yml
 [tty1] $ kubectl apply -f handson/handson-06/deployment.yml
-# после запуска снова запускаем
-[tty0] $ watch -n0.1 app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+# после запуска снова запускаем команду для проверки
+[tty0] $ watch -e -n0.1 curl --fail app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 ```
 
-- [ ] Задание: Изменить количество реплик для деплоймента app-butter-deployment на 2 с помощью команды `kubectl scale`
+- [ ] Исследуем надёжность нашего деплоймента
+
+- [ ] Задание: Изменить количество реплик для deployment app-butter-deployment на 3 с помощью команды `kubectl scale`
 
 - [ ] Then тест упал при увеличении количества реплик когда сервис вернул HTTP 500
 - [ ] Почему упал тест? Разберитесь в источнике проблемы
@@ -352,9 +378,9 @@ Hands-on practice quest #07: Redeploy application with probes
 
 Конфигурируем для одного приложение rediness/liveness для другого нет
 ```shell
-[tty0] $ watch -n0.1 app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+[tty0] $ watch -e -n0.1 curl --fail app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 
-[tty1] $ kubectl edit deployment.apps app-butter-deployment
+[tty1] $ kubectl edit deployment app-butter-deployment
 [tty1] $ kubectl apply -f deployment.yml
 ```
 
@@ -364,14 +390,15 @@ Hands-on practice quest #07: Redeploy application with probes
 - Как распределены инстансы приложений?
 - В какой момент приложение становится доступно для запроса curl?
 - Будут ли доходить запросы до приложения если livenessProbe отрицательна а readinessProbe положительна?
-- * HAL API: как быть с обратными ссылками? Как узнать с каого адреса пришёл запрос?
+- Достаточно ли только readiness для надёжной работы app-butter?
+- * HAL API: как быть с обратными ссылками? Как узнать с какого адреса пришёл запрос?
 
 Hands-on practice quest #08: Edit deployment
 -------------------------------------------------------------
 - [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress
 - [ ] When участники запускают команды и применяют новую настройки
 
-Изменим metadata.labels.app
+Изменим metadata.labels.app на app-knife-edited
 ```shell
 [tty0] $ kubectl get pods -w
 [tty1] $ kubectl edit pod app-butter-<custom-id-autocomplete-it>
@@ -388,6 +415,7 @@ kubectl get pods
 - Что случилось со старым приложением при изменении labels?
 - Объясните поведение
 - Будет ли работать replica set?
+- Как удалить все изменённые поды?
 
 K8S Deployment rollout
 -------------------------------------------
@@ -443,33 +471,44 @@ INFO: [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/us
 - Как можно исправить проблему с путями? (3 варианта)
 - Достаточно ли заголовков которые приходят для восстановления контекста запроса?
 - Как посмотреть логи всех инстансов(подов) приложения?
-- Можно ли настроить TLS для нашего сервиса на ingress?
+- \* Можно ли настроить TLS для нашего сервиса на ingress? Попробуйте сделать
 
 K8S ConfigMaps
 ----------------
-- [ ] K8S ConfigMaps
-- [ ] Подробно Forwarded RFC + расширения
 - [ ] DNS TTL и как это влияет на maintenance приложений
 - [ ] Локальность данных при использовании DNS Discovery
 - [ ] K8S Config maps - Что это и где стоит использовать а где нет
+- [ ] \* Подробно Forwarded RFC + расширения
 
 Hands-on practice quest #09: Redeploy application with custom configuration
 ---------------------------------------------------------------------------
 - [ ] Given пары участников имеют app-knife-deployment и app-butter-deployment в своём namespace
 - [ ] When участники запускают команды и применяют новую настройки
 
-- [ ] Вынести настройку имени сервиса app-butter в конфигурацию для возможной смены
+- [ ] Вынести настройку имени сервиса и таймаута app-butter в конфигурацию для возможной смены
 
 ```shell
 kubectl explain pod.spec.volumes
 kubectl explain pod.spec.containers.volumeMounts
+kubectl explain pod.spec.containers.env 
+kubectl explain configmap 
 vi configmap.yml
 vi deployment.yml
 kubectl apply -f configmap.yml
 kubectl apply -f deployment.yml
 ```
 
+- [ ] Then Настройки подтянулись в app-knife
+- [ ] Задание: измените конфигурацию - сменить таймаут. После проверьте значение
+- [ ] Когда меняется значение?
+
+```shell
+kubectl edit con
+
+```
+
 - [ ] Then участники делятся результатами и соображениями
+- Как проверить что изменения подтянулись?
 - нужен ли рестарт приложения после применения configmap? Обоснуйте так лучше?
 - какие проблемы могут быть с обращением через DNS имя?
 - есть ли разница DNS имя сервиса или пода?
@@ -495,13 +534,15 @@ kubectl explain secrets
 kubectl explain secrets.data
 vi secret.yml
 vi deployment.yml
-kubectl apply -f configmap.yml
+kubectl apply -f secret.yml
 kubectl apply -f deployment.yml
 ```
 
 - [ ] Then участники делятся результатами и соображениями
 - можно ли зашифровать секрет?
 - чем секрет отличается от ConfigMap
+- безопасен ли такой секрет?
+- что нужно сделать чтобы безопасно получать секрет в приложении?
 
 K8S Apps Distribution
 ------------------------------------------------
@@ -510,8 +551,10 @@ K8S Apps Distribution
 - [ ] Topology keys
 - [ ] Disruption Budget
 - [ ] Node maintenance
-Hands-on practice quest #10: Reconfigure apps distribution
---------------------------------------------------------------------------
+
+Hands-on practice quest #11: Reconfigure apps distribution
+----------------------------------------------------------
+
 - [ ] Given пары участников имеют app-knife-deployment и app-butter-deployment в своём namespace
 - [ ] When участники запускают команды и применяют новую настройки
 
@@ -533,7 +576,7 @@ K8S Jobs Management and workload distribution
 - [ ] High Level альтернативы. Argo workflow etc.
 - [ ] Демо запуск нагрузки на наше приложение через jobs
 
-Hands-on practice quest #11: Run dependant jobs
+Hands-on practice quest #12: Run dependant jobs
 --------------------------------------------------------------------------
 - [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress и завершили задания
 - [ ] When участники запускают команды и применяют новую настройки
