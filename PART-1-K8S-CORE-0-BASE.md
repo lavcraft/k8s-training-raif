@@ -203,9 +203,9 @@ kubectl delete -f handson/handson-03/apps-01.yml
 kubectl apply -f handson/handson-03/apps-02.yml
 kubectl explain pod.spec.containers.resources
 # add limits 4mb и cpu 200mi
-kubectl edit app-butter
-vi handson/handson-03/apps-01.yml
-kubectl apply -f handson/handson-03/apps-01.yml
+kubectl edit pod app-butter
+vi handson/handson-03/apps-02.yml
+kubectl apply -f handson/handson-03/apps-02.yml
 kubectl get pods
 ```
 
@@ -262,6 +262,8 @@ kubectl get endpoints
 ```
 
 - [ ] Как проверить работоспособность сервисов?
+- [ ] Работает ли `kubectl port-forward pod/app-knife 8080` если не задан `containerPort`?
+- [ ] На что влияет containerPort в pod.spec.containers.ports.containerPort?
 - [ ] Как выполнить команду в запущенном контейнере?
 - [ ] Можно ли включить интерактивный шел в запущенном контейнере?
 - [ ] Задание: Допишете сервис для недостающего приложения
