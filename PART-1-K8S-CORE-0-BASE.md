@@ -508,7 +508,7 @@ kubectl apply -f deployment.yml
 - [ ] Когда меняется значение?
 
 - [ ] Then Настройки подтянулись в app-knife
-- [ ] Задание: добавьте в configmap.yml не key-value настройку, а многострочный "файл" (контент ниже). И смонтируйти содержимое в файле в контейнере
+- [ ] Задание: добавьте в configmap.yml не key-value настройку, а многострочный "файл" (контент ниже). И смонтируйте содержимое в файле в контейнере
 ```plain
   Content-Type: multipart/form-data; boundary=---------------------------314911788813839
 
@@ -525,7 +525,6 @@ The second line.
 -----------------------------314911788813839--
 ```
 - [ ] Когда меняется значение в файле?
-- [ ]
 
 - [ ] Then участники делятся результатами и соображениями
 - Как проверить что изменения подтянулись?
@@ -544,22 +543,66 @@ Hands-on practice quest #10: K8S Secrets simple practice
 - [ ] Given пары участников имеют app-knife-deployment и app-butter-deployment в своём namespace
 - [ ] When участники запускают команды и применяют новую настройки
 
-- [ ] Задание: создать секрет и добавить его в приложения. Проверить его наличие и формат
+- [ ] Задание: создать секрет и добавить его в приложения используя секции `data` и `stringData`. Проверить его наличие и формат
 
 ```shell
 kubectl explain secrets
 kubectl explain secrets.data
-vi secret.yml
-vi deployment.yml
-kubectl apply -f secret.yml
-kubectl apply -f deployment.yml
+kubectl explain secrets.stringData
+vi handson-10/secret.yml
+kubectl apply -f handson-10/secret.yml
+
+# изучим возможности
+kubectl explain pod.spec.volumes
+kubectl explain pod.spec.containers.volumeMounts
+kubectl explain pod.spec.containers.env 
+kubectl explain pod.spec.containers.env.valueFrom.secretKeyRef
+
+# Добавляем секреты в наши поды 
+vi handson-10/deployment.yml
+kubectl apply -f handson-10/deployment.yml
 ```
 
 - [ ] Then участники делятся результатами и соображениями
+- как вывести текущее значение `username` секрета `the-secret-of-tasty-sandwich`? Какое оно и почему?
 - можно ли зашифровать секрет?
 - чем секрет отличается от ConfigMap
 - безопасен ли такой секрет?
+- чем отличаются секции data и stringData?
 - что нужно сделать чтобы безопасно получать секрет в приложении?
+- помните где мы уже сталкивались с секретами?
+- что будет если смонтировать секреты во одну директорию?
+
+- [ ] Задание: смонтируйте секрет `butterEndpoint` и любое из значений в `ConfigMap` из предыдущей практики в директорию к приложению - `/usr/src/app`s  
+
+```shell
+# изучим возможности
+kubectl explain pod.spec.containers.volumeMounts.subPath
+kubectl explain pod.spec.volumes.secret.items
+kubectl explain pod.spec.volumes.configMap.items
+
+vi handson-10/deployment.yml
+```
+
+- [ ] Then участники делятся результатами и соображениями
+- Какие возникли сложности при монтировании?
+- Попробуйте объяснить почему так сложно?
+- Как бы сделали вы?
+  
+- \* Попробуйте создать секрет другими способами
+
+```shell
+kubectl create secret generic secret_name \
+
+# Далее четыре варианта создания секрета из файла
+1. --from-file=secret.txt \ 
+2. --from-file=key=secret.txt \ 
+3. --from-literal=key=value
+4. --from-env-file=.env
+```
+
+- [ ] Then участники делятся результатами и соображениями по дополнительному заданию
+- \* Когда такой способ может быть удобен?
 
 K8S Apps Distribution
 ------------------------------------------------
