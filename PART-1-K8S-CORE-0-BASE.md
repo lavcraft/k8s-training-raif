@@ -490,7 +490,7 @@ Hands-on practice quest #09: Redeploy application with custom configuration
 - [ ] Given пары участников имеют app-knife-deployment и app-butter-deployment в своём namespace
 - [ ] When участники запускают команды и применяют новую настройки
 
-- [ ] Вынести настройку имени сервиса и таймаута app-butter в конфигурацию для возможной смены
+- [ ] Задание: Вынести настройку имени сервиса и таймаута app-butter в конфигурацию для возможной смены
 
 ```shell
 kubectl explain pod.spec.volumes
