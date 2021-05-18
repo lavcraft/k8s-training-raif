@@ -493,8 +493,6 @@ Hands-on practice quest #09: Redeploy application with custom configuration
 - [ ] Задание: Вынести настройку имени сервиса и таймаута app-butter в конфигурацию для возможной смены
 
 ```shell
-kubectl explain pod.spec.volumes
-kubectl explain pod.spec.containers.volumeMounts
 kubectl explain pod.spec.containers.env 
 kubectl explain configmap 
 vi configmap.yml
@@ -523,6 +521,17 @@ The first line.
 The second line.
 
 -----------------------------314911788813839--
+```
+
+```shell
+kubectl explain pod.spec.volumes
+kubectl explain pod.spec.containers.volumeMounts
+
+vi configmap.yml
+vi deployment.yml
+
+kubectl apply -f configmap.yml
+kubectl apply -f deployment.yml
 ```
 
 - [ ] Then участники делятся результатами и соображениями
