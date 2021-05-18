@@ -398,7 +398,7 @@ Hands-on practice quest #07: Redeploy application with probes
 - Достаточно ли только readiness для надёжной работы app-butter?
 - * HAL API: как быть с обратными ссылками? Как узнать с какого адреса пришёл запрос?
 
-Hands-on practice quest #08: Edit deployment
+Hands-on practice quest #7.1: Edit deployment
 -------------------------------------------------------------
 - [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress
 - [ ] When участники запускают команды и применяют новую настройки
