@@ -35,6 +35,8 @@ Hands-on practice quest #01: Работа с filebeat
 - [ ] Given пары участников залогинены на `bastion` и имеют настроенный kubectl
 - [ ] When участники пользуются kubectl и накопленными навыками для старта filebeat
 
+- Задание: настроить pod с filebeat которые читает логи и выгражает их в outputs.kafka и outputs.console
+
 ```shell
 cat handson/handson-logging/filebeat-pod.yml
 kubectl apply -f handson/handson-logging/filebeat-pod.yml
