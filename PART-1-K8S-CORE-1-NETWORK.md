@@ -126,7 +126,7 @@ tty1$ curl <>
 - [ ] Где разграничиваем доступ - egress/ingress
 - [ ] как выбираем на кого применяем policy
 
-Hands-on practice quest #01: Настройка NetworkPolicy
+Hands-on practice quest #03: Настройка NetworkPolicy
 ----------------------------------------------------
 
 ```shell

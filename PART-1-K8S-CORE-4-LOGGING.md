@@ -23,3 +23,26 @@ Hands-on practice quest #00: Логи на файловой системе
 ```shell
 node tty$ ls /var/log/containers
 ```
+
+## Logs delivering
+
+- [ ] Logstash, Filebeat, Fluentd, Fluentbit
+- [ ] Про filebeat
+- [ ] Как устроен типичный доступ к логами приложений
+
+Hands-on practice quest #01: Работа с filebeat
+----------------------------------------------
+- [ ] Given пары участников залогинены на `bastion` и имеют настроенный kubectl
+- [ ] When участники пользуются kubectl и накопленными навыками для старта filebeat
+
+```shell
+cat handson/handson-logging/filebeat-pod.yml
+kubectl apply -f handson/handson-logging/filebeat-pod.yml
+```
+
+- [ ] Then участники делятся проблемами и опытом
+- [ ] Можно ли запустить несколько filebeat на один файл? Если да то зачем?
+- [ ] Где узкое место filebeat?
+- [ ] В чём отличие filebeat от других похожих решений?
+- [ ] Что будет если output сломается?
+- [ ] Что будет если output станет очень медленно принимать логи?
