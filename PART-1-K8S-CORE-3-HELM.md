@@ -1,4 +1,4 @@
-Kubernetes Charts
+Kubernetes Helm
 =================
 4 часов, 1 ак. дня.
 

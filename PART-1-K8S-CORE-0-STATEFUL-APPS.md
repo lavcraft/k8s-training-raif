@@ -1,11 +1,9 @@
-Intro to Kubernetes
-===================
-1 час
+K8S Statefull Apps
+==================
+4 часа
 
-Agenda
-======
-Введение в K8S
------------------
+Введение
+--------------
 
 - [ ] PV and PVC
 - [ ] Static vs Dynamic Provisioning

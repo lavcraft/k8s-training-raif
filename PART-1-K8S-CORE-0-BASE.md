@@ -163,7 +163,7 @@ kubectl get pods
 - кто ответственнен за это удаление?
 - \* запустить под с лимитами по памяти в 16mb
 
-## K8S Concepts Network isolation
+## K8S Container isolation
 
 - [ ] Clusters and nodes
 - [ ] Clusters network isolation
@@ -228,8 +228,8 @@ kubectl get pods
 - как получить сырой вывод api?
 - получилось ли у вас отредактировать лимиты приложения? Какие были трудности?
 
-K8S Application discovery
--------------------------
+K8S Application networking
+-------------------------------
 - [ ] Виды Service Discovery для приложений. Компромиссы каждого
 - [ ] Роутинг трафика в кластер и в кластере. Взаимодействие внешнего балансировщика, NSX-T и K8S
 - [ ] Доступность при деплое и политики обновления
