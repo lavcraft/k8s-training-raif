@@ -55,6 +55,8 @@ source <(kubectl completion bash)
 - Какая версия kubernetes кластера у вас?
 - Какая версия kubectl нужна для установленного кластера?
 - Какие версии kubectl совместимы с какими версиями кластера?
+- Откуда берётся папка `~/.kube` ?
+- Есть ли разница в какой оболочке запускать команды? BASH/ZSH/FISH/ETC
 - [Enable kubectl completion howto](https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/#enable-kubectl-autocompletion)
 
 K8S Authentication
