@@ -166,7 +166,7 @@ kubectl get pods
 - чем отличается Job от Pods?
 - когда удаляется Pod созданный при создании Job?
 - кто ответственнен за это удаление?
-- \* запустить под с лимитами по памяти в 16mb
+- \* запустить под с лимитами по памяти в 16mb. [About K8S Limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
 
 ## K8S Container isolation
 
