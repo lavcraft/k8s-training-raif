@@ -20,8 +20,8 @@ Install required and optional software. Optional for more comfortable work
 1. WARNING: temporary solution for RHEL8
     1. open https://artifactory.raiffeisen.ru and login
     1. Search `kubectl` and copy `url to file`
-    1. Download `wget --user <YOUR_USER> --password <url>`
-    1. install `sudo rpm -i *.rpm`
+    1. Click setup me and configure artifactory repository (unlock config with credentials by your password). Follow instructions
+    3. install `sudo yum install kubectl`
 1. `sudo yum install helm jq`
 
 **Sudo**
