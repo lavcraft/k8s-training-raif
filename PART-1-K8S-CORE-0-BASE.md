@@ -99,7 +99,7 @@ kubectl auth can-i --list
 - Как избежать ошибок выполнения команд не на "тех" кластерах?
 - Как разделены ресурсы других участников во дном кластере?
 - Как выбрать свой namespace пол умолчанию?
-- \* попробуйте использовать несколько конфигураций с помощью переменной окружения `KUBECONFIG`. Что будет с разными кластерами при выводе `kubectl config view`?
+- \* попробуйте использовать несколько конфигураций с помощью переменной окружения `KUBECONFIG`. Что будет с разными кластерами при выводе `kubectl config view`? [О KUBECONFIG](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/)
 
 ## K8S Concepts
 
