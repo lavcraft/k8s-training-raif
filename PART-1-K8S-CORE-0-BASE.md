@@ -218,6 +218,7 @@ vi handson/handson-03/apps-02.yml
 kubectl apply -f handson/handson-03/apps-02.yml
 kubectl get pods
 ```
+[Про установки лимитов](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits)
 
 - [ ] Then приложение не запуcтилось
 - [ ] Найти информацию для извлечения признака проблемы
