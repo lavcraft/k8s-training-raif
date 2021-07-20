@@ -149,11 +149,13 @@ kubectl run -it debug --image=artifactory.raiffeisen.ru/ext-rbru-container-commu
 cat ~/.docker/config.json
 
 kubectl get events
+# Если у вас был docker login
 kubectl create secret generic regcred \
     --from-file=.dockerconfigjson=/home/$USER/.docker/config.json \
     --type=kubernetes.io/dockerconfigjson
-# или ввести логин пароль вручную https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-secret-by-providing-credentials-on-the-command-line
+# если не было - ввести логин пароль вручную https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-secret-by-providing-credentials-on-the-command-line
 kubectl create secret docker-registry regcred --docker-server=<your-registry-server> --docker-username=<your-name> --docker-password=<your-pword> --docker-email=<your-email>
+# <your-registry-server> - например https://artifactory.raiffeisen.ru
 kubectl explain serviceaccount.imagePullSecrets
 kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regcred"}]}'
 
