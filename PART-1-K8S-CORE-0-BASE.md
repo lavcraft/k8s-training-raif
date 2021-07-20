@@ -223,7 +223,7 @@ kubectl get pods
 - [ ] Then приложение не запуcтилось
 - [ ] Найти информацию для извлечения признака проблемы
 - [ ] Найти оптимальное значение лимитов и исправить
-- [ ] \* Вывести статусы всех ошибочных статусов приложений в форме `name/image - status`. Смотри документацию jsonpath/go-template [kubectl jsonpath doc](https://kubernetes.io/docs/reference/kubectl/jsonpath/)
+- [ ] \* Вывести все поды с ошибочным статусом в формате `name/image - status`. Смотри документацию jsonpath/go-template [kubectl jsonpath doc](https://kubernetes.io/docs/reference/kubectl/jsonpath/)
 - [ ] \* Задайте дефолтные квоты для приложений в вашем namespace
 
 
