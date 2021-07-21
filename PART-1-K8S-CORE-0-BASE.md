@@ -267,8 +267,9 @@ kubectl get pod debug
 kubect exec -it debug -- /bin/bash
 ...
 ```
-[Debugging DNS Resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/)
-[DNS Pod Service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods)
+1. Задание - найти IP адресс и имя запущенного Pod
+1. [Debugging DNS Resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/)
+1. [DNS Pod Service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods)
 
 ```shell
 cat handson/handson-04/services.yml
