@@ -267,10 +267,10 @@ kubectl get pod debug
 kubect exec -it debug -- /bin/bash
 ...
 ```
-1. Задание: С помощью материалов ниже вычислите IP адресс и имя запущенного Pod
+1. Задание: С помощью материалов ниже вычислите IP адресс и имя запущенного Pod и сделать запрос к сервису app-knife
 1. [Debugging DNS Resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/)
 1. [DNS Pod Service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods)
-1. Задание: Допишете сервис для недостающего приложения
+1. Задание: Допишете сервис для недостающего приложения и повторите запрос к app-knife
 
 ```shell
 cat handson/handson-04/services.yml
@@ -285,8 +285,13 @@ kubectl get endpoints
 - [ ] Как проверить работоспособность сервисов?
 - [ ] Работает ли `kubectl port-forward pod/app-knife 8080` если не задан `containerPort`?
 - [ ] На что влияет containerPort в pod.spec.containers.ports.containerPort?
-- [ ] Как выполнить команду в запущенном контейнере?
+- [ ] Что будет если при работающей команде `kubectl port-forward pod/app-knife 8080` перезапустить pod app-knife?
+- [ ] Объясните ответы от сервиса app-knife в случаях: 
+  1. не сервиса app-butter-service.
+  2. есть сервис app-butter-service но нет labels у app-butter. (Воспользуйтесб debug подом и посмотрите что возвращает app-butter-service)
+  3. есть и сервис и соответсвующий ему labels.app? (Попробуйте воспользоваться командой `kubectl edit pod app-butter` и добавить `metadata.labels.app=app-butter`
 - [ ] Можно ли включить интерактивный шел в запущенном контейнере?
+- [ ] Как выполнить команду в запущенном контейнере не заходя в него?
 
 ```shell
 kubectl get pods
@@ -303,6 +308,8 @@ kubectl get pods
 - [ ] Demo 
 - [ ] Задание: Найти кто влияет на название DNS имени
 
+[man resolv.conf](https://man7.org/linux/man-pages/man5/resolv.conf.5.html)
+
 ```shell script
 [debug] $ cat /etc/resolv.conf
 kubectl get services --all-namespaces | grep <nameserver-ip>
@@ -310,9 +317,9 @@ kubectl get pods --namespace=kube-system -l k8s-app=kube-dns
 ```
 
   
-- [ ] Then участники делятся результатами и соображениями
+- [ ] Then участники делятся результатами и соображениями. Контрольные вопросы блока:
 - Как узнать что сервис настроен правильно и работает корректно?
-- Рестартовало ли приложение после `kubectl apply -f pod.yml`?
+- Рестартовало ли приложение после повторного `kubectl apply -f pod.yml` и почему?
 - Что будет если изменить metadata.labels.app ?
 - Что если остановить приложение и обратиться к сервису?
 - Кто настраивает kube-dns ?
