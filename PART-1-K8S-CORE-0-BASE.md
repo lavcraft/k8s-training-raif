@@ -254,11 +254,9 @@ Hands-on practice quest #04: Access to application via services
 - [ ] When участники запускают команды и применяют новую настройки
 - [ ] Задание: Запустить cli-tools если отсутствует
 
-```shell
-# Если не выполняли предыдущее задание
-kubectl apply -f  handson/handson-04/apps.yml
-```
+> Для выполнения задания требуются приложения из [handson #03](#hands-on-practice-quest-03-run-apps-in-cluster)
 
+https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#motivation
 ```shell
 # проверим что есть под debug, иначе запустим (см handson #02)
 kubectl get pod debug 
@@ -267,6 +265,7 @@ kubectl get pod debug
 kubect exec -it debug -- /bin/bash
 ...
 ```
+
 1. Задание: С помощью материалов ниже вычислите IP адресс и имя запущенного Pod и сделать запрос к сервису app-knife
 1. [Debugging DNS Resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/)
 1. [DNS Pod Service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods)
@@ -282,10 +281,11 @@ kubectl get services
 kubectl get endpoints
 ```
 
-- [ ] Как проверить работоспособность сервисов?
+- [ ] Задание: Проверить работоспособность сервиса?
 - [ ] Работает ли `kubectl port-forward pod/app-knife 8080` если не задан `containerPort`?
 - [ ] На что влияет containerPort в pod.spec.containers.ports.containerPort?
 - [ ] Что будет если при работающей команде `kubectl port-forward pod/app-knife 8080` перезапустить pod app-knife?
+- [ ] Задание: Заставить сервис `app-butter-service` возвращать json ответ. (Совет: попробуйте лучше понять, отвечая на ответы дальше по списку)
 - [ ] Объясните ответы от сервиса app-knife в случаях: 
   1. не сервиса app-butter-service.
   2. есть сервис app-butter-service но нет labels у app-butter. (Воспользуйтесб debug подом и посмотрите что возвращает app-butter-service)
