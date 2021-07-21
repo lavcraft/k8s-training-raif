@@ -267,9 +267,10 @@ kubectl get pod debug
 kubect exec -it debug -- /bin/bash
 ...
 ```
-1. Задание - найти IP адресс и имя запущенного Pod
+1. Задание: С помощью материалов ниже вычислите IP адресс и имя запущенного Pod
 1. [Debugging DNS Resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/)
 1. [DNS Pod Service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods)
+1. Задание: Допишете сервис для недостающего приложения
 
 ```shell
 cat handson/handson-04/services.yml
@@ -286,9 +287,6 @@ kubectl get endpoints
 - [ ] На что влияет containerPort в pod.spec.containers.ports.containerPort?
 - [ ] Как выполнить команду в запущенном контейнере?
 - [ ] Можно ли включить интерактивный шел в запущенном контейнере?
-- [ ] Задание: Допишете сервис для недостающего приложения
-- [ ] Задание: Запустить cli-tools если под не запущен
-- [ ] Задание: Вычислите IP сервиса
 
 ```shell
 kubectl get pods
