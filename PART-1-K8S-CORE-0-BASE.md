@@ -256,7 +256,6 @@ Hands-on practice quest #04: Access to application via services
 
 > Для выполнения задания требуются приложения из [handson #03](#hands-on-practice-quest-03-run-apps-in-cluster)
 
-https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#motivation
 ```shell
 # проверим что есть под debug, иначе запустим (см handson #02)
 kubectl get pod debug 
@@ -281,7 +280,7 @@ kubectl get services
 kubectl get endpoints
 ```
 
-- [ ] Задание: Проверить работоспособность сервиса?
+- [ ] Задание: Проверить работоспособность сервиса? ([О метаданных и labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#motivation))
 - [ ] Работает ли `kubectl port-forward pod/app-knife 8080` если не задан `containerPort`?
 - [ ] На что влияет containerPort в pod.spec.containers.ports.containerPort?
 - [ ] Что будет если при работающей команде `kubectl port-forward pod/app-knife 8080` перезапустить pod app-knife?
