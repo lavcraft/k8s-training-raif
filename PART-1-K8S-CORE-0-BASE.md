@@ -255,11 +255,17 @@ Hands-on practice quest #04: Access to application via services
 - [ ] Задание: Запустить cli-tools если отсутствует
 
 ```shell
-kubectl delete -f handson/handson-03/apps-01.yml
-kubectl delete -f handson/handson-03/apps-02.yml
-cat  handson/handson-04/apps.yml
+# Если не выполняли предыдущее задание
 kubectl apply -f  handson/handson-04/apps.yml
+```
+
+```shell
+# проверим что есть под debug, иначе запустим (см handson #02)
 kubectl get pod debug 
+# Откроем новую консоль
+# Зайдём в контейнер и будем него будем производить дебаг наших приложений
+kubect exec -it debug -- /bin/bash
+...
 ```
 
 ```shell
