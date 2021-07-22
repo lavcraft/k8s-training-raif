@@ -281,6 +281,7 @@ kubectl get endpoints
 ```
 
 - [ ] Задание: Проверить работоспособность сервиса? ([О метаданных и labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#motivation))
+- [ ] Кто быстрей удаляется при `kubectl delete pod app-knife/app-butter`? Подумайте почему?
 - [ ] Работает ли `kubectl port-forward pod/app-knife 8080` если не задан `containerPort`?
 - [ ] На что влияет containerPort в pod.spec.containers.ports.containerPort?
 - [ ] Что будет если при работающей команде `kubectl port-forward pod/app-knife 8080` перезапустить pod app-knife?
