@@ -539,6 +539,7 @@ kubectl apply -f deployment.yml
 
 - [ ] Then Настройки подтянулись в app-knife
 - [ ] Задание: добавьте в configmap.yml не key-value настройку, а многострочный "файл" (контент ниже). И смонтируйте содержимое в файле в контейнер в папку `/usr/src/app`
+
 ```plain
   Content-Type: multipart/form-data; boundary=---------------------------314911788813839
 
@@ -572,7 +573,8 @@ kubectl apply -f deployment.yml
 - нужен ли рестарт приложения после применения configmap? Обоснуйте так лучше?
 - как посмотреть какие сейчас есть балансировщики?
 - Можно ли добавить информацию с манифеста приложения в env?
-- Можно ли добавить информацию о текущем namespace в ENV ?
+
+[Exposing information to pod](https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/)
 
 K8S Secrets
 ----------------
