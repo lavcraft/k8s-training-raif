@@ -369,14 +369,16 @@ Hands-on practice quest #06: Redeploy application with replicas
 ---------------------------------------------------------------
 - [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress
 - [ ] When участники запускают команды и применяют новую настройки
-- [ ] Задание: изменить запуск приложений в поде на запуск c помощью deployment
+- [ ] Задание: изменить запуск приложений в поде на запуск c помощью deployment (для app-butter и app-knife)
 
 ```shell
 # запускаем тестовую команду. Видим что падает
 [tty0] $ watch -e -n0.1 curl --fail app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 [tty1] kubectl explain deployment
 # применяем деплоймент
+## смотрим шаблон
 [tty1] $ cat handson/handson-06/deployment.yml
+## заполняем недостающую секцию
 [tty1] $ vi handson/handson-06/deployment.yml
 [tty1] $ kubectl apply -f handson/handson-06/deployment.yml
 # после запуска снова запускаем команду для проверки
