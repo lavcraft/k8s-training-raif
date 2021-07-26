@@ -493,7 +493,9 @@ INFO: [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/us
 
 ```shell
 # Тест должен заработать
-[tty0] $ watch -n0.5 curl training-app.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+[tty0] $ watch -n0.5 curl training-app.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru/app-knife/
+# or
+[tty0] $ watch -n0.5 curl training-app.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru/app-butter/
 
 [tty1] $ kubectl explain ingress.spec.rules.http.paths
 # Выносим приложения на разные пути одного домена
