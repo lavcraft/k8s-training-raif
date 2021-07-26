@@ -411,6 +411,8 @@ Hands-on practice quest #07: Redeploy application with probes
 - [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress
 - [ ] When участники запускают команды и применяют новую настройки
 
+[Kubernetes probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+
 Конфигурируем для одного приложение rediness/liveness для другого нет
 ```shell
 [tty0] $ watch -e -n0.1 curl --fail app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
