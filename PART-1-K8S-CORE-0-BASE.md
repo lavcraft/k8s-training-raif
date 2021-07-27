@@ -524,7 +524,9 @@ Hands-on practice quest #09: Redeploy application with custom configuration
 - [ ] Given пары участников имеют app-knife-deployment и app-butter-deployment в своём namespace
 - [ ] When участники запускают команды и применяют новую настройки
 
-- [ ] Задание: Вынести настройку имени сервиса и таймаута app-butter в конфигурацию для возможной смены
+- [ ] Задание: Вынести настройку имени сервиса (CALL_HOST) и таймаута app-butter (CALL_TIMEOUT) в конфигурацию для возможной смены
+
+[Подробнее о ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/)
 
 ```shell
 kubectl explain pod.spec.containers.env 
@@ -532,8 +534,14 @@ kubectl explain configmap
 vi configmap.yml
 vi deployment.yml
 kubectl apply -f configmap.yml
-kubectl apply -f deployment.yml
+kubectl create configmap -h 
 ```
+- [] Then ConfigMap успешно создался и вы убедились что он создан
+- [] Задание: Попробуйте вывести ключи сохраннёные внутри ConfigMap
+- [] В каком формате хранятся данные внутри ConfigMap?
+- [] Как посмотреть что было сохранено и почему так сложно? Поясните
+
+[Про Shell ENV Variables](https://en.wikipedia.org/wiki/Environment_variable)
 
 - [ ] Then Настройки подтянулись в app-knife
 - [ ] Задание: измените конфигурацию - сменить таймаут. После проверьте значение
