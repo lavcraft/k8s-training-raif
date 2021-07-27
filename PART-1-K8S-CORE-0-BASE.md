@@ -756,6 +756,8 @@ vi handson/handson-12/deployment.yml
 - [ ] может ли CronJob запустить много Job одновременно? (`kubectl explain cronjob.spec.startingDeadlineSeconds`)
 - [ ] а если что-то пошло не так?
 
+[Про ограничения и неоднозначные моменты CronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#cron-job-limitations)
+
 K8S Base Homework
 -----------------
 
