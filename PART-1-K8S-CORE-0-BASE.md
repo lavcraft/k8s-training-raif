@@ -678,7 +678,7 @@ Hands-on practice quest #11: Reconfigure apps distribution
 
 NOTICE: Увеличьте количество реплик до 10, чтобы было более наглядно
 
-WARN: проверьте наличие объекта limitranges (создавался в задание #03). 
+WARN: проверьте наличие объекта limitranges (создавался в задание #03). [Подробнее о практиках и ограничениях масштабирования](https://kubernetes.io/docs/setup/best-practices/cluster-large/)
 Если их нет, то отредактируйте файл `handson/handson-03/default-limits.yml` для установки лимитов в 10Mi. 
 После чего примените его если нет с помощью команды:
 `kubectl apply -f handson/handson-03/default-limits.yml`.
