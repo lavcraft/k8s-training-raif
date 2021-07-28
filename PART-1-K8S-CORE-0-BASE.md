@@ -700,6 +700,8 @@ kubectl edit deployment app-knife-deployment
 - [ ] \* Задание: запустить поды на всех узлах кроме одного
 - [ ] \* Задание: запустить поды так, чтобы на каждой ноде оказалось по одному app-knife и app-butter.
 
+[Подробнее про Affinity и способы распределения Pod](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/)
+
 ```shell
 kubectl edit deployment app-knife-deployment
 ```
