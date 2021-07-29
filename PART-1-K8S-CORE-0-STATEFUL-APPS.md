@@ -36,6 +36,9 @@ EOF
 - [] Задание: монтируйте директорию в какой либо Pod. Запишите данные и попробуйте его пересоздать
 
 ```shell
+kubectl explain pod.spec.volumes.persistentVolumeClaim
+kubectl explain pod.spec.containers.volumeMounts
+
 vi sandwich.yml
 kubectl apply -f sandwich.yml
 kubectl exec -it <mypod> -- sh
@@ -48,6 +51,7 @@ kubectl apply -f sandwich.yml
 - [ ] Then участники делятся возникшими и решенными проблемами и отвечают на вопросы
 - [ ] На каком узле запустился под после пересоздания пода?
 - [ ] Можно ли перенести под на другую ноду?
+- [ ] Можно ли запустить ещё один под с этим pvc? Попробуйте
 - [ ] Удаляется ли PVC после удаления Pod?
 - [ ] Можно ли удалить PVC до удаления Pod?
 
