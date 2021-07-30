@@ -46,6 +46,13 @@ echo "tasty potatos" > <mountdir>/potato
 
 kubectl delete pod <mypod>
 kubectl apply -f sandwich.yml
+
+# если вы сделали deployment
+kubectl scale deployment <ваш deployment c volume> --replicas=3
+
+# если вы сделали pod - добавляем второй под с тем же PVC
+vi sandwich.yml 
+kubectl apply -f sandwich.yml
 ```
 
 - [ ] Then участники делятся возникшими и решенными проблемами и отвечают на вопросы
