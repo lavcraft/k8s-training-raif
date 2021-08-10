@@ -29,13 +29,18 @@ Agenda
 
 Hands-on practice quest #00: requisites check and compatibility check
 ---------------------------------------------------------------------
+Проверяем окружение в котором будем работать и настраиваем инструменты для комфортабельной работы
+* наличие kubectl - с ним будем работать в течении всего курса, наш основной инструмент
+* [optional] docker - нужен/пригодится для сборки демо приложений если хочется эксперементировать с приложениями собственаручно
 
 - [ ] Given сформированы пары участников
 - [ ] When участники используют команды и проанализируют их вывод и поведение
 
 ```shell script
 kubectl
+# optional. Need for rebuild demo apps
 docker version
+# optional. Need for configure secrets from docker config istead of raw secret creation
 docker login artifactory.raiffeisen.ru
 ```
 
