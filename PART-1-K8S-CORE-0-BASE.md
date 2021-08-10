@@ -74,6 +74,8 @@ K8S Authentication
 
 Hands-on practice quest #01: connect to existed cluster
 -------------------------------------------------------
+Настраиваем и проверяем подключение к кластеру K8S
+
 - [ ] Given пары участников
 - [ ] When участники используют команды для извлечения информации из кластера
 - [ ] Задача: узнать список ваших привилегий в кластере
@@ -113,11 +115,13 @@ kubectl auth can-i --list
 - [ ] Control loop (Observe, Orient, Decide, Act) Jonh Boyd
 - [ ] Reconciliation
 - Real control loop examples by kubectl - Desired state vs Current stats (Observe, diff ,act Control model)
+- Kubernetes API-Server and OpenAPI
 - Материалы
   - [Настрокйка реквизитов docker-registry k8s](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 
 ### Hands-on practice quest #02: I have an application, I wish deploy it to production!
+Знакомимся с базовыми возможностями kubectl - запускаем простейшую работу в кластере и ловим типичные проблемы
 
 - [ ] Given пары участников прошедших Docker тренинг
 - [ ] When участники собирают приложение и деплоят в кластер
