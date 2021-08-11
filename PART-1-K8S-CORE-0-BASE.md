@@ -271,7 +271,7 @@ Hands-on practice quest #04: Access to application via services
 kubectl get pod debug 
 # Откроем новую консоль
 # Зайдём в контейнер и будем него будем производить дебаг наших приложений
-kubect exec -it debug -- /bin/bash
+kubectl exec -it debug -- /bin/bash
 ...
 ```
 
