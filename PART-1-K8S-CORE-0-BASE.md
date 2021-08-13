@@ -492,12 +492,14 @@ Hands-on practice quest #07.2: deployment rollout
 [tty1] $ kubectl rollout history deployment app-butter-deployment
 [tty1] $ kubectl rollout undo deployment app-butter-deployment --to-revision=<revision-number>
 [tty1] $ kubectl get deployment app-butter-deployment -o yaml
+[tty1] $ kubectl get rs
 ```
 
 - [ ] Then участники делятся результатами и соображениями
 - Можно ли откатиться на уже откаченную версию (последнюю)?
 - Как посмотреть все deployments на кластере?
 - Изменится ли версия deployment если изменить связанный с ним ReplicaSet? А если Pod?
+- Почему в списке ReplicaSet есть какие то пустые? Объясните зачем они
 
 K8S Multi path applications
 ---------------------------
