@@ -354,7 +354,7 @@ Hands-on practice quest #05: Redeploy application with ingress
 ```shell script
 # тест должен заработать
 watch -n0.1 curl http://app-knife-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
-kubect explain ingress.spec
+kubectl explain ingress.spec
 # Завершите ingress конфигурацию
 vi handson/handson-05/ingress.yml
 kubectl apply -f handson/handson-05/ingress.yml
