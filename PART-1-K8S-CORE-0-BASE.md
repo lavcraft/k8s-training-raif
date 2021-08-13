@@ -497,6 +497,7 @@ Hands-on practice quest #07.2: deployment rollout
 - [ ] Then участники делятся результатами и соображениями
 - Можно ли откатиться на уже откаченную версию (последнюю)?
 - Как посмотреть все deployments на кластере?
+- Изменится ли версия deployment если изменить связанный с ним ReplicaSet? А если Pod?
 
 K8S Multi path applications
 ---------------------------
