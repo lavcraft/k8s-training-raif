@@ -455,7 +455,7 @@ Hands-on practice quest #7.1: Edit deployment
 
 Изменим metadata.labels.app на app-knife-edited
 ```shell
-[tty0] $ kubectl get pods -w
+[tty0] $ kubectl get replicasets -w
 [tty1] $ kubectl edit pod app-butter-<custom-id-autocomplete-it>
 [tty1] $ kubectl get pods
 ```
