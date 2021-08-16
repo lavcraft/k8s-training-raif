@@ -579,22 +579,25 @@ kubectl create configmap -h
 - [ ] Когда меняется значение?
 
 - [ ] Then Настройки подтянулись в app-knife
-- [ ] Задание: добавьте в configmap.yml не key-value настройку, а многострочный "файл" (контент ниже). И смонтируйте содержимое в файле в контейнер в папку `/usr/src/app`
+- [ ] Задание: добавьте в configmap.yml не key-value настройку `nginx.conf`, а многострочный "файл" (контент ниже). И смонтируйте содержимое в файле в контейнер в папку `/usr/src/app`
 
 ```plain
-  Content-Type: multipart/form-data; boundary=---------------------------314911788813839
+user       www www;
+error_log  logs/error.log;
 
------------------------------314911788813839
-Content-Disposition: form-data; name="foo"
+http {
+  include    conf/mime.types;
+  index    index.html index.htm index.php;
 
-bar
------------------------------314911788813839
-Content-Disposition: form-data; name="baz"
-
-The first line.
-The second line.
-
------------------------------314911788813839--
+  server { # php/fastcgi
+    listen       80;
+    server_name  example.com www.example.com;
+    
+    location ~ \.php$ {
+      fastcgi_pass   127.0.0.1:1025;
+    }
+  }
+}
 ```
 
 ```shell
@@ -661,7 +664,7 @@ kubectl apply -f handson-10/deployment.yml
 - помните где мы уже сталкивались с секретами?
 - что будет если смонтировать секреты во одну директорию?
 
-- [ ] Задание: смонтируйте секрет `butterEndpoint` и любое из значений в `ConfigMap` из предыдущей практики в директорию к приложению - `/usr/src/app`s  
+- [ ] Задание: смонтируйте секрет `nginx.conf` и любое из значений в `ConfigMap` из предыдущей практики в директорию к приложению - `/usr/src/app`s  
 
 ```shell
 # изучим возможности
