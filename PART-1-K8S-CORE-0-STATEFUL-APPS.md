@@ -11,6 +11,7 @@ K8S Statefull Apps
 
 Hands-on practice quest #00: working with pvc and statefulset
 -------------------------------------------------------------
+Пробуем воспользоваться "файловыми" ресурсами кластера для постоянного хранения данных в наших подах
 
 - [ ] Given сформированы пары участников
 - [ ] When участники используют команды и проанализируют их вывод и поведение
@@ -33,7 +34,19 @@ spec:
 EOF
 ```
 
-- [] Задание: монтируйте директорию в какой либо Pod. Запишите данные и попробуйте его пересоздать
+`kubectl apply -f sandwich-ingridients.yml`
+
+- [] Then: ресурс успешно создан
+- [] Как проверить в каком статусе сейчас наш `PersistentVolumeClaim`?
+- [] Доступен ли созданный `PersistentVolumeClaim` во всём кластере или только в нашем неймспейсе? Почему?
+
+
+- [] Задание: монтируйте директорию в какой либо `Pod` или `Job`. Запишите данные и попробуйте его пересоздать
+
+> Примеры `Pod` или `Job` вы можете 
+> 1. взять из предыдущих заданий (например handson-03)
+> 2. написать сами
+> 3. получить с помощью команду `kubectl create/run` и переиспользовать манифест в дальнейшем
 
 ```shell
 kubectl explain pod.spec.volumes.persistentVolumeClaim
@@ -47,9 +60,6 @@ echo "tasty potatos" > <mountdir>/potato
 kubectl delete pod <mypod>
 kubectl apply -f sandwich.yml
 
-# если вы сделали deployment
-kubectl scale deployment <ваш deployment c volume> --replicas=3
-
 # если вы сделали pod - добавляем второй под с тем же PVC
 vi sandwich.yml 
 kubectl apply -f sandwich.yml
@@ -62,12 +72,19 @@ kubectl apply -f sandwich.yml
 - [ ] Удаляется ли PVC после удаления Pod?
 - [ ] Можно ли удалить PVC до удаления Pod?
 
+Hands-on practice quest #01: Statefull apps scaling
+---------------------------------------------------
+Переходим от одиночного инстанса к полноценным отказоустойчивым приложениям с состояниями. 
+Проводим аналогии с знаниями полученными в первой части тренинга
+
 - [] Задание: создайте statefulset
 - Материалы - [Creating a StatefulSet](https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#creating-a-statefulset)
 
 
 ```shell
-# переделываем на StatefulSet
+kubectl explain statefulset.spec
+
+# переделываем своё приложение на StatefulSet для запуска в режиме нескольких инстансов
 vi sandwich.yml
 kubectl apply -f sandwich.yml
 kubectl get pods
@@ -80,12 +97,14 @@ kubectl exec -it debug -- sh
 - [ ] зайдите в контейнер и запишите данные. 
 - [ ] Удалите контейнер и наблюдайте за состоянием statefulset. 
 - [ ] Проверьте что стало с данными
+- [ ] Перезапустите/отмасштабируйте `statefulset`
 
 Подведите итоги:
 - [ ] Then участники делятся возникшими и решенными проблемами и отвечают на вопросы
 - Как возникли сложности?
-- Для чего нужен `serviceName` в StatefulSet?
-- Может ли у пода из StatefulSet меняться IP?
+- Для чего нужен `serviceName` в `StatefulSet`?
+- Может ли у пода из `StatefulSet` меняться IP?
 - Для чего стоит использовать Service с `clusterIP: None`?
 - Когда удаляются PVC?
 - Когда стоит использовать статический PV?
+- В каком порядке запускаются поды в `StatefulSet`?
