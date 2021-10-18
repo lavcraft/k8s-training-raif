@@ -38,15 +38,11 @@ Hands-on practice quest #00: requisites check and compatibility check
 
 ```shell script
 kubectl
-# optional. Need for rebuild demo apps
-docker version
-# optional. Need for configure secrets from docker config istead of raw secret creation
-docker login artifactory.raiffeisen.ru
-```
 
-```shell script
-ls -la ~/.kube
-kubectl cluster-info
+# optional. Need for rebuild demo apps
+#docker version
+# optional. Need for configure secrets from docker config istead of raw secret creation
+#docker login artifactory.raiffeisen.ru
 ```
 
 ```shell script
@@ -54,6 +50,11 @@ kubectl cluster-info
 kubectl completion bash
 # применим её
 source <(kubectl completion bash)
+```
+
+```shell script
+ls -la ~/.kube
+kubectl cluster-info
 ```
 
 - [ ] Then участники делятся возникшими и решенными проблемами и отвечают на вопросы
