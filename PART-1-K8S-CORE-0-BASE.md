@@ -178,6 +178,7 @@ kubectl get pods
 - когда удаляется Pod созданный при создании Job?
 - кто ответственнен за это удаление?
 - \* Как упростить процесс создания `regcred` секрета если вы уже залогинены в docker registry через docker login?
+- \* Отредактируйте `serviceaccount` не через patch а через `kubectl edit`. Что будет если ошибиться в редактируемом манифесте?
 - \* запустить под с лимитами по памяти в 16mb. [About K8S Limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
 
 [K8S и Private Registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
