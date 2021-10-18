@@ -57,6 +57,10 @@ ls -la ~/.kube
 kubectl cluster-info
 ```
 
+```shell script
+git clone https://gitlabci.raiffeisen.ru/container-trainings/training-k8s
+```
+
 - [ ] Then участники делятся возникшими и решенными проблемами и отвечают на вопросы
 - Какая версия kubernetes кластера у вас?
 - Какая версия kubectl нужна для установленного кластера?
