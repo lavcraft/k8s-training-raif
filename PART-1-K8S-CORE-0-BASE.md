@@ -93,7 +93,7 @@ kubectl config get-contexts
 ```
 
 ```shell script
-kubectl config use-contexts
+kubectl config use-context \tab
 kubectl auth can-i --list 
 ```
 [Подробнее про права и RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-binding-examples)
