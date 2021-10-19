@@ -238,7 +238,7 @@ kubectl get pods
 - [ ] Then приложение не запуcтилось
 - [ ] Найти информацию для извлечения признака проблемы
 - [ ] Найти оптимальное значение лимитов и исправить
-- [ ] \* Вывести все поды с ошибочным статусом в формате `name/image - status`. Смотри документацию jsonpath/go-template [kubectl jsonpath doc](https://kubernetes.io/docs/reference/kubectl/jsonpath/)
+- [ ] Вывести все поды с ошибочным статусом в формате `name/image - status`. Смотри документацию jsonpath/go-template [kubectl jsonpath doc](https://kubernetes.io/docs/reference/kubectl/jsonpath/)
 - [ ] \* Задайте дефолтные квоты для приложений в вашем namespace
 
 
@@ -253,6 +253,7 @@ kubectl get pods
 - как понять какие ресурсы работают в рамках неймспейса??
 - как получить сырой вывод api?
 - получилось ли у вас отредактировать лимиты приложения? Какие были трудности?
+- \* Как приложение понимает что ему нужно выключаться? Кто быстрее выключается, `app-knife` или `app-butter`?
 
 K8S Application networking
 -------------------------------
@@ -303,7 +304,7 @@ kubectl get endpoints
 - [ ] Работает ли `kubectl port-forward pod/app-knife 8080` если не задан `containerPort`?
 - [ ] На что влияет containerPort в pod.spec.containers.ports.containerPort?
 - [ ] Что будет если при работающей команде `kubectl port-forward pod/app-knife 8080` перезапустить pod app-knife?
-- [ ] Задание: Заставить сервис `app-butter-service` возвращать json ответ. (Совет: попробуйте лучше понять, отвечая на ответы дальше по списку)
+- [ ] Задание: Заставить сервис `app-butter-service` возвращать json ответ. (Совет: попробуйте разобраться, отвечая на ответы дальше по списку)
 - [ ] Объясните ответы от сервиса app-knife в случаях: 
   1. не сервиса app-butter-service.
   2. есть сервис app-butter-service но нет labels у app-butter. (Воспользуйтесб debug подом и посмотрите что возвращает app-butter-service)
