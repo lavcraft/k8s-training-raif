@@ -67,6 +67,7 @@ git clone https://gitlabci.raiffeisen.ru/container-trainings/training-k8s
 - Какие версии kubectl совместимы с какими версиями кластера?
 - Откуда берётся папка `~/.kube` ?
 - Есть ли разница в какой оболочке запускать команды? BASH/ZSH/FISH/ETC
+- \* Написать config для kubernetes с разными контекстами - prod/dev (смотрят на разные namespace в нашем случае. dev - ваш неймспейс. prod - неймспейс osttok)
 - [Enable kubectl completion howto](https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/#enable-kubectl-autocompletion)
 
 K8S Authentication
