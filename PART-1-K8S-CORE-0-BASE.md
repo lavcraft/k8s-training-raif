@@ -227,7 +227,7 @@ kubectl edit butter-fabric
 kubectl delete -f handson/handson-03/apps-01.yml
 kubectl apply -f handson/handson-03/apps-02.yml
 kubectl explain pod.spec.containers.resources
-# add limits 8mb и cpu 200mi
+# add limits 8Mi и cpu 200mi
 kubectl edit pod app-butter
 vi handson/handson-03/apps-02.yml
 kubectl apply -f handson/handson-03/apps-02.yml
