@@ -382,7 +382,7 @@ kubectl apply -f handson/handson-05/ingress.yml
 - Кто отвечает за "анонсирование" внутренних имён сервисов и имён для ingress?
 - \* Как посмотреть справку по конкретной версии API с помощью `kubectl explain ingress`?
 - \* Перепишите ingress с beta версии API на релизную - `networking.k8s.io/v1`
-- \* Можно ли отправить запрос на ingress, DNS которого не резолвится?
+- \* Можно ли отправить запрос на ingress, DNS которого не резолвится? Если да то как?
 
 K8S Namespace, Pods, Containers again and Scaling
 -------------------------------------------------
