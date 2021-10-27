@@ -25,7 +25,7 @@ Agenda
 - [ ] K8S и приложения - Capabilities (Self-Service, API-Driven, Elastic)
 - [ ] Основные компоненты и с чем мы будем работать на этом тренинге
 - kubectl
-- [] **Демо**. CLI и настройки доступа к кластеру
+- [ ] **Демо**. CLI и настройки доступа к кластеру
 
 Hands-on practice quest #00: requisites check and compatibility check
 ---------------------------------------------------------------------
@@ -61,7 +61,7 @@ kubectl cluster-info
 git clone https://gitlabci.raiffeisen.ru/container-trainings/training-k8s
 ```
 
-- **Then** участники делятся возникшими и решенными проблемами и отвечают на вопросы
+**Then** участники делятся возникшими и решенными проблемами и отвечают на вопросы
 - Какая версия kubernetes кластера у вас?
 - Какая версия kubectl нужна для установленного кластера?
 - Какие версии kubectl совместимы с какими версиями кластера?
@@ -104,7 +104,7 @@ kubectl auth can-i --list
 ```
 [Подробнее про права и RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-binding-examples)
 
-- **Then** участники делятся возникшими и решенными проблемами и отвечают на вопросы
+**Then** участники делятся возникшими и решенными проблемами и отвечают на вопросы
 - Что делать если команда не найдена?
 - Как я авторизовываюсь в кластере?
 - Кто может выдавать права доступа к кластера и в чём заключается "передача"?
@@ -152,7 +152,7 @@ kubectl delete job test
 kubectl get pods
 ```
 
-- **Then**: участники делятся мыслями и отвечают на вопросы
+**Then**: участники делятся мыслями и отвечают на вопросы
 - в чём различие в семантике написания команд - `kubectl get job test` и `kubectl get jobs/test`? Попробуйте объяснить
 - что будет если команду вывода логов разными способами?
 - удаляется ли созданный pod после удаления job test? 
@@ -173,7 +173,7 @@ kubectl run -it debug --image=artifactory.raiffeisen.ru/ext-rbru-container-commu
 kubectl get pods
 ```
 
-- **Then** участники делятся мыслями и соображениями
+**Then** участники делятся мыслями и соображениями
 - куда нужно запушить образ чтобы kubernetes кластер его успешно спулил?
 - какой правильный процесс деплоя образов?
 - чем отличается Job от Pods?
@@ -208,7 +208,7 @@ cat handson/handson-03/apps-01.yml
 kubectl apply -f handson/handson-03/apps-01.yml
 ```
 
-- **Then** участники делятся результатами и соображениями
+**Then** участники делятся результатами и соображениями
 - Какой статус пода?
 - Найдите ошибку
 - Как посмотреть логи конкретного контейнера пода?
@@ -221,7 +221,8 @@ kubectl explain pod.spec
 kubectl edit butter-fabric
 ```
 
-- [ ] Какие возникли трудности при редактировании? Объясните почему так?
+**Then**: участники делятся наблюдениями и разбираются что пошло не так
+- Какие возникли трудности при редактировании? Объясните почему так?
 - **Задание**: передеплоить приложения отдельно
 
 ```shell script
@@ -236,11 +237,11 @@ kubectl get pods
 ```
 [Про установки лимитов](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits)
 
-- **Then** приложение не запуcтилось
+**Then** приложение не запуcтилось
 - Найти информацию для извлечения признака проблемы
 - Найти оптимальное значение лимитов и исправить
 - Вывести все поды с ошибочным статусом в формате `name/image - status`. Смотри документацию jsonpath/go-template [kubectl jsonpath doc](https://kubernetes.io/docs/reference/kubectl/jsonpath/)
-- \* **Доп задание**: Задайте дефолтные квоты для приложений в вашем namespace
+- **Доп задание**\*: Задайте дефолтные квоты для приложений в вашем namespace
 
 
 **Then** участники делятся результатами и соображениями
@@ -254,7 +255,7 @@ kubectl get pods
 1. как понять какие ресурсы работают в рамках неймспейса??
 1. как получить сырой вывод api?
 1. получилось ли у вас отредактировать лимиты приложения? Какие были трудности?
-1. \* **Доп задание**: Как приложение понимает что ему нужно выключаться? Кто быстрее выключается, `app-knife` или `app-butter`?
+1. **Доп задание**\*: Как приложение понимает что ему нужно выключаться? Кто быстрее выключается, `app-knife` или `app-butter`?
 
 K8S Application networking
 -------------------------------
@@ -300,18 +301,19 @@ kubectl get services
 kubectl get endpoints
 ```
 
-- [ ] Задание: Проверить работоспособность сервиса? ([О метаданных и labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#motivation))
-- [ ] Кто быстрей удаляется при `kubectl delete pod app-knife/app-butter`? Подумайте почему?
-- [ ] Работает ли `kubectl port-forward pod/app-knife 8080` если не задан `containerPort`?
-- [ ] На что влияет containerPort в pod.spec.containers.ports.containerPort?
-- [ ] Что будет если при работающей команде `kubectl port-forward pod/app-knife 8080` перезапустить pod app-knife?
-- [ ] Задание: Заставить сервис `app-butter-service` возвращать json ответ. (Совет: попробуйте разобраться, отвечая на ответы дальше по списку)
-- [ ] Объясните ответы от сервиса app-knife в случаях: 
+**Задание**: Проверить работоспособность сервиса? ([О метаданных и labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#motivation))
+1. Кто быстрей удаляется при `kubectl delete pod app-knife/app-butter`? Подумайте почему?
+1. Работает ли `kubectl port-forward pod/app-knife 8080` если не задан `containerPort`?
+1. На что влияет containerPort в pod.spec.containers.ports.containerPort?
+1. Что будет если при работающей команде `kubectl port-forward pod/app-knife 8080` перезапустить pod app-knife?
+
+**Задание**: Заставить сервис `app-butter-service` возвращать json ответ. (Совет: попробуйте разобраться, отвечая на ответы дальше по списку)
+1. Объясните ответы от сервиса app-knife в случаях: 
   1. не сервиса app-butter-service.
   2. есть сервис app-butter-service но нет labels у app-butter. (Воспользуйтесб debug подом и посмотрите что возвращает app-butter-service)
   3. есть и сервис и соответсвующий ему labels.app? (Попробуйте воспользоваться командой `kubectl edit pod app-butter` и добавить `metadata.labels.app=app-butter`
-- [ ] Можно ли включить интерактивный шел в запущенном контейнере?
-- [ ] Как выполнить команду в запущенном контейнере не заходя в него?
+1. Можно ли включить интерактивный шел в запущенном контейнере?
+1. Как выполнить команду в запущенном контейнере не заходя в него?
 
 Попробуйте выполнить в debug контейнере следующие команды:
 ```shell
