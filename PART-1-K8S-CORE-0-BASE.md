@@ -763,7 +763,8 @@ kubectl edit deployment app-knife-deployment
 
 - [ ] Then участники делятся результатами и соображениями
 - Подумайте, насколько это жизненный сценарий?
-- \* Задание: Добавьте ResourceQuotas
+- \* Задание: Изучите объект `ResourceQuotas` и добавьте его. Как проверить его работоспособность?
+- \* Задание: Изучите объект `PodDisruptionBudget` и добавьте его. Как проверить его работоспособность?
 
 ```shell
 kubectl explain resourcequota
