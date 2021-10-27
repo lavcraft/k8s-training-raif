@@ -203,7 +203,8 @@ kubectl get pods
 - [ ] Демо kubectl apply/get/describe и output моды
 
 :shopping_cart: *Материалы*  
-- [Подробно о ресурсах и CGroups](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html-single/resource_management_guide/index)
+1. [Подробно о ресурсах и CGroups](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html-single/resource_management_guide/index)
+1. [Про установки лимитов](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits)
 
 ### Hands-on practice quest #03: Run apps in cluster
 Познаём различные ограничения (технические и концептуальные) контейнерных технологий в связке с абстракциями K8S (Pod). 
@@ -245,7 +246,7 @@ vi handson/handson-03/apps-02.yml
 kubectl apply -f handson/handson-03/apps-02.yml
 kubectl get pods
 ```
-[Про установки лимитов](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits)
+:eyes: [Про установки лимитов](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits)
 
 **Then** приложение не запуcтилось
 - Найти информацию для извлечения признака проблемы
