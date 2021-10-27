@@ -24,7 +24,12 @@ Agenda
   factor apps)
 - [ ] K8S и приложения - Capabilities (Self-Service, API-Driven, Elastic)
 - [ ] Основные компоненты и с чем мы будем работать на этом тренинге
-- kubectl
+    - `ssh`
+    - `kubectl`
+    - linux shell (`bash` or `zsh`)
+    - `curl`
+    - `watch`
+    - `nslookup/dig`
 - [ ] **Демо**. CLI и настройки доступа к кластеру
 
 Hands-on practice quest #00: requisites check and compatibility check
