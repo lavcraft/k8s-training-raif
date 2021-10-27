@@ -131,7 +131,7 @@ kubectl auth can-i --list
 - [ ] Kubernetes API-Server and OpenAPI
 
 :shopping_cart: *Материалы*  
-  - [Настрокйка реквизитов docker-registry k8s](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+  -1. [Настрокйка реквизитов docker-registry k8s](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 
 ### Hands-on practice quest #02: I have an application, I wish deploy it to production!
@@ -143,9 +143,9 @@ kubectl auth can-i --list
 kubectl create job test --image=busybox -- echo "Hello World"
 ```
 
-- [ ] Задание: Понять сработала ли наша задача
-- [ ] Почему не вывелись логи?
-- [ ] Почему у пода такое странное имя?
+**Задание**: Понять сработала ли наша задача
+1. Почему не вывелись логи?
+1. Почему у пода такое странное имя?
 
 ```shell script
 kubectl describe pod test-<id>
@@ -161,9 +161,10 @@ kubectl get pods
 ```
 
 **Then**: участники делятся мыслями и отвечают на вопросы
-- в чём различие в семантике написания команд - `kubectl get job test` и `kubectl get jobs/test`? Попробуйте объяснить
-- что будет если команду вывода логов разными способами?
-- удаляется ли созданный pod после удаления job test? 
+1. в чём различие в семантике написания команд - `kubectl get job test` и `kubectl get jobs/test`? Попробуйте объяснить
+1. что будет если команду вывода логов разными способами?
+1. удаляется ли созданный pod после удаления job test? 
+
 **Задание**: запустить образ с curl, dig прочими инструментами для дебага
 
 ```shell script
