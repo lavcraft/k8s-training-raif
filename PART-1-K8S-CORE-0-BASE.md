@@ -309,9 +309,9 @@ kubectl get endpoints
 
 **Задание**: Заставить сервис `app-butter-service` возвращать json ответ. (Совет: попробуйте разобраться, отвечая на ответы дальше по списку)
 1. Объясните ответы от сервиса `app-knife` в случаях: 
-  1. не сервиса `app-butter-service`.
-  1. есть сервис `app-butter-service` но нет labels у `app-butter`. (Воспользуйтесб debug подом и посмотрите что возвращает `app-butter-service`)
-  1. есть и сервис и соответсвующий ему `labels.app`? (Попробуйте воспользоваться командой `kubectl edit pod app-butter` и добавить `metadata.labels.app=app-butter`
+    1. не сервиса `app-butter-service`.
+    1. есть сервис `app-butter-service` но нет labels у `app-butter`. (Воспользуйтесб debug подом и посмотрите что возвращает `app-butter-service`)
+    1. есть и сервис и соответсвующий ему `labels.app`? (Попробуйте воспользоваться командой `kubectl edit pod app-butter` и добавить `metadata.labels.app=app-butter`
 1. Можно ли включить интерактивный шел в запущенном контейнере?
 1. Как выполнить команду в запущенном контейнере не заходя в него?
 
