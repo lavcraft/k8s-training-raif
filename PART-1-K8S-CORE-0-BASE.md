@@ -183,14 +183,14 @@ kubectl get pods
 ```
 
 **Then** участники делятся мыслями и соображениями
-- куда нужно запушить образ чтобы kubernetes кластер его успешно спулил?
-- какой правильный процесс деплоя образов?
-- чем отличается Job от Pods?
-- когда удаляется Pod созданный при создании Job?
-- кто ответственнен за это удаление?
-- \* Как упростить процесс создания `regcred` секрета если вы уже залогинены в docker registry через docker login?
-- \* Отредактируйте `serviceaccount` не через patch а через `kubectl edit`. Что будет если ошибиться в редактируемом манифесте?
-- \* запустить под с лимитами по памяти в 16mb. [About K8S Limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+1. куда нужно запушить образ чтобы kubernetes кластер его успешно спулил?
+1. какой правильный процесс деплоя образов?
+1. чем отличается Job от Pods?
+1. когда удаляется Pod созданный при создании Job?
+1. кто ответственнен за это удаление?
+1. **Доп задание**\*: Как упростить процесс создания `regcred` секрета если вы уже залогинены в docker registry через docker login?
+1. **Доп задание**\*: Отредактируйте `serviceaccount` не через patch а через `kubectl edit`. Что будет если ошибиться в редактируемом манифесте?
+1. **Доп задание**\*: запустить под с лимитами по памяти в 16mb. [About K8S Limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
 
 [K8S и Private Registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
