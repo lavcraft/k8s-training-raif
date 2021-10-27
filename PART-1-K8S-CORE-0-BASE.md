@@ -363,7 +363,7 @@ Hands-on practice quest #05: Redeploy application with ingress
 
 ```shell script
 # тест должен заработать
-watch -n0.1 curl http://app-knife-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+watch -n0.1 curl -s -v http://app-knife-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 kubectl explain ingress.spec
 # Завершите ingress конфигурацию
 vi handson/handson-05/ingress.yml
@@ -400,7 +400,7 @@ Hands-on practice quest #06: Redeploy application with replicas
 
 ```shell
 # запускаем тестовую команду. Видим что падает
-[tty0] $ watch -e -n0.1 curl --fail app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+[tty0] $ watch -e -n0.1 curl --fail -s -v app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 [tty1] kubectl explain deployment
 # применяем деплоймент
 ## смотрим шаблон
@@ -409,7 +409,7 @@ Hands-on practice quest #06: Redeploy application with replicas
 [tty1] $ vi handson/handson-06/deployment.yml
 [tty1] $ kubectl apply -f handson/handson-06/deployment.yml
 # после запуска снова запускаем команду для проверки
-[tty0] $ watch -e -n0.1 curl --fail app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+[tty0] $ watch -e -n0.1 curl --fail -s -v app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 ```
 
 - [ ] Исследуем надёжность нашего деплоймента
@@ -444,7 +444,7 @@ Hands-on practice quest #07: Redeploy application with probes
 
 Конфигурируем для одного приложение rediness/liveness для другого нет
 ```shell
-[tty0] $ watch -e -n0.1 curl --fail app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+[tty0] $ watch -e -n0.1 curl --fail -s -v app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 
 [tty1] $ kubectl edit deployment app-butter-deployment
 [tty1] $ kubectl apply -f deployment.yml
