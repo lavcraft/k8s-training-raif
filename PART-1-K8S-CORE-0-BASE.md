@@ -130,7 +130,7 @@ kubectl auth can-i --list
 - [ ] Real control loop examples by kubectl - Desired state vs Current stats (Observe, diff ,act Control model)
 - [ ] Kubernetes API-Server and OpenAPI
 
-:shopping_cart: *Материалы*
+:shopping_cart: *Материалы*  
   - [Настрокйка реквизитов docker-registry k8s](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 
