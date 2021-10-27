@@ -254,10 +254,10 @@ kubectl get pods
 :eyes: [Про установки лимитов](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits)
 
 **Then** приложение не запуcтилось
-- Найти информацию для извлечения признака проблемы
-- Найти оптимальное значение лимитов и исправить
-- Вывести все поды с ошибочным статусом в формате `name/image - status`. Смотри документацию jsonpath/go-template [kubectl jsonpath doc](https://kubernetes.io/docs/reference/kubectl/jsonpath/)
-- **Доп задание**\*: Задайте дефолтные квоты для приложений в вашем namespace
+1. Найти информацию для извлечения признака проблемы
+1. Найти оптимальное значение лимитов и исправить
+1. Вывести все поды с ошибочным статусом в формате `name/image - status`. Смотри документацию jsonpath/go-template [kubectl jsonpath doc](https://kubernetes.io/docs/reference/kubectl/jsonpath/)
+1. **Доп задание**\*: Задайте дефолтные квоты для приложений в вашем namespace
 
 
 **Then** участники делятся результатами и соображениями
