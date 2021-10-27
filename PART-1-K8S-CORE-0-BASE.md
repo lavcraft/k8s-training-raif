@@ -131,7 +131,8 @@ kubectl auth can-i --list
 - [ ] Kubernetes API-Server and OpenAPI
 
 :shopping_cart: *Материалы*  
-  -1. [Настрокйка реквизитов docker-registry k8s](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+  1. [Настрокйка реквизитов docker-registry k8s](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+  1. [K8S и Private Registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 
 ### Hands-on practice quest #02: I have an application, I wish deploy it to production!
@@ -191,8 +192,6 @@ kubectl get pods
 1. **Доп задание**\*: Как упростить процесс создания `regcred` секрета если вы уже залогинены в docker registry через docker login?
 1. **Доп задание**\*: Отредактируйте `serviceaccount` не через patch а через `kubectl edit`. Что будет если ошибиться в редактируемом манифесте?
 1. **Доп задание**\*: запустить под с лимитами по памяти в 16mb. [About K8S Limits](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
-
-[K8S и Private Registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 ## K8S Container isolation
 
