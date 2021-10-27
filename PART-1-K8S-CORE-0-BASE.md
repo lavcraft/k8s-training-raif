@@ -109,7 +109,7 @@ kubectl config get-contexts
 kubectl config use-context \tab
 kubectl auth can-i --list 
 ```
-[Подробнее про права и RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-binding-examples)
+> :eyes: [Подробнее про права и RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-binding-examples)
 
 **Then** участники делятся возникшими и решенными проблемами и отвечают на вопросы
 - Что делать если команда не найдена?
