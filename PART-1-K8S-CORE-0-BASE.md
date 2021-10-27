@@ -109,18 +109,18 @@ kubectl config get-contexts
 kubectl config use-context \tab
 kubectl auth can-i --list 
 ```
-> :eyes: [Подробнее про права и RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-binding-examples)
+:eyes: [Подробнее про права и RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-binding-examples)
 
 **Then** участники делятся возникшими и решенными проблемами и отвечают на вопросы
-- Что делать если команда не найдена?
-- Как я авторизовываюсь в кластере?
-- Кто может выдавать права доступа к кластера и в чём заключается "передача"?
-- Можно ли авторизоваться в kubernetes с помощью Ouath 2.0/OIDC т.е через "Соцсеточки"?
-- Как переключать кластеры без use-context?
-- Как избежать ошибок выполнения команд не на "тех" кластерах?
-- Как разделены ресурсы других участников во дном кластере?
-- Как выбрать свой namespace пол умолчанию?
-- \* попробуйте использовать несколько конфигураций с помощью переменной окружения `KUBECONFIG`. Что будет с разными кластерами при выводе `kubectl config view`? [О KUBECONFIG](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/)
+1. Что делать если команда не найдена?
+1. Как я авторизовываюсь в кластере?
+1. Кто может выдавать права доступа к кластера и в чём заключается "передача"?
+1. Можно ли авторизоваться в kubernetes с помощью Ouath 2.0/OIDC т.е через "Соцсеточки"?
+1. Как переключать кластеры без use-context?
+1. Как избежать ошибок выполнения команд не на "тех" кластерах?
+1. Как разделены ресурсы других участников во дном кластере?
+1. Как выбрать свой namespace пол умолчанию?
+1. **Доп задание**\*: попробуйте использовать несколько конфигураций с помощью переменной окружения `KUBECONFIG`. Что будет с разными кластерами при выводе `kubectl config view`? [О KUBECONFIG](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/)
 
 ## K8S Concepts
 
@@ -129,7 +129,8 @@ kubectl auth can-i --list
 - [ ] Reconciliation
 - [ ] Real control loop examples by kubectl - Desired state vs Current stats (Observe, diff ,act Control model)
 - [ ] Kubernetes API-Server and OpenAPI
-- Материалы
+
+:shopping_cart: *Материалы*
   - [Настрокйка реквизитов docker-registry k8s](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
 
