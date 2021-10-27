@@ -201,6 +201,8 @@ kubectl get pods
 - [ ] Cluster network availability
 - [ ] Docker run in Kubernetes and minimal configuration. Namespaces and pods fast introduction
 - [ ] Демо kubectl apply/get/describe и output моды
+
+:shopping_cart: *Материалы*  
 - [Подробно о ресурсах и CGroups](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html-single/resource_management_guide/index)
 
 ### Hands-on practice quest #03: Run apps in cluster
