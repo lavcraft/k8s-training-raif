@@ -524,9 +524,9 @@ Hands-on practice quest #08: Two apps in one domain
 Изучаем особенности маршрутизации трафика в кластер и настраиваем более сложную схему. 
 Подымаем вопросы совместимости и Reverse Proxy компромиссы
 
-- [ ] Given пары участников имеют задеплоенную версию приложений и сервисов и ingress
-- [ ] When участники запускают команды и применяют новую настройки
-- [ ] Задание: сделать новый ingress, чтобы приложения работали на одном хосте
+- Given пары участников имеют задеплоенную версию приложений и сервисов и ingress
+- When участники запускают команды и применяют новую настройки
+- Задание: сделать новый ingress, чтобы приложения работали на одном хосте
 
 INFO: [Nginx ingress docs](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 INFO: [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/user-guide/ingress-path-matching/)
@@ -544,9 +544,9 @@ INFO: [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/us
 [tty1] $ kubectl apply -f ingress.yml
 ```
 
-- [ ] Задание: просмотрите логи всех приложений app-butter. Какие заголовки приходят в приложение?
+[] Задание: просмотрите логи всех приложений app-butter. Какие заголовки приходят в приложение?
 
-- [ ] Then участники делятся результатами и соображениями
+Then участники делятся результатами и соображениями
 - Пробовали открыть UI? Всё работает как нужно?
 - Как можно исправить проблему с путями? (3 варианта)
 - Достаточно ли заголовков которые приходят для восстановления контекста запроса?
@@ -556,10 +556,10 @@ INFO: [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/us
 
 K8S ConfigMaps
 ----------------
-- [ ] DNS TTL и как это влияет на maintenance приложений
-- [ ] Локальность данных при использовании DNS Discovery
-- [ ] K8S Config maps - Что это и где стоит использовать а где нет
-- [ ] \* Подробно Forwarded RFC + расширения
+- DNS TTL и как это влияет на maintenance приложений
+- Локальность данных при использовании DNS Discovery
+- K8S Config maps - Что это и где стоит использовать а где нет
+- \* Подробно Forwarded RFC + расширения
 
 Hands-on practice quest #09: Redeploy application with custom configuration
 ---------------------------------------------------------------------------
