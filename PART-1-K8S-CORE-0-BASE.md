@@ -287,8 +287,8 @@ kubectl exec -it debug -- /bin/bash
 ```
 
 1. **Задание**: С помощью материалов ниже вычислите IP адресс и имя запущенного Pod и сделать запрос к сервису app-knife
-1. [Debugging DNS Resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/)
-1. [DNS Pod Service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods)
+    > [Debugging DNS Resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/)
+    > [DNS Pod Service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods)
 1. **Задание**: Допишете сервис для недостающего приложения и повторите запрос к app-knife
 
 ```shell
