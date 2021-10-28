@@ -695,10 +695,9 @@ Hands-on practice quest #10: K8S Secrets simple practice
 Знакомимся с секретами K8S, обсуждаем их компромисы и варианты использования
 Пробуем сконфигурировать наше приложение с помощью секретов
 
-**Given** пары участников имеют `app-knife-deployment`   и `app-butter-deployment` в своём namespace
-**When** участники запускают команды и применяют новую настройки
-1. **Задание**: создать секрет и добавить его в приложения используя секции `data` и `stringData`. Проверить его наличие и формат
-1. **Задание**: смонтировать секреты `username` и `password` в папку `/usr/src/app` вместе с конфигом `nginx.conf` из предыдущего задания
+**Given** пары участников имеют `app-knife-deployment`   и `app-butter-deployment` в своём namespace  
+**When** участники запускают команды и применяют новую настройки  
+**Задание**: создать секрет и добавить его в приложения используя секции `data` и `stringData`. Проверить его наличие и формат
 
 ```shell
 kubectl explain secrets
@@ -706,7 +705,17 @@ kubectl explain secrets.data
 kubectl explain secrets.stringData
 vi handson-10/secret.yml
 kubectl apply -f handson-10/secret.yml
+```
 
+**Then** участники деляться результатами и соображения, отвечая на вопросы:
+1. В каком формате находятся данные в секции `data`?
+1. Можно ли записать "неправильные" данные в `data` и что будет при попытке их прочитать?
+1. Что будет если ключи в `data` и `stringData` пересекутся?
+1. Можно ли обратиться к stringData после применения ресурса (`kubectl apply -f ...`)
+
+**Задание**: смонтировать секреты `username` и `password` в папку `/usr/src/app` вместе с конфигом `nginx.conf` из предыдущего задания
+
+```shell
 # изучим возможности
 kubectl explain pod.spec.volumes
 kubectl explain pod.spec.containers.volumeMounts
