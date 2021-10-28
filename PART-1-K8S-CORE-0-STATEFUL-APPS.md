@@ -81,7 +81,7 @@ Hands-on practice quest #01: Statefull apps scaling
 :shopping_cart: *Материалы*  
 1. [Creating a StatefulSet](https://kubernetes.io/docs/tutorials/stateful-application/basic-stateful-set/#creating-a-statefulset)
 
-**Задание**: создайте `statefulset`
+**Задание**: создайте `statefulset` и попробуйте получить доступ к его разным элементам
 
 ```shell
 kubectl explain statefulset.spec
