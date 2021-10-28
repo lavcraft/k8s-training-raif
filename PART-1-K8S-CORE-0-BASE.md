@@ -690,6 +690,9 @@ K8S Secrets
 - [ ] Secrets best practice for Cloud Native apps
 - [ ] Required support for security from infrastructure side and app side
 
+:shopping_cart: *Материалы*  
+1. [About Secret Encryption](https://kubernetes.io/docs/tasks/administer-cluster/kms-provider/)
+
 Hands-on practice quest #10: K8S Secrets simple practice
 --------------------------------------------------------
 Знакомимся с секретами K8S, обсуждаем их компромисы и варианты использования
