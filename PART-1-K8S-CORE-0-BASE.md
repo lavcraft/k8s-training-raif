@@ -462,6 +462,9 @@ K8S Application Probes and full deployments
 - [ ] LB probes and application availability for user corner cases
 - [ ] K8S Deploments
 
+:shopping_cart: *Материалы*
+1. [Kubernetes probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+
 Hands-on practice quest #07: Redeploy application with probes
 -------------------------------------------------------------
 Пытаемся митигировать недоступность нашего приложения средствами K8S
@@ -469,7 +472,7 @@ Hands-on practice quest #07: Redeploy application with probes
 **Given** пары участников имеют задеплоенную версию   приложений и сервисов и ingress
 **When** участники запускают команды и применяют новую настройки
 
-[Kubernetes probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+:eyes: [Kubernetes probes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
 
 Конфигурируем для одного приложение rediness/liveness для другого нет
 ```shell
