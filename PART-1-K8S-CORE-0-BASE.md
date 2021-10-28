@@ -291,12 +291,10 @@ Hands-on practice quest #04: Access to application via services
 Получаем доступ к нашим приложениям, исследуем особенности сетевого взаимодействия. 
 Стараемся обращать внимание на жизненный цикл наших приложений
 
-**Given** пары участников имеют задеплоенную версию   приложений
-**When** участники запускают команды и применяют новую настройки
-**Задание**: Запустить cli-tools если отсутствует
-
-> Для выполнения задания требуются приложения из [handson #03](#hands-on-practice-quest-03-run-apps-in-cluster)
-
+**Given** пары участников имеют задеплоенную версию   приложений  
+**When** участники запускают команды и применяют новую настройки  
+**Задание**: Запустить cli-tools если отсутствует  
+> Для выполнения задания требуются приложения из [handson #03](#hands-on-practice-quest-03-run-apps-in-cluster)  
 ```shell
 # проверим что есть под debug, иначе запустим (см handson #02)
 kubectl get pod debug 
@@ -308,7 +306,7 @@ kubectl exec -it debug -- /bin/bash
 
 1. **Задание**: С помощью материалов ниже вычислите IP адресс и имя запущенного `Pod` и сделать запрос к сервису `app-knife`
     > Чтобы лучше понять - [Debugging DNS Resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/)
-    > и [DNS Pod Service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods)
+    > и [DNS Pod Service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods)  
 1. **Задание**: Допишете сервис для недостающего приложения и повторите запрос к app-knife
 
 ```shell
