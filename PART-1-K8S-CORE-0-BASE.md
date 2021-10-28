@@ -271,7 +271,7 @@ kubectl get pods
 1. как понять какие ресурсы работают в рамках неймспейса??
 1. как получить сырой вывод api?
 1. получилось ли у вас отредактировать лимиты приложения? Какие были трудности?
-1. **Доп задание**\*: Как приложение понимает что ему нужно выключаться? Кто быстрее выключается, `app-knife` или `app-butter`?
+1. **Доп задание**\*: Объясните как приложение понимает что ему нужно выключаться? С помощью каких команд можно узнать узнать кто быстрее выключается, `app-knife` или `app-butter`?
 
 K8S Application networking
 -------------------------------
@@ -280,7 +280,11 @@ K8S Application networking
 - [ ] Доступность при деплое и политики обновления
 - [ ] K8S Services and namespaces
 - [ ] Демо kubectl exec curl с интерактивным watch для get pods/get svc -o wide
-- [kubectl port-forward docs](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
+
+:shopping_cart: *Материалы*  
+1. [kubectl port-forward docs](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
+1. [DNS Pod Service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods)
+1. [Debugging DNS Resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/)
 
 Hands-on practice quest #04: Access to application via services
 ---------------------------------------------------------------
@@ -303,7 +307,7 @@ kubectl exec -it debug -- /bin/bash
 ```
 
 1. **Задание**: С помощью материалов ниже вычислите IP адресс и имя запущенного `Pod` и сделать запрос к сервису `app-knife`
-    > Материалы - [Debugging DNS Resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/)
+    > Чтобы лучше понять - [Debugging DNS Resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/)
     > и [DNS Pod Service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods)
 1. **Задание**: Допишете сервис для недостающего приложения и повторите запрос к app-knife
 
