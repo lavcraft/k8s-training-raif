@@ -607,6 +607,7 @@ K8S ConfigMaps
 :shopping_cart: *Материалы*
 1. [Подробнее о ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/)
 1. [Про Shell ENV Variables](https://en.wikipedia.org/wiki/Environment_variable)
+1. [Exposing information to pod](https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/)
 
 Hands-on practice quest #09: Redeploy application with custom configuration
 ---------------------------------------------------------------------------
@@ -641,7 +642,7 @@ kubectl create configmap -h
 1. Попробуйте объяснить почему так
 
 **Then** Настройки подтянулись в app-knife  
-**Задание**: добавьте в configmap.yml не key-value настройку `nginx.conf`, а многострочный "файл" (контент ниже). И смонтируйте содержимое в файле в контейнер в папку `/usr/src/app`
+**Задание**: добавьте в configmap.yml не просто key-value настройку, а полноценный многострочный `nginx.conf` "файл" (контент ниже). Смонтируйте его содержимое контейнер в папку `/usr/src/app`
 
 ```plain
 user       www www;
@@ -675,11 +676,13 @@ kubectl apply -f deployment.yml
 
 **Then** участники делятся результатами и соображениями
 1. Когда меняется значение в файле?
+1. Всегда ли будет работать обновления файла?
+1. Как узнать понять, будут ли файла обновляться из контейнера?
 1. Как проверить что изменения подтянулись?
 1. нужен ли рестарт приложения после применения configmap? Обоснуйте так лучше?
 1. Можно ли добавить информацию с манифеста приложения в env?
 
-[Exposing information to pod](https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/)
+:eyes: [Exposing information to pod](https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/)
 
 K8S Secrets
 ----------------
