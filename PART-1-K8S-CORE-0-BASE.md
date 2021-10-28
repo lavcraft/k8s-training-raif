@@ -779,6 +779,7 @@ K8S Apps Distribution
 
 :shopping_cart: *Материалы*  
 1. [Подробнее о практиках и ограничениях масштабирования](https://kubernetes.io/docs/setup/best-practices/cluster-large/)
+1. [Подробнее про Affinity и способы распределения Pod](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/)
 
 Hands-on practice quest #11: Reconfigure apps distribution
 ----------------------------------------------------------
@@ -820,7 +821,8 @@ kubectl edit deployment app-knife-deployment
 
 **Then** участники делятся результатами и соображениями
 1. Подумайте, насколько это жизненный сценарий?
-**Доп задание**\*: Изучите объект `ResourceQuotas` и добавьте его. Как проверить его работоспособность?
+
+**Доп задание**\*: Изучите объект `ResourceQuotas` и добавьте его. Как проверить его работоспособность?  
 **Доп задание**\*: Изучите объект `PodDisruptionBudget` и добавьте его. Как проверить его работоспособность?
 
 ```shell
