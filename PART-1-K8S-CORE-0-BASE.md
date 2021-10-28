@@ -553,6 +553,7 @@ K8S Multi path applications
 :shopping_cart: *Материалы*  
 1. [Nginx ingress docs](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 1. [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/user-guide/ingress-path-matching/)
+1. [Reverse proxy - HowTo](https://kinsta.com/blog/reverse-proxy/)
 
 Hands-on practice quest #08: Two apps in one domain
 ---------------------------------------------------
