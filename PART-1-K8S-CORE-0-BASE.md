@@ -550,6 +550,10 @@ K8S Multi path applications
 - [ ] Basic Reverse proxy concepts
 - [ ] Ingress rules - rewrite, split locations, certs
 
+:shopping_cart: *Материалы*  
+1. [Nginx ingress docs](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+1. [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/user-guide/ingress-path-matching/)
+
 Hands-on practice quest #08: Two apps in one domain
 ---------------------------------------------------
 Изучаем особенности маршрутизации трафика в кластер и настраиваем более сложную схему. 
@@ -559,9 +563,9 @@ Hands-on practice quest #08: Two apps in one domain
 **When** участники запускают команды и применяют новую настройки
 **Задание**: сделать новый ingress, чтобы приложения работали на одном хосте
 
-> [Nginx ingress docs](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+:eyes: [Nginx ingress docs](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 
-> [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/user-guide/ingress-path-matching/)
+:eyes: [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/user-guide/ingress-path-matching/)
 
 
 ```shell
