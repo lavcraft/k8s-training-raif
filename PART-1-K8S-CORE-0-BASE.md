@@ -604,16 +604,20 @@ K8S ConfigMaps
 - [ ] K8S Config maps - Что это и где стоит использовать а где нет
 - [ ] \* Подробно Forwarded RFC + расширения
 
+:shopping_cart: *Материалы*
+1. [Подробнее о ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/)
+1. [Про Shell ENV Variables](https://en.wikipedia.org/wiki/Environment_variable)
+
 Hands-on practice quest #09: Redeploy application with custom configuration
 ---------------------------------------------------------------------------
 Знакомимся с механизмами внешних конфигураций подробно и пытаемся сконфигурировать наши приложения
 Подымаем вопросы конфигурации "коробочных" приложений
 
-[] **Given** пары участников имеют   app-knife-deployment и app-butter-deployment в своём namespace
-[] **When** участники запускают команды и применяют новую настройки
-[] **Задание**: Вынести настройку имени сервиса (CALL_HOST) и таймаута app-butter (CALL_TIMEOUT) в конфигурацию для возможной смены
+**Given** пары участников имеют   app-knife-deployment и app-butter-deployment в своём namespace  
+**When** участники запускают команды и применяют новую настройки  
+**Задание**: Вынести настройку имени сервиса (`CALL_HOST`) и таймаута app-butter (`CALL_TIMEOUT`) в конфигурацию для возможной смены
 
-[Подробнее о ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/)
+:eyes: [Подробнее о ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/)
 
 ```shell
 kubectl explain pod.spec.containers.env 
@@ -628,7 +632,7 @@ kubectl create configmap -h
 1. В каком формате хранятся данные внутри ConfigMap?
 1. Как посмотреть что было сохранено и почему так сложно? Поясните
 
-[Про Shell ENV Variables](https://en.wikipedia.org/wiki/Environment_variable)
+:eyes: [Про Shell ENV Variables](https://en.wikipedia.org/wiki/Environment_variable)
 
 **Then** Настройки подтянулись в app-knife
 1. **Задание**: измените конфигурацию - сменить таймаут. После проверьте значение
