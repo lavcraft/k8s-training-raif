@@ -285,6 +285,7 @@ K8S Application networking
 1. [kubectl port-forward docs](https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/)
 1. [DNS Pod Service](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pods)
 1. [Debugging DNS Resolution](https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/)
+1. [man resolv.conf](https://man7.org/linux/man-pages/man5/resolv.conf.5.html)
 
 Hands-on practice quest #04: Access to application via services
 ---------------------------------------------------------------
