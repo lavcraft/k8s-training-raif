@@ -349,7 +349,7 @@ kubectl get pods
 1. Можно ли его переконфигурировать?
 1. **Задание**: Найти кто влияет на название DNS имени
 
-[man resolv.conf](https://man7.org/linux/man-pages/man5/resolv.conf.5.html)
+:eyes: [man resolv.conf](https://man7.org/linux/man-pages/man5/resolv.conf.5.html)
 
 ```shell script
 [debug] $ cat /etc/resolv.conf
