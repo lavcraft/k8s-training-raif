@@ -371,7 +371,9 @@ K8S Internal and External access to containers
 - [ ] Containers Shell
 - [ ] K8S Ingress и его описание
 - [ ] kubectl exec
-- [ ] [Подробнее об ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+
+:shopping_cart: *Материалы*
+1. [Подробнее об ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 
 Hands-on practice quest #05: Redeploy application with ingress
 --------------------------------------------------------------
