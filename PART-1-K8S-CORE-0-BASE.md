@@ -94,6 +94,7 @@ Hands-on practice quest #01: connect to existed cluster
 - **Задача**: узнать список ваших привилегий в кластере
 
 ```shell script
+kubectl config -h
 cat ~/.kube/config
 ```
 
