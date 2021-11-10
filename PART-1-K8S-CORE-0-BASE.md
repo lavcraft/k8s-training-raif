@@ -443,7 +443,7 @@ Hands-on practice quest #06: Redeploy application with replicas
 > Флаг -e для команды watch прерывает повторы команды если команда завершилась ошибкой
 
 
-**Задание**: Изменить количество реплик для deployment app-butter-deployment на 3 с помощью команды `kubectl scale` и исследовать надёжность нашего деплоймента
+**Задание**: Изменить количество реплик для deployment app-butter-deployment на 3 с помощью команды `kubectl scale` и исследовать надёжность нашего деплоймента  
     > Проверить работспособность можно командой `watch -e -n0.1 curl --fail --show-error -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru`
 
 **Then** тест упал при увеличении количества реплик когда сервис вернул HTTP 500
