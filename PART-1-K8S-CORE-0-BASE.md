@@ -386,7 +386,7 @@ Hands-on practice quest #05: Redeploy application with ingress
 
 ```shell script
 # далее мы должны сделать так, чтобы тест заработал
-watch -n0.1 curl -s -v http://app-knife-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+watch -n0.1 curl -s -i http://app-knife-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 kubectl explain ingress.spec
 # Завершите ingress конфигурацию
 vi handson/handson-05/ingress.yml
@@ -424,7 +424,7 @@ Hands-on practice quest #06: Redeploy application with replicas
 
 ```shell
 # запускаем тестовую команду. Видим что падает
-[tty0] $ watch -e -n0.1 curl --fail -s -v app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+[tty0] $ watch -e -n0.1 curl --fail -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 [tty1] kubectl explain deployment
 # применяем деплоймент
 ## смотрим шаблон
@@ -433,7 +433,7 @@ Hands-on practice quest #06: Redeploy application with replicas
 [tty1] $ vi handson/handson-06/deployment.yml
 [tty1] $ kubectl apply -f handson/handson-06/deployment.yml
 # после запуска снова запускаем команду для проверки
-[tty0] $ watch -e -n0.1 curl --fail -s -v app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+[tty0] $ watch -e -n0.1 curl --fail -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 ```
 
 > Флаг --fail команды curl завершает команду с ошибочным статусом если был HTTP ответ не 200
@@ -444,7 +444,7 @@ Hands-on practice quest #06: Redeploy application with replicas
 
 
 **Задание**: Изменить количество реплик для deployment app-butter-deployment на 3 с помощью команды `kubectl scale` и исследовать надёжность нашего деплоймента
-    > Проверить работспособность можно командой `watch -e -n0.1 curl --fail -s -v app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru`
+    > Проверить работспособность можно командой `watch -e -n0.1 curl --fail -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru`
 
 **Then** тест упал при увеличении количества реплик когда сервис вернул HTTP 500
 1. Почему упал тест? Разберитесь в источнике проблемы
@@ -477,7 +477,7 @@ Hands-on practice quest #07: Redeploy application with probes
 
 Конфигурируем для одного приложение rediness/liveness для другого нет
 ```shell
-[tty0] $ watch -e -n0.1 curl --fail -s -v app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+[tty0] $ watch -e -n0.1 curl --fail -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 
 [tty1] $ kubectl edit deployment app-butter-deployment
 [tty1] $ kubectl apply -f deployment.yml
