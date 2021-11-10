@@ -424,7 +424,7 @@ Hands-on practice quest #06: Redeploy application with replicas
 
 ```shell
 # запускаем тестовую команду. Видим что падает
-[tty0] $ watch -e -n0.1 curl --fail -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+[tty0] $ watch -e -n0.1 curl --fail --show-error -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 [tty1] kubectl explain deployment
 # применяем деплоймент
 ## смотрим шаблон
@@ -433,7 +433,7 @@ Hands-on practice quest #06: Redeploy application with replicas
 [tty1] $ vi handson/handson-06/deployment.yml
 [tty1] $ kubectl apply -f handson/handson-06/deployment.yml
 # после запуска снова запускаем команду для проверки
-[tty0] $ watch -e -n0.1 curl --fail -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+[tty0] $ watch -e -n0.1 curl --fail --show-error -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 ```
 
 > Флаг --fail команды curl завершает команду с ошибочным статусом если был HTTP ответ не 200
@@ -444,7 +444,7 @@ Hands-on practice quest #06: Redeploy application with replicas
 
 
 **Задание**: Изменить количество реплик для deployment app-butter-deployment на 3 с помощью команды `kubectl scale` и исследовать надёжность нашего деплоймента
-    > Проверить работспособность можно командой `watch -e -n0.1 curl --fail -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru`
+    > Проверить работспособность можно командой `watch -e -n0.1 curl --fail --show-error -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru`
 
 **Then** тест упал при увеличении количества реплик когда сервис вернул HTTP 500
 1. Почему упал тест? Разберитесь в источнике проблемы
@@ -478,7 +478,7 @@ Hands-on practice quest #07: Redeploy application with probes
 
 Конфигурируем для одного приложение rediness/liveness для другого нет
 ```shell
-[tty0] $ watch -e -n0.1 curl --fail -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
+[tty0] $ watch -e -n0.1 curl --fail --show-error -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 
 [tty1] $ kubectl edit deployment app-butter-deployment
 [tty1] $ kubectl apply -f deployment.yml
@@ -575,9 +575,9 @@ Hands-on practice quest #08: Two apps in one domain
 
 ```shell
 # Тест должен заработать
-[tty0] $ watch -n0.5 curl training-app.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru/app-knife/
+[tty0] $ watch -n0.5 curl -s -i training-app.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru/app-knife/
 # or
-[tty0] $ watch -n0.5 curl training-app.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru/app-butter/
+[tty0] $ watch -n0.5 curl -s -i training-app.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru/app-butter/
 
 [tty1] $ kubectl explain ingress.spec.rules.http.paths
 # Выносим приложения на разные пути одного домена
