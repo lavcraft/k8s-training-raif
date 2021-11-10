@@ -385,7 +385,7 @@ Hands-on practice quest #05: Redeploy application with ingress
 **Задание**: Настроить доступ из сети банка к приложению следуя инструкциям
 
 ```shell script
-# тест должен заработать
+# далее мы должны сделать так, чтобы тест заработал
 watch -n0.1 curl -s -v http://app-knife-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 kubectl explain ingress.spec
 # Завершите ingress конфигурацию
