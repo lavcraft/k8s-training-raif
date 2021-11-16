@@ -572,8 +572,10 @@ Hands-on practice quest #08: Two apps in one domain
 **Задание**: сделать новый ingress, чтобы приложения работали на одном хосте
 
 :eyes: [Nginx ingress docs](https://kubernetes.io/docs/concepts/services-networking/ingress/)
-
 :eyes: [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/user-guide/ingress-path-matching/)
+:eyes: [Nginx ingress rewrite](https://kubernetes.github.io/ingress-nginx/examples/rewrite/)
+:eyes: [Nginx ingress forwarded prefix header](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#x-forwarded-prefix-header)
+:eyes: [Про Reverse Proxy с X-Forwarder-* на примере Spring](https://tomgregory.com/spring-boot-behind-load-balancer-using-x-forwarded-headers/)
 
 
 ```shell
@@ -602,7 +604,9 @@ Hands-on practice quest #08: Two apps in one domain
 1. По какому пути (HTTP PATH) запросы приходят в приложение из нового ingress?
 1. Что будет, если приложение будет обрабатывать каждый путь отдельно а не все одинаково? (например `/api/butter` и `/api/knife` соответственно). Что нужно сделать чтобы в такой ситуации работали оба ingress?
 1. **Доп задание**\*: HAL API: как быть с обратными ссылками? Как узнать с какого адреса пришёл запрос?
-1. **Доп задание**\* Можно ли настроить TLS для нашего сервиса на ingress? Попробуйте сделать
+1. **Доп задание**\*: Можно ли настроить TLS для нашего сервиса на ingress? Попробуйте сделать
+1. **Доп задание**\*: Сделайте так, чтобы в приложение приходил url без `/app-knife/` и `/app-butter/` - т.е чтобы `/info` заработал
+1. **Доп задание**\*: Добавьте `x-forwarder-prefix` заголовок для ingress `traingin-app`
 
 K8S ConfigMaps
 ----------------
