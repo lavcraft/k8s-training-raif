@@ -571,11 +571,11 @@ Hands-on practice quest #08: Two apps in one domain
 **When** участники запускают команды и применяют новую настройки  
 **Задание**: сделать новый ingress, чтобы приложения работали на одном хосте
 
-:eyes: [Nginx ingress docs](https://kubernetes.io/docs/concepts/services-networking/ingress/)
-:eyes: [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/user-guide/ingress-path-matching/)
-:eyes: [Nginx ingress rewrite](https://kubernetes.github.io/ingress-nginx/examples/rewrite/)
-:eyes: [Nginx ingress forwarded prefix header](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#x-forwarded-prefix-header)
-:eyes: [Про Reverse Proxy с X-Forwarder-* на примере Spring](https://tomgregory.com/spring-boot-behind-load-balancer-using-x-forwarded-headers/)
+:eyes: [Nginx ingress docs](https://kubernetes.io/docs/concepts/services-networking/ingress/)  
+:eyes: [Nginx ingress path mapping](https://kubernetes.github.io/ingress-nginx/user-guide/ingress-path-matching/)  
+:eyes: [Nginx ingress rewrite](https://kubernetes.github.io/ingress-nginx/examples/rewrite/)  
+:eyes: [Nginx ingress forwarded prefix header](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#x-forwarded-prefix-header)  
+:eyes: [Про Reverse Proxy с X-Forwarder-* на примере Spring](https://tomgregory.com/spring-boot-behind-load-balancer-using-x-forwarded-headers/)  
 
 
 ```shell
