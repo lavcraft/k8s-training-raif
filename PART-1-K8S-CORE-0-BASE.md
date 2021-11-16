@@ -642,7 +642,7 @@ kubectl create configmap -h
 **Then** ConfigMap успешно создался и вы убедились что он создан  
 **Задание**: Попробуйте вывести ключи сохраннёные внутри ConfigMap
 1. В каком формате хранятся данные внутри ConfigMap?
-1. Что будет если добавить одинаковые ключи в секцию `spec.data` и `spec.binaryData` ?
+1. Что будет если добавить одинаковые ключи в секцию `.data` и `.binaryData` ?
 1. Как посмотреть что было сохранено и почему так сложно? Поясните
 
 :eyes: [Про Shell ENV Variables](https://en.wikipedia.org/wiki/Environment_variable)
