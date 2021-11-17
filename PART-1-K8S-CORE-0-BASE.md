@@ -692,6 +692,7 @@ kubectl apply -f deployment.yml
 1. Как проверить что изменения подтянулись?
 1. нужен ли рестарт приложения после применения configmap? Обоснуйте так лучше?
 1. Можно ли добавить информацию с манифеста приложения в env?
+1. **Доп задание**\*: Добавьте имя машины (`nodeName`) на которой запустился под в переменную окружения `POD_NODE_NAME`
 
 :eyes: [Exposing information to pod](https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/)
 
