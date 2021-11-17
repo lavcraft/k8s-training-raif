@@ -782,7 +782,7 @@ kubectl create secret generic secret_name \
 **Then** участники делятся результатами и соображениями по дополнительному заданию
 1. В чём отличие типа у regcred от обычного секрета? Как закодирован ваш пароль?
 1. **Доп задание**\*: Когда такой способ может быть удобен?
-1. **Доп задание**\*: Задание: попробуйте найти свой пароль из секрета regcred ( создавался в [задании 02](#hands-on-practice-quest-02-i-have-an-application-i-wish-deploy-it-to-production) )
+1. **Доп задание**\*: Попробуйте найти свой пароль из секрета regcred ( создавался в [задании 02](#hands-on-practice-quest-02-i-have-an-application-i-wish-deploy-it-to-production) )
 
 K8S Apps Distribution
 ---------------------
