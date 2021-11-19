@@ -73,6 +73,11 @@ helm search repo
 1. Объясните их природу
 1. **Доп задание**\*: Найдите где Helm хранит свои настройки и посмотрите. Всё ли вам нравится?
 
+:eyes: [Основы Helm Templates](https://helm.sh/docs/chart_best_practices/templates/#helm)  
+:eyes: [Helm соглашения о именовании переменных values.yml](https://helm.sh/docs/chart_best_practices/values/)  
+:eyes: [Helm Crate gettings started](https://helm.sh/docs/chart_template_guide/getting_started/)  
+:eyes: [Helm Tests](https://helm.sh/docs/topics/chart_tests/)  
+
 Hands-on practice quest #01: создание Helm Chart
 ------------------------------------------------
 
@@ -91,6 +96,8 @@ ls -la
 cat Chart.yml
 ls templates
 ```
+
+:eyes: [Helm Crate gettings started](https://helm.sh/docs/chart_template_guide/getting_started/)
 
 **Then** участники делятся возникшими и решенными проблемами и отвечают на вопросы
 1. знакомо ли вам то, что находит в директории templates?
@@ -122,6 +129,9 @@ K8S Helm charts
 - [ ] команды helm и templates
 - [ ] определение переменных для деплоя нашего приложения с помощью helm
 
+:eyes: [Именованные шаблоны](https://helm.sh/docs/chart_template_guide/named_templates/)  
+:eyes: [Функции шаблона и их комбинирование](https://helm.sh/docs/chart_template_guide/functions_and_pipelines/)  
+
 Hands-on practice quest #02: структура и шаблон. Начинаем переносить deployment
 -------------------------------------------------------------------------------
 **Given** пары участников залогинены на `bastion` и создали шаблон helm chart  
@@ -149,6 +159,9 @@ K8S Helm charts шаблонизирование
 - [ ] Go-Template и его функции
 - [ ] Helm CLI устройство
 - [ ] Мета информация в шаблоне и использование примеров
+
+:eyes: [Debug helm chars](https://helm.sh/docs/chart_template_guide/debugging/)
+:eyes: [Список вспомогательных функций шаблонизации](https://helm.sh/docs/chart_template_guide/function_list/)
 
 Hands-on practice quest #03: функции шаблонизации и deployment
 --------------------------------------------------------------
