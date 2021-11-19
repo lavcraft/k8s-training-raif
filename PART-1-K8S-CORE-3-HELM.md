@@ -24,6 +24,8 @@ K8S Helm charts introduction
 - [ ] Связь с multi service deploy и управление группой ресурсов как одной сущностью
 - [ ] Сторонние Helm и их поддержка/обновление
 
+:eyes: [Совместимость версий Helm/Kubectl](https://helm.sh/docs/topics/version_skew/)
+
 ## Hands-on practice quest #00: Установка и настройка
 
 **Given** пары участников залогинены на `bastion` и выполнили `BASE` части  
@@ -238,7 +240,10 @@ helm upgrade <> .
 - [ ] О Hub и как искать helm charts
 - [ ] О релизном цикле helm charts
 - [ ] Про multi service deployment 
-  
+
+:eyes: [Helm Hooks](https://helm.sh/docs/topics/charts_hooks/)
+:eyes: [Helm Architecture](https://helm.sh/docs/topics/architecture/)
+
 Hands-on practice quest #4.1: задаём вопросы и доделываем то что не успели
 --------------------------------------------------------------------------
 
