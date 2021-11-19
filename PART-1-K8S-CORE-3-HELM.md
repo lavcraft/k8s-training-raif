@@ -162,8 +162,7 @@ K8S Helm charts шаблонизирование
 - [ ] Helm CLI устройство
 - [ ] Мета информация в шаблоне и использование примеров
 
-:eyes: [Debug helm chars](https://helm.sh/docs/chart_template_guide/debugging/)
-:eyes: [Список вспомогательных функций шаблонизации](https://helm.sh/docs/chart_template_guide/function_list/)
+:eyes: [Debug helm chars](https://helm.sh/docs/chart_template_guide/debugging/)  
 
 Hands-on practice quest #03: функции шаблонизации и deployment
 --------------------------------------------------------------
@@ -197,6 +196,8 @@ K8S Helm charts как пакетный менеджер для K8S
 - [ ] Роль пакетных менеджеров для платформ
 - [ ] Откуда растут ноги у Helm (Bitnami)
 - [ ] HELM Chart как API для развёртывания комплексных решений в K8S
+
+:eyes: [Список вспомогательных функций шаблонизации](https://helm.sh/docs/chart_template_guide/function_list/)  
 
 Hands-on practice quest #04: добавляем дефолтные значения в шаблон и мигрируем ingress
 --------------------------------------------------------------------------------------
