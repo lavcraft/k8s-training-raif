@@ -242,8 +242,8 @@ helm upgrade <> .
 - [ ] О релизном цикле helm charts
 - [ ] Про multi service deployment 
 
-:eyes: [Helm Hooks](https://helm.sh/docs/topics/charts_hooks/)
-:eyes: [Helm Architecture](https://helm.sh/docs/topics/architecture/)
+:eyes: [Helm Hooks](https://helm.sh/docs/topics/charts_hooks/)  
+:eyes: [Helm Architecture](https://helm.sh/docs/topics/architecture/)  
 
 Hands-on practice quest #4.1: задаём вопросы и доделываем то что не успели
 --------------------------------------------------------------------------
