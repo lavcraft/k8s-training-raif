@@ -4,7 +4,7 @@
 
 Install required and optional software. Optional for more comfortable work
 
-### Hands-On #00: prepare workspace
+### Hands-On Requirements #00: prepare workspace
 
 1. Install terminal or ssh client.
    1. osx `brew install iterm`
@@ -13,7 +13,7 @@ Install required and optional software. Optional for more comfortable work
 1. Generate ssh keys - `ssh-keygen`
 1. Pass https://vim-adventures.com/ (for free)
 
-### Hands-On #01: prepare to work
+### Hands-On Requirements #01: prepare to work
 
 
 1. For RHEL7 `sudo yum install helm jq git docker kubectl`
