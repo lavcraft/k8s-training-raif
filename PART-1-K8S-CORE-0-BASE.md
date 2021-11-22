@@ -134,6 +134,7 @@ kubectl auth can-i --list
 :shopping_cart: *Материалы*  
   1. [Настрокйка реквизитов docker-registry k8s](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
   1. [K8S и Private Registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+  1. [K8S LimitRanges](https://kubernetes.io/docs/concepts/policy/limit-range/)
 
 
 ### Hands-on practice quest #02: I have an application, I wish deploy it to production!
