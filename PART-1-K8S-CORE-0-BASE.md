@@ -121,6 +121,7 @@ kubectl auth can-i --list
 1. Как избежать ошибок выполнения команд не на "тех" кластерах?
 1. Как разделены ресурсы других участников во дном кластере?
 1. Как выбрать свой namespace пол умолчанию?
+1. **Доп задание**\*: попробуйте добавить второй контекст с другим `namespace`
 1. **Доп задание**\*: попробуйте использовать несколько конфигураций с помощью переменной окружения `KUBECONFIG`. Что будет с разными кластерами при выводе `kubectl config view`? [О KUBECONFIG](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/)
 
 ## K8S Concepts
