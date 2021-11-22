@@ -74,7 +74,7 @@ git clone https://gitlabci.raiffeisen.ru/container-trainings/training-k8s
 - Какие версии kubectl совместимы с какими версиями кластера?
 - Откуда берётся папка `~/.kube` ?
 - Есть ли разница в какой оболочке запускать команды? BASH/ZSH/FISH/ETC
-- \* Написать config для kubernetes с разными контекстами - prod/dev (смотрят на разные namespace в нашем случае. dev - ваш неймспейс. prod - неймспейс osttok)
+- **Задание**\*: Написать config для kubernetes с разными контекстами - prod/dev (смотрят на разные namespace в нашем случае. dev - ваш неймспейс. prod - неймспейс osttok)
 - [Enable kubectl completion howto](https://kubernetes.io/docs/tasks/tools/included/optional-kubectl-configs-bash-linux/#enable-kubectl-autocompletion)
 
 K8S Authentication
@@ -90,7 +90,7 @@ Hands-on practice quest #01: connect to existed cluster
 Настраиваем и проверяем подключение к кластеру K8S
 
 **Given** пары участников  
-**When** участники используют команды для извлечения информации из кластера
+**When** участники используют команды для извлечения информации из кластера  
 **Задача**: узнать список ваших привилегий в кластере
 
 ```shell script
@@ -213,8 +213,8 @@ kubectl get pods
 Познаём различные ограничения (технические и концептуальные) контейнерных технологий в связке с абстракциями K8S (Pod). 
 Делаем это на примере демо приложения "нож" и "масло"
 
-**Given** пары участников имеют собранные образы   приложений
-**When** участники описывают поды с двумя сервисами и меняют состояние kubernetes
+**Given** пары участников имеют собранные образы   приложений  
+**When** участники описывают поды с двумя сервисами и меняют состояние kubernetes  
 
 
 ```shell script
