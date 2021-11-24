@@ -425,7 +425,6 @@ Hands-on practice quest #06: Redeploy application with replicas
 **Задание**: изменить запуск приложений в поде на запуск c помощью deployment (для app-butter и app-knife)
 
 ```shell
-# запускаем тестовую команду. Видим что падает
 [tty0] $ watch -e -n0.1 curl --fail --show-error -s -i app-butter-ingress.<namespace-name>.lb.<cluster-name>.k8s.raiffeisen.ru
 [tty1] kubectl explain deployment
 # применяем деплоймент
