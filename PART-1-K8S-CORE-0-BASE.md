@@ -504,7 +504,7 @@ Hands-on practice quest #7.1: Edit deployment
 **When** участники запускают команды и применяют новую настройки  
 **Задание** поэкспериментировать с `ReplicaSet`
 
-Изменим `metadata.labels.app` на `app-knife-edited`
+Изменим `metadata.labels.app` на `app-butter-edited`
 ```shell
 [tty0] $ kubectl get replicasets -w
 [tty1] $ kubectl edit pod app-butter-<custom-id-autocomplete-it>
