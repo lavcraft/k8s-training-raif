@@ -52,8 +52,7 @@ helm search repo
 ```shell
 # добавляем наши репозитории в helm
 helm repo add -h
-helm repo add ext-rbru-container-community-virtual-helm "https://artifactory.raiffeisen.ru/artifactory/ext-rbru-container-community-virtual-helm/" \
-  --username "$USER"
+helm repo add ext-rbru-container-community-virtual-helm "https://artifactory.raiffeisen.ru/artifactory/ext-rbru-container-community-virtual-helm/" --username "$USER"
 helm repo update
 helm repo list
 helm search repo
